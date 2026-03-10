@@ -1,0 +1,755 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="UTF-8">
+    <title>SMS - School Management System | OCTOGONE TECHNOLOGIES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SEO -->
+    <meta name="description" content="SMS - School Management System est une solution complète de gestion scolaire pour écoles, collèges, lycées, universités et centres de formation : inscriptions, emplois du temps, notes, scolarité, parents, infirmerie, comptabilité et pack Google Suite.">
+    <meta name="author" content="OCTOGONE TECHNOLOGIES">
+    <meta name="keywords" content="gestion scolaire, school management system, SMS, logiciel école, collège, lycée, université, centre de formation, digitalisation, scolarité, gestion élèves, Côte d'Ivoire, Afrique">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0B1F4B">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SMS - School Management System | OCTOGONE TECHNOLOGIES">
+    <meta property="og:description" content="Pilotez votre établissement scolaire de A à Z avec une solution tout-en-un : académique, comptabilité, parents, étudiants, infirmerie, Google Suite, et plus encore.">
+    <meta property="og:url" content="https://www.octogone.tech/sms/">
+    <meta property="og:image" content="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=1200">
+
+    <!-- Favicon (icône école en ligne) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://img.icons8.com/color/96/graduation-cap.png">
+    <link rel="shortcut icon" href="https://img.icons8.com/color/96/graduation-cap.png">
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=poppins:300,400,500,600,700&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0B1F4B',  // Bleu OCTOGONE
+                        secondary: '#FF9F1C', // Orange accent
+                        accent: '#00A6CE',    // Bleu clair
+                    },
+                    boxShadow: {
+                        soft: '0 18px 45px rgba(15,23,42,0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-bg {
+            background-image: linear-gradient(
+                    120deg,
+                    rgba(11,31,75,0.94),
+                    rgba(0,166,206,0.9)
+                ),
+                url('https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+
+
+<body class="bg-slate-950 text-slate-100 font-sans">
+<header class="hero-bg min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="w-full sticky top-0 z-30 glass border-b border-slate-700/60">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="#hero" class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center text-primary font-extrabold text-lg shadow-md">
+                    SMS
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span class="font-semibold text-sm sm:text-base tracking-tight">School Management System</span>
+                    <span class="text-[10px] text-slate-200/80">by OCTOGONE TECHNOLOGIES</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#modules" class="hover:text-secondary transition">Modules</a>
+                <a href="#cibles" class="hover:text-secondary transition">Établissements</a>
+                <a href="#benefices" class="hover:text-secondary transition">Bénéfices</a>
+                <a href="#faq" class="hover:text-secondary transition">FAQ</a>
+                 <a href="{% url 'login' %}" class="hover:text-secondary transition">Login</a>
+                <a href="#demo" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-primary font-semibold shadow-soft hover:translate-y-0.5 transition-all">
+                    <i class="ri-live-line text-lg"></i> Demander une démo
+                </a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden flex items-center justify-center w-9 h-9 rounded-full border border-slate-200/30">
+                <i class="ri-menu-line text-xl"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden border-t border-slate-700/60 glass">
+            <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-3 text-sm">
+                <a href="#modules" class="hover:text-secondary transition">Modules</a>
+                <a href="#cibles" class="hover:text-secondary transition">Établissements</a>
+                <a href="#benefices" class="hover:text-secondary transition">Bénéfices</a>
+                <a href="#faq" class="hover:text-secondary transition">FAQ</a>
+                <a href="#demo" class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-secondary text-primary font-semibold shadow-soft">
+                    <i class="ri-live-line text-lg"></i> Demander une démo
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero" class="flex-1 flex items-center">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <!-- Left -->
+                <div class="space-y-6 fade-up">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-slate-900/70 border border-secondary/60 px-3 py-1 text-[11px] tracking-wide uppercase">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Gestion scolaire intelligente · 10 modules intégrés
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+                        Pilotez votre établissement
+                        <span class="text-secondary">de A à Z</span>
+                        avec un seul logiciel.
+                    </h1>
+                    <p class="text-sm sm:text-base text-slate-100/80 leading-relaxed">
+                        SMS est un <span class="font-semibold">logiciel tout-en-un</span> pour la gestion quotidienne
+                        des écoles maternelles, primaires, collèges, lycées, universités et centres de formation,
+                        publiques ou privés. Inscription, emplois du temps, notes, scolarité, parents, infirmerie,
+                        Google Suite… tout est centralisé.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="#demo"
+                           class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-primary font-semibold shadow-soft hover:translate-y-0.5 transition-all">
+                            <i class="ri-flashlight-fill text-lg"></i>
+                            Demander une démo personnalisée
+                        </a>
+                        <a href="#modules" class="inline-flex items-center gap-2 text-sm text-slate-100/80 hover:text-secondary transition">
+                            Voir tous les modules
+                            <i class="ri-arrow-right-up-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 text-xs text-slate-100/80">
+                        <div class="rounded-2xl bg-slate-900/70 border border-slate-700/70 px-4 py-3">
+                            <p class="text-lg font-extrabold">10+</p>
+                            <p class="mt-1 text-[11px] leading-snug">Modules métiers pour couvrir toute la chaîne de valeur.</p>
+                        </div>
+                        <div class="rounded-2xl bg-slate-900/70 border border-slate-700/70 px-4 py-3">
+                            <p class="text-lg font-extrabold">4</p>
+                            <p class="mt-1 text-[11px] leading-snug">Profils clés : Administration, Enseignant, Étudiant, Parent.</p>
+                        </div>
+                        <div class="rounded-2xl bg-slate-900/70 border border-slate-700/70 px-4 py-3">
+                            <p class="text-lg font-extrabold">100%</p>
+                            <p class="mt-1 text-[11px] leading-snug">Marque blanche : aux couleurs de votre établissement.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right -->
+                <div class="fade-up delay-150">
+                    <div class="relative">
+                        <div class="absolute -top-6 -right-4 w-28 h-28 rounded-3xl bg-secondary/20 blur-2xl"></div>
+                        <div class="absolute -bottom-10 -left-6 w-32 h-32 rounded-full bg-accent/20 blur-2xl"></div>
+
+                        <div class="relative rounded-3xl bg-slate-950/80 border border-slate-700/80 shadow-soft p-5 md:p-6 space-y-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.22em] text-secondary mb-1">Dashboard SMS</p>
+                                    <p class="text-sm text-slate-200">Vue 360° sur votre établissement</p>
+                                </div>
+                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 text-emerald-300 text-[11px] px-3 py-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span>En temps réel</span>
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 text-[11px]">
+                                <div class="rounded-2xl bg-slate-900/80 border border-slate-700/80 px-3 py-3">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-semibold text-xs">Académique</span>
+                                        <i class="ri-calendar-check-line text-secondary text-lg"></i>
+                                    </div>
+                                    <p class="text-slate-300/80 leading-snug">
+                                        Années, classes, maquettes pédagogiques, emplois du temps et progression.
+                                    </p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-900/80 border border-slate-700/80 px-3 py-3">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-semibold text-xs">Comptabilité</span>
+                                        <i class="ri-pie-chart-2-line text-secondary text-lg"></i>
+                                    </div>
+                                    <p class="text-slate-300/80 leading-snug">
+                                        Frais de scolarité, contrats, paie, acomptes, tableaux de bord financiers.
+                                    </p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-900/80 border border-slate-700/80 px-3 py-3">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-semibold text-xs">Parents & Étudiants</span>
+                                        <i class="ri-user-star-line text-secondary text-lg"></i>
+                                    </div>
+                                    <p class="text-slate-300/80 leading-snug">
+                                        Notes, bulletins, absences, scolarité, carnet électronique, support de cours.
+                                    </p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-900/80 border border-slate-700/80 px-3 py-3">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-semibold text-xs">Pack Google Suite</span>
+                                        <i class="ri-google-fill text-secondary text-lg"></i>
+                                    </div>
+                                    <p class="text-slate-300/80 leading-snug">
+                                        Emails pro personnalisés & tous les services premium Google pour votre école.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between text-[11px] text-slate-300/90 pt-2 border-t border-slate-800 mt-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span>Accès Web, Android & iOS</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="ri-lock-fill text-emerald-400"></i>
+                                    <span>Données sécurisées & sauvegardées</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- right -->
+            </div>
+        </div>
+    </section>
+</header>
+
+<main class="bg-slate-950">
+    <!-- Section Cibles -->
+    <section id="cibles" class="py-16 md:py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 fade-up">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-semibold mb-3">Pensé pour <span class="text-secondary">tous les types d’établissements</span></h2>
+                    <p class="text-sm sm:text-base text-slate-300/90 max-w-2xl">
+                        SMS s’adapte aussi bien aux structures de petite taille qu’aux grands groupes scolaires.
+                        Notre approche par modules vous permet d’activer uniquement ce dont vous avez besoin, à votre rythme.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-xs text-slate-200/80">
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-building-2-line text-secondary text-lg"></i>
+                        </span>
+                        <span>Écoles maternelles & primaires</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-community-line text-secondary text-lg"></i>
+                        </span>
+                        <span>Collèges & lycées</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-graduation-cap-line text-secondary text-lg"></i>
+                        </span>
+                        <span>Universités & grandes écoles</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-lightbulb-flash-line text-secondary text-lg"></i>
+                        </span>
+                        <span>Centres de formation publics & privés</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards opportunités -->
+            <div class="grid md:grid-cols-3 gap-6 fade-up">
+                <article class="rounded-3xl bg-slate-900/70 border border-slate-700/60 p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-time-line text-secondary text-2xl"></i>
+                        </span>
+                        <h3 class="font-semibold text-base">Gagner des heures chaque semaine</h3>
+                    </div>
+                    <p class="text-sm text-slate-300/90">
+                        Finis les tableurs éparpillés et les carnets papier. Les inscriptions, emplois du temps, bulletins
+                        et paiements sont centralisés et automatisés.
+                    </p>
+                    <ul class="text-xs text-slate-300/90 space-y-1">
+                        <li>• moins de tâches répétitives pour l’administration,</li>
+                        <li>• des process standardisés pour tout le personnel,</li>
+                        <li>• des erreurs fortement réduites.</li>
+                    </ul>
+                </article>
+                <article class="rounded-3xl bg-slate-900/70 border border-slate-700/60 p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-line-chart-line text-secondary text-2xl"></i>
+                        </span>
+                        <h3 class="font-semibold text-base">Mieux piloter vos performances</h3>
+                    </div>
+                    <p class="text-sm text-slate-300/90">
+                        Grâce à vos statistiques académiques & financières, vous suivez l’évolution des effectifs, des résultats,
+                        de la trésorerie et prenez de meilleures décisions.
+                    </p>
+                    <ul class="text-xs text-slate-300/90 space-y-1">
+                        <li>• vue consolidée sur les effectifs et scolarité,</li>
+                        <li>• analyse des retards & impayés,</li>
+                        <li>• suivi fin des résultats par classe et par niveau.</li>
+                    </ul>
+                </article>
+                <article class="rounded-3xl bg-slate-900/70 border border-slate-700/60 p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-secondary/20 flex items-center justify-center">
+                            <i class="ri-customer-service-2-line text-secondary text-2xl"></i>
+                        </span>
+                        <h3 class="font-semibold text-base">Renforcer le lien école-parents</h3>
+                    </div>
+                    <p class="text-sm text-slate-300/90">
+                        Les parents suivent la vie scolaire en temps réel : emploi du temps, progression, paiements,
+                        bulletins, absences, et notifications ciblées.
+                    </p>
+                    <ul class="text-xs text-slate-300/90 space-y-1">
+                        <li>• transparence et confiance renforcées,</li>
+                        <li>• moins d’allers-retours physiques au secrétariat,</li>
+                        <li>• meilleure image de votre établissement.</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules -->
+    <section id="modules" class="py-16 md:py-20 bg-slate-900/40 border-y border-slate-800/70">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10 fade-up">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-semibold mb-3">10 modules pour couvrir toute votre gestion</h2>
+                    <p class="text-sm sm:text-base text-slate-300/90 max-w-3xl">
+                        Chaque module a été pensé pour un métier précis : administration, enseignants, comptabilité,
+                        étudiants, parents, infirmerie… Vous pouvez activer uniquement ceux qui vous intéressent.
+                    </p>
+                </div>
+                <span class="inline-flex items-center gap-2 rounded-full border border-secondary/60 px-4 py-1 text-[11px] uppercase tracking-[0.18em] text-secondary">
+                    Flexible · Évolutif · Modulaire
+                </span>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 text-sm fade-up">
+                <!-- 1-3 -->
+                <div class="space-y-4">
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">1</span>
+                        Gestion académique
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Années académiques, filières, niveaux, classes et salles.</li>
+                        <li>• Création et gestion des maquettes pédagogiques.</li>
+                        <li>• Suivi du dossier électronique de l’étudiant.</li>
+                        <li>• Statistiques académiques par niveau, filière et promotion.</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">2</span>
+                        Inscriptions & réinscriptions
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Gestion complète des dossiers d’inscription & réinscription.</li>
+                        <li>• Suivi des pièces, états & paiements liés au dossier.</li>
+                        <li>• Automatisation des flux entre admissions, scolarité & comptabilité.</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">3</span>
+                        Emplois du temps
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Planification fine des emplois du temps par classe, salle et enseignant.</li>
+                        <li>• Gestion des conflits de planning & des remplacements.</li>
+                        <li>• Suivi et validation des progressions pédagogiques.</li>
+                    </ul>
+                </div>
+
+                <!-- 4-6 -->
+                <div class="space-y-4">
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">4</span>
+                        Module Enseignant
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Suivi des programmes & contrats d’enseignement.</li>
+                        <li>• Dépôt de supports de cours & ressources pédagogiques.</li>
+                        <li>• Accès rapide aux listes de classes, fiches & relevés.</li>
+                        <li>• Gestion des demandes d’acomptes & validation.</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">5</span>
+                        Évaluations & Examens
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Gestion des notes, contrôles continus et examens.</li>
+                        <li>• Édition automatique des bulletins & procès-verbaux.</li>
+                        <li>• Calcul des moyennes, rangs & décisions (admis, rattrapage…).</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">6</span>
+                        Comptabilité & Scolarité
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Gestion des frais de scolarité & échéanciers.</li>
+                        <li>• Suivi des contrats & engagements financiers.</li>
+                        <li>• Impressions de masse (reçus, attestations, relevés…).</li>
+                        <li>• Gestion de la paie & des acomptes du personnel.</li>
+                    </ul>
+                </div>
+
+                <!-- 7-10 -->
+                <div class="space-y-4">
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">7</span>
+                        Module Étudiant
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Accès aux documents administratifs & supports de cours.</li>
+                        <li>• Consultation des notes, examens & bulletins.</li>
+                        <li>• CV automatisé & suivi du cursus.</li>
+                        <li>• Suivi des heures d’absence et avertissements.</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">8</span>
+                        Module Parent
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Suivi des emplois du temps & de la progression.</li>
+                        <li>• Paiement de la scolarité via Orange / Moov / MTN / Wave.</li>
+                        <li>• Notifications ciblées sur la vie scolaire de l’enfant.</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">9</span>
+                        Module Infirmerie
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Dossier médical de l’élève & carnet électronique.</li>
+                        <li>• Historique des consultations & traitements.</li>
+                        <li>• Suivi des allergies, traitements & restrictions.</li>
+                    </ul>
+
+                    <h3 class="text-secondary font-semibold text-sm flex items-center gap-2 uppercase tracking-wide mt-6">
+                        <span class="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center text-[11px] text-secondary">10</span>
+                        Pack Google Suite
+                    </h3>
+                    <ul class="space-y-1 text-slate-300/90 text-xs">
+                        <li>• Accès aux services premium Google (Drive, Meet, Classroom…).</li>
+                        <li>• Adresses e-mail professionnelles au nom de votre établissement.</li>
+                        <li>• Intégration fluide avec votre environnement pédagogique.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bénéfices / Potentiel -->
+    <section id="benefices" class="py-16 md:py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-10 items-start fade-up">
+                <div class="space-y-4">
+                    <h2 class="text-2xl sm:text-3xl font-semibold">Un levier de transformation digitale pour votre établissement</h2>
+                    <p class="text-sm sm:text-base text-slate-300/90">
+                        Avec SMS, vous passez d’une gestion fragmentée à un pilotage intégral, moderne et orienté données.
+                        C’est un véritable « operating system » pour votre école.
+                    </p>
+                    <ul class="space-y-3 text-sm text-slate-300/90">
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-1"></i>
+                            <span><strong>Transformation numérique maîtrisée :</strong> digitalisez progressivement chaque processus sans brutaliser vos équipes.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-1"></i>
+                            <span><strong>Image de marque renforcée :</strong> application en marque blanche aux couleurs de votre établissement, disponible sur le web et les stores.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-1"></i>
+                            <span><strong>Décisions guidées par la donnée :</strong> statistiques académiques et financières consolidées en temps réel.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-1"></i>
+                            <span><strong>Accompagnement & personnalisation :</strong> nos modules étant indépendants, nous pouvons en développer de nouveaux sur-mesure.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <div class="rounded-3xl bg-slate-900/80 border border-slate-700/70 p-6">
+                        <h3 class="text-base font-semibold mb-4 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-2xl bg-secondary/20 flex items-center justify-center">
+                                <i class="ri-question-answer-line text-secondary text-xl"></i>
+                            </span>
+                            FAQ rapide
+                        </h3>
+                        <div class="space-y-4 text-sm text-slate-300/90">
+                            <div>
+                                <p class="font-semibold text-slate-50 mb-1">Sommes-nous obligés d’avoir tous les modules ?</p>
+                                <p class="text-xs">
+                                    Non. Nos modules étant indépendants, vous choisissez uniquement ce dont vous avez besoin
+                                    aujourd’hui, avec la possibilité d’en activer d’autres plus tard.
+                                </p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-50 mb-1">Et si j’ai besoin d’un autre module ?</p>
+                                <p class="text-xs">
+                                    Notre priorité est de répondre à vos besoins. D’autres modules peuvent être développés
+                                    spécialement pour votre établissement.
+                                </p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-50 mb-1">Combien coûte l’application ?</p>
+                                <p class="text-xs">
+                                    Chaque établissement étant unique, nous privilégions la discussion afin de définir
+                                    la formule la plus adaptée à votre contexte (taille, nombre de sites, modules, etc.).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rounded-3xl bg-gradient-to-r from-primary to-accent p-[1px]">
+                        <div class="rounded-3xl bg-slate-950/95 p-5 flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-[11px] uppercase tracking-[0.2em] text-secondary mb-1">Accès & déploiement</p>
+                                <p class="text-xs text-slate-200/90">
+                                    Application disponible sur navigateur Web & stores mobiles, brandée à vos couleurs.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 text-3xl">
+                                <i class="ri-chrome-line text-secondary"></i>
+                                <i class="ri-android-line text-secondary"></i>
+                                <i class="ri-apple-line text-secondary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ simple + CTA -->
+    <section id="faq" class="py-16 md:py-20 bg-slate-900/40 border-y border-slate-800/70">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-10 items-start">
+                <div class="space-y-4 fade-up">
+                    <h2 class="text-2xl sm:text-3xl font-semibold">Questions fréquentes</h2>
+                    <div class="space-y-4 text-sm text-slate-300/90">
+                        <div>
+                            <p class="font-semibold text-slate-50 mb-1">Combien de temps pour déployer SMS ?</p>
+                            <p class="text-xs">
+                                Selon la taille de l’établissement, un déploiement peut se faire en quelques jours :
+                                paramétrage, import des données, formation des équipes et accompagnement au démarrage.
+                            </p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-50 mb-1">Proposez-vous une formation ?</p>
+                            <p class="text-xs">
+                                Oui. Nous formons vos équipes administratives, enseignants et responsables IT pour une prise en main fluide.
+                            </p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-50 mb-1">Et le support après la mise en place ?</p>
+                            <p class="text-xs">
+                                Vous bénéficiez d’un support continu (email, téléphone, WhatsApp) ainsi que de mises à jour régulières du logiciel.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4 fade-up">
+                    <div class="rounded-3xl bg-gradient-to-br from-secondary/15 via-accent/20 to-primary/60 border border-secondary/60 p-6">
+                        <h3 class="text-base font-semibold mb-2 flex items-center gap-2">
+                            <i class="ri-message-3-line text-secondary text-xl"></i>
+                            Besoin d’en savoir plus ?
+                        </h3>
+                        <p class="text-xs text-slate-200/90 mb-4">
+                            Contactez-nous directement pour discuter de votre projet ou planifier un atelier de cadrage.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-100/90">
+                            <li class="flex items-center gap-2">
+                                <i class="ri-phone-fill text-secondary"></i> <span>+225 07 48 73 33 65</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="ri-mail-send-line text-secondary"></i> <span>octogone.techs@gmail.com</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="ri-global-line text-secondary"></i> <span>www.myoctogone.com</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="ri-map-pin-2-line text-secondary"></i> <span>Abidjan – Cocody Rivera</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#demo" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-secondary text-primary font-semibold shadow-soft hover:translate-y-0.5 transition-all text-sm">
+                        <i class="ri-live-line text-lg"></i> Planifier une démo maintenant
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO FORM -->
+    <section id="demo" class="py-16 md:py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-10 items-start">
+                <div class="space-y-4 fade-up">
+                    <h2 class="text-2xl sm:text-3xl font-semibold">Demander une démo personnalisée</h2>
+                    <p class="text-sm sm:text-base text-slate-300/90">
+                        Partagez quelques informations sur votre établissement. Nous vous recontactons sous 24 à 48h
+                        avec une proposition de démo adaptée à votre réalité (en présentiel ou à distance).
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300/90">
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-0.5"></i>
+                            <span>Démo gratuite et sans engagement.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-0.5"></i>
+                            <span>Conseils sur la digitalisation de vos processus scolaires.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="ri-check-line text-emerald-400 mt-0.5"></i>
+                            <span>Échanges directs avec l’équipe produit OCTOGONE TECHNOLOGIES.</span>
+                        </li>
+                    </ul>
+
+                    {% if messages %}
+                        <div class="space-y-2 mt-4">
+                            {% for message in messages %}
+                                <div class="text-xs px-4 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-200">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="fade-up">
+                   <form method="post" class="rounded-3xl bg-slate-900/80 border border-slate-700/70 p-6 space-y-4 shadow-soft">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+            <label class="block text-xs font-medium mb-1">Nom &amp; Prénom</label>
+            {{ form.full_name }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Fonction dans l’établissement</label>
+            {{ form.position }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Nom de l’établissement</label>
+            {{ form.school_name }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Type d’établissement</label>
+            {{ form.school_type }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Email professionnel</label>
+            {{ form.email }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Téléphone / WhatsApp</label>
+            {{ form.phone }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Nombre approximatif d’élèves</label>
+            {{ form.students_count }}
+        </div>
+        <div>
+            <label class="block text-xs font-medium mb-1">Meilleur créneau pour la démo</label>
+            {{ form.preferred_slot }}
+        </div>
+    </div>
+    <div>
+        <label class="block text-xs font-medium mb-1">Besoin / contexte de votre établissement</label>
+        {{ form.message }}
+    </div>
+    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-secondary text-primary text-sm font-semibold shadow-soft hover:translate-y-0.5 transition-all">
+        <i class="ri-send-plane-2-line text-lg"></i>
+        Envoyer ma demande de démo
+    </button>
+    <p class="mt-2 text-[11px] text-slate-400 flex items-center gap-1">
+        <i class="ri-shield-check-line text-secondary"></i>
+        Vos informations sont utilisées uniquement pour vous recontacter à propos de SMS.
+    </p>
+</form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="border-t border-slate-800/70 bg-slate-950 py-6">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
+        <p>© {% now "Y" %} <a style="color:#FF9F1C" href="https://myoctogone.com" target="_blank">OCTOGONE TECHNOLOGIES</a> · School Management System (SMS)</p>
+        <p class="flex items-center gap-2">
+            <i class="ri-heart-3-fill text-secondary"></i>
+            Conçu pour les établissements.
+        </p>
+    </div>
+</footer>
+
+<script>
+    // mobile menu
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    // fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

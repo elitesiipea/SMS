@@ -164,15 +164,62 @@
                                                 <tbody>
 
                                                    
-                                                   {% for paiement in paiements  %}
+                                                    {% for paiement in paiements %}
                                                     <tr>
-                                                        <th scope="row">{{forloop.counter}}</th>
-                                                        <td>{{paiement.source}}</td>
-                                                        <td>{{paiement.reference}}</td>
-                                                        <td>{{paiement.created}}</td>
-                                                        <td>{{paiement.montant}}</td>
+                                                        <th scope="row">{{ forloop.counter }}</th>
+                                                        <td>{{ paiement.source }}</td>
+                                                        <td>
+                                                            {% if user.is_program_manger_for_online_courses %}
+                                                            <form method="POST">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="paiement_id" value="{{ paiement.id }}">
+                                                                
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-md-2">
+                                                                        <label for="reference">Référence</label>
+                                                                        <input type="text" name="reference" value="{{ paiement.reference }}" class="form-control" id="reference">
+                                                                    </div>
+                                                            
+                                                                    <div class="form-group col-md-2">
+                                                                        <label for="montant">Montant</label>
+                                                                        <input type="text" name="montant" value="{{ paiement.montant }}" class="form-control" id="montant">
+                                                                    </div>
+                                                            
+                                                                    <div class="form-group col-md-2">
+                                                                        <label for="source">Source</label>
+                                                                        <input type="text" name="source" value="{{ paiement.source }}" class="form-control" id="source">
+                                                                    </div>
+                                                            
+                                                                    <div class="form-group col-md-2">
+                                                                        <label for="effectue_par">Effectué par</label>
+                                                                        <input type="text" name="effectue_par" value="{{ paiement.effectue_par }}" class="form-control" id="effectue_par">
+                                                                    </div>
+                                                            
+                                                                    <div class="form-group col-md-2">
+                                                                        <label for="created">Date et Heure de création</label>
+                                                                        <input type="datetime-local" name="created" value="{{ paiement.created|date:'Y-m-d\TH:i' }}" class="form-control" id="created">
+                                                                    </div>
+                                                            
+                                                                    <div class="form-group col-md-2">
+                                                                        <label for="active">Actif</label>
+                                                                        <input type="checkbox" name="active" {% if paiement.active %}checked{% endif %} id="active">
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <!-- Bouton de soumission -->
+                                                                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                                                            </form>
+                                                            
+                                                            
+                                                            {% else %}
+                                                                {{ paiement.reference }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ paiement.created }}</td>
+                                                        <td>{{ paiement.montant }}</td>
                                                     </tr>
-                                                   {% endfor %}
+                                                    {% endfor %}
+                                                    
                                                     
                                                    
                                                 </tbody>
@@ -227,13 +274,13 @@
                                                 {% if not etudiant.last_class.photo %}- 04 Photo d'identité de même tirage<br>{% endif %}
                                                 
                                                </p>
+
                                                <p style="font-size: large;color:black">
                                                 Merci de bien vouloir fournir ces éléments dans un délai de 48 heures faute de quoi votre inscription sera invalidée.
-                                            </p>
+                                                </p>
                                                 
                                             </div>
                                         </div>
-                                            
                                         {% endif %}
 
                                     <div class="invoice-footer">

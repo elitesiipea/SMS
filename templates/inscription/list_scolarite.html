@@ -20,25 +20,26 @@
                             <tr>
                                 
                                 <th>ID</th>
-                                <th>ANNEE ACADEMIQUE</th>
-                               
                                 <th>NOM</th>
                                 <th>PRENOMS</th>
                                 <th>FILIERE</th>
                                 <th>NIVEAU</th>
                                 <th>STATUS</th>
-                            
                                 <th>CONTACT 1</th>
                                 <th>CONTACT 2</th>
-                             
+                            
                                 <th>ELITES-ID</th>
-                                <th>CODE PARRAIN</th>
+                               
                                 <th>PASSE LE BTS</th>
                                 <th>FRAIS SCOLARITE</th>
                                 <th>MONTANT PAYE</th>
                                 <th>RESTE A PAYER</th>
                                 <th>STATUS SCOLARITE</th>
                                 <th>CYCLE</th>
+                                <th>Date de Naissance</th>
+                                <th>Sexe</th>
+                                <th>Inscrit le : </th>
+                            
                                 <th>ACTIONS</th>
                               
                             
@@ -51,7 +52,7 @@
 
                             <tr>
                                 <th>{{scolarite.etudiant.id | upper }}</th>
-                                <th><b>{{scolarite.annee_academique | upper }}</b></th>
+                         
                                 <th>{{scolarite.etudiant.nom | upper }}</th>
                                 <th>{{scolarite.etudiant.prenom | upper }}</th>
                                 <th>{{scolarite.filiere | upper }}</th>
@@ -59,8 +60,9 @@
                                 <th>{{scolarite.etudiant.type_etudiant | upper }}</th>
                                 <th>+225{{scolarite.etudiant.contact | upper }}</th>
                                 <th>+225{{scolarite.etudiant.contactparent | upper }}</th>
+                            
                                 <th>{{scolarite.etudiant.code_paiement | upper }}</th>
-                                <th>{{scolarite.code_parrain | upper }}</th>
+                             
                                 <th>
                                 {% if scolarite.passe_le_bts %}OUI {% else %}NON{% endif %}
                                 </th>
@@ -69,12 +71,17 @@
                                 <th>{{scolarite.reste | upper }}</th>
                                 <th>{% if scolarite.solded %}Soldée  {% else %}Non Soldée{% endif %}</th>
                                 <th>{{scolarite.parcour | upper }}</th>
+                                <th>{{ scolarite.etudiant.date_de_naissance }}</th>
+                                <th>{{ scolarite.etudiant.sexe | upper  }}</th>
+                                <th>{{ scolarite.created   |date:'d/m/Y'  }}</th>
+                             
                                 <td style="white-space: nowrap; width: 15%;">
                                     <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                     <div class="btn-group btn-group-sm" style="float: none;">
                                        
-                                        <button type="button" onclick="window.location.href='{{ scolarite.etudiant.url }}'" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span></button>
-                                        <button type="button" onclick="window.location.href='{{ scolarite.etudiant.scolarite_admin_url }}'" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-money"></span></button>
+                                        <a target="__blank" type="button" href='{{ scolarite.etudiant.url }}'" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span></a>
+                                        <a target="__blank" type="button" href='{{ scolarite.etudiant.scolarite_admin_url }}'" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-money"></span></a>
+                                        <a target="__blank" type="button" href='{{ scolarite.etudiant.get_edit_url }}'" class="tabledit-save-button btn btn-sm btn-warning" style="float: none; margin: 5px;"><span class="ti-pencil"></span></a>
                                         
                                     </div>
                                     </div>

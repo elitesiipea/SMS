@@ -1,0 +1,314 @@
+from django.db import models
+from gestion_academique.models import (Classe,)
+from django.urls import reverse
+from django.db.models import Q
+from django.db.models import Count
+cycles = (
+    ('CYCLE UNIVERSITAIRE', 'CYCLE UNIVERSITAIRE',),
+    ('CYCLE PROFESSIONNEL JOUR', 'CYCLE PROFESSIONNEL JOUR',),
+    ('CYCLE PROFESSIONNEL SOIR', 'CYCLE PROFESSIONNEL SOIR',),
+    ('CYCLE EN LIGNE', 'CYCLE EN LIGNE',),
+)
+
+natures = (
+    ('INSCRIPTION', 'INSCRIPTION',),
+    ('RE-INSCRIPTION', 'RE-INSCRIPTION',),
+    
+)
+
+# Create your models here.
+class Inscription(models.Model):
+    """Model definition for Inscription."""
+    etudiant         = models.ForeignKey("etudiants.Etudiant", related_name="inscription_etudiant",               on_delete=models.CASCADE)
+    annee_academique = models.ForeignKey("gestion_academique.AnneeAcademique", related_name="inscription_annee", on_delete=models.CASCADE)
+    filiere          = models.ForeignKey("gestion_academique.Filiere", related_name="inscription_filiere",        on_delete=models.CASCADE)
+    niveau            = models.ForeignKey("gestion_academique.Niveau", related_name="inscription_niveau",          on_delete=models.CASCADE)
+    classe            = models.ForeignKey("gestion_academique.Classe", related_name="inscription_classe",          on_delete=models.CASCADE)
+    parcour           = models.CharField(max_length=200, choices=cycles)
+    nature            = models.CharField(max_length=200, choices=natures)
+    frais             = models.IntegerField()
+    paye              = models.IntegerField(default=0)
+    code_parrain      = models.CharField(max_length=10, null=True, blank=True)
+    piece             = models.BooleanField(default=False, help_text="Cocher si l'étudiant a déposé une copie de sa pièce")
+    passe_le_bts             = models.BooleanField(default=False, help_text="Cocher si l'étudiant passe le BTS cette année")
+    extrait           = models.BooleanField(default=False, help_text="Cocher si l'étudiant a déposé son extrait")
+    bac               = models.BooleanField(default=False, help_text="Cocher si l'étudiant a déposé son bac")
+    fiche_orientation = models.BooleanField(default=False, help_text="Cocher si l'étudiant a déposé sa fiche d'orientation")
+    photo             = models.BooleanField(default=False, help_text="Cocher si l'étudiant a déposé les photos d'identité")
+    polo              = models.BooleanField(default=False, help_text="Cocher si l'étudiant à recu son Polo")
+    macaron           = models.BooleanField(default=False, help_text="Cocher si l'étudiant à recu son macaron")
+    cravate           = models.BooleanField(default=False, help_text="Cocher si l'étudiant à recu sa cravate")
+    tissu             = models.BooleanField(default=False, help_text="Cocher si l'étudiant à recu son tissu")
+    rame              = models.BooleanField(default=False, help_text="Cocher si l'étudiant à déposé ses rames")
+    marqueur          = models.BooleanField(default=False, help_text="Cocher si l'étudiant à déposé ses marqueurs")
+    active            = models.BooleanField(default=False)
+    nouvel_etudiant   = models.BooleanField(default=False, help_text="Cocher si l'étudiant est s'inscris pour la première fois dans l'établissement")
+    created           = models.DateTimeField(auto_now_add=True)
+    date_update       = models.DateTimeField(auto_now=True)
+    absence_semestre1 = models.IntegerField(default=0)
+    absence_semestre2 = models.IntegerField(default=0)
+    carte_etudiant = models.BooleanField(default=False, help_text="Cocher si l'étudiant a recu sa carte etudiant")
+    confirmed           = models.BooleanField(default=False)
+    solded           = models.BooleanField(default=False)
+    quantite_rame = models.IntegerField(default=0)
+    quantite_marqueur = models.IntegerField(default=0)
+    
+    # TODO: Define fields here
+
+    class Meta:
+        """Meta definition for Inscription."""
+
+        verbose_name = 'Inscription'
+        verbose_name_plural = 'Inscriptions'
+        #ordering = ['etudiant__nom','etudiant__prenom']
+    
+    @property
+    def completed_kits(self):
+        return all([self.polo, self.macaron, self.cravate, self.tissu, ])
+    
+    @property
+    def dossier_complet(self):
+        return all([self.extrait, self.bac, self.piece, self.photo])
+
+    @property
+    def reste(self):
+        return self.frais - self.paye
+
+    def __str__(self):
+        """Unicode representation of Inscription."""
+        return f'{self.etudiant} - {self.annee_academique} - {self.filiere} - {self.niveau} {self.frais}'
+
+    @property
+    def paiements(self):
+        return self.inscription_paiement.filter(confirmed=True).order_by('-created')
+
+    @property
+    def status_cursus(self):
+        status_dict = {
+            'univ': False,
+            'pro_jour': False,
+            'pro_soir': False,
+            'en_ligne': False,
+        }
+        if self.parcour == 'CYCLE UNIVERSITAIRE':
+            status_dict['univ'] = True
+        elif self.parcour == 'CYCLE PROFESSIONNEL JOUR':
+            status_dict['pro_jour'] = True
+        elif self.parcour == 'CYCLE PROFESSIONNEL SOIR':
+            status_dict['pro_soir'] = True
+        elif self.parcour == 'CYCLE EN LIGNE':
+            status_dict['en_ligne'] = True
+
+        return status_dict
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+    def url(self):
+        return reverse('student_inscription_details', args=[self.pk])
+
+    def paiement_url(self):
+        return reverse('student_fees_payment', kwargs={'code' : self.etudiant.code_paiement , 'pk' : self.pk })
+
+
+    def notes_semestre_1(self):
+        return self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 1")
+
+    def notes_semestre_2(self):
+        return self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 2")
+    
+    def notes_semestre_3(self):
+        return self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 3")
+
+    def total_notes_semestre_1(self):
+        return round(sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 1")),2)
+
+    def total_notes_semestre_2(self):
+        return round(sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 2")),2)
+    
+    def total_notes_semestre_3(self):
+        return round(sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 3")),2)    
+    @property
+    def credit_notes_semestre_1(self):
+        if self.classe.classe_universitaire:
+            return 30
+        return sum(item.note.coeeficient_matiere for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 1"))
+    
+    @property   
+    def credit_notes_semestre_2(self):
+        if self.classe.classe_universitaire:
+            return 30
+        return sum(item.note.coeeficient_matiere for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 2"))
+    
+    @property   
+    def credit_notes_semestre_3(self):
+        if self.classe.classe_universitaire:
+            return 30
+        return sum(item.note.coeeficient_matiere for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 3"))
+
+    @property
+    def credit_notes(self):
+        if self.classe.annee_academique.etablissement.is_college:
+            return self.credit_notes_semestre_1 + self.credit_notes_semestre_2 + self.credit_notes_semestre_3
+        else:
+            if self.classe.classe_universitaire:
+                return 60
+            return self.credit_notes_semestre_1 + self.credit_notes_semestre_2
+
+
+
+    @property
+    def credit_obtenues_notes_semestre_1(self):
+        filtered_results = self.insription_note.filter(
+            note__matiere__matiere__unite__semestre__exact="SEMESTRE 1"
+        )
+        
+        credit_count = 0
+        for item in filtered_results:
+            if item.moyenne >= 10 or item.moyenne_unite >= 10:
+                credit_count += item.note.coeeficient_matiere
+        
+        return credit_count
+        
+    @property
+    def credit_obtenues_notes_semestre_2(self):
+        filtered_results = self.insription_note.filter(
+            note__matiere__matiere__unite__semestre__exact="SEMESTRE 2"
+        )
+        
+        credit_count = 0
+        for item in filtered_results:
+            if item.moyenne >= 10 or item.moyenne_unite >= 10:
+                credit_count += item.note.coeeficient_matiere
+        
+        return credit_count
+    
+    @property
+    def credit_obtenues_notes_semestre_3(self):
+        filtered_results = self.insription_note.filter(
+            note__matiere__matiere__unite__semestre__exact="SEMESTRE 3"
+        )
+        
+        credit_count = 0
+        for item in filtered_results:
+            if item.moyenne >= 10 or item.moyenne_unite >= 10:
+                credit_count += item.note.coeeficient_matiere
+        
+        return credit_count
+
+    @property
+    def moyenne1(self):
+        if self.classe.classe_universitaire:
+            return round((sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 1"))/30),2)
+        try:
+            return round((
+            sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 1"))/
+            sum(item.note.coeeficient_matiere for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 1")))
+            ,2)
+        
+        except:
+            return 0
+
+    @property
+    def moyenne2(self):
+        try:
+            if self.classe.classe_universitaire:
+                return round((sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 2"))/30),2)
+            return round((
+                sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 2"))/
+                sum(item.note.coeeficient_matiere for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 2")))
+                ,2)
+        except:
+            return 0
+        
+    @property
+    def moyenne3(self):
+        try:
+            if self.classe.classe_universitaire:
+                return round((sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 3"))/30),2)
+            return round((
+                sum(item.moyenne_coefficient for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 3"))/
+                sum(item.note.coeeficient_matiere for item in self.insription_note.filter(note__matiere__matiere__unite__semestre__exact="SEMESTRE 3")))
+                ,2)
+        except:
+            return 0
+
+    @property
+    def moyenne_totale(self):
+        if self.classe.annee_academique.etablissement.is_college:
+            return round((self.moyenne1 + self.moyenne2 + self.moyenne3) / 3,2)
+        return round((self.moyenne1 + self.moyenne2) / 2,2)
+
+    @property
+    def credit_total(self):
+        if self.classe.annee_academique.etablissement.is_college:
+            return self.credit_obtenues_notes_semestre_1 + self.credit_obtenues_notes_semestre_2 + self.credit_obtenues_notes_semestre_3
+        return self.credit_obtenues_notes_semestre_1 + self.credit_obtenues_notes_semestre_2
+
+    # TODO: Define custom methods here
+
+    @property
+    def niv(self):
+        return self.niveau.nom.split()[0]
+class Paiement(models.Model):
+    """Model definition for Paiement."""
+    inscription         = models.ForeignKey(Inscription, related_name="inscription_paiement",  on_delete=models.CASCADE)
+    montant = models.FloatField(default=0)
+    source = models.CharField(max_length=150, blank=True, null=True)
+    reference = models.CharField(max_length=150, blank=True, null=True)
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    confirmation_finance = models.BooleanField(default=False)
+    non_wave_direct_api = models.BooleanField(default=False)
+    date_update = models.DateTimeField(auto_now=True)
+    effectue_par = models.CharField(null=True,blank=True, max_length=50)
+    ############Pour Api
+    confirmed = models.BooleanField(default=False)
+    wave_launch_url = models.CharField(max_length=250, null=True, blank=True)
+    wave_id = models.CharField(max_length=250, null=True, blank=True)
+
+    # TODO: Define fields here
+
+    class Meta:
+        """Meta definition for Paiement."""
+
+        verbose_name = 'Paiement'
+        verbose_name_plural = 'Paiements'
+
+    def __str__(self):
+        """Unicode representation of Paiement."""
+        return f'{self.inscription} - {self.montant}'
+
+    def save(self,*args, **kwargs):
+        """Save method for Paiement."""
+        if self.confirmed:
+            # Update the paye field of the related Inscription
+            self.inscription.paye += self.montant
+            # Confirmation de l'inscription
+            self.inscription.confirmed = True
+            # Check if the total payment reaches the frais value
+            if self.inscription.paye >= self.inscription.frais:
+                self.inscription.solded = True
+            else:
+                self.inscription.solded = False
+            # Save the Inscription first to ensure data consistency
+            self.inscription.save()
+            # Save the Paiement instance
+            super(Paiement, self).save(*args, **kwargs)
+        else:
+            super(Paiement, self).save(*args, **kwargs)
+
+    @property
+    def success_url(self):
+        return reverse('wavesuccess', kwargs={'code': self.inscription.etudiant.code_paiement, 'pk': self.pk}) 
+
+    @property
+    def error_url(self):
+        return reverse('waveerror', kwargs={'code': self.inscription.etudiant.code_paiement, 'pk': self.pk}) 
+
+
+    # TODO: Define custom methods here
+    
+    
+    
+

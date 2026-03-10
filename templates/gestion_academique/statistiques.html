@@ -4,132 +4,699 @@
 {% block page %}
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Start Contentbar -->    
-  <div class="contentbar">                
-    <!-- Start row -->
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 14px;
+        color: #1f2933;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 24px 28px;
+        color: white;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .page-header-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .logo-box {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo-box img {
+        max-height: 56px;
+        border-radius: 8px;
+        background: white;
+        padding: 4px;
+    }
+
+    .page-title-block h1 {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0 0 4px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .page-title-block .subtitle {
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    .badge-annee {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.12);
+        font-size: 12px;
+    }
+
+    .badge-annee i {
+        font-size: 14px;
+    }
+
+    .header-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+    }
+
+    .btn-print {
+        background: #f97316;
+        color: white;
+        border: none;
+        padding: 9px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(249,115,22,0.35);
+    }
+
+    .btn-print:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+    }
+
+    .btn-print i {
+        font-size: 16px;
+    }
+
+    .last-update {
+        font-size: 11px;
+        opacity: 0.9;
+    }
+
+    .card {
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 15px rgba(15,23,42,0.03);
+    }
+
+    .card-header {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        border-radius: 14px 14px 0 0 !important;
+        padding: 12px 18px;
+    }
+
+    .card-header h5 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .card-header h5 i {
+        font-size: 17px;
+    }
+
+    .card-body {
+        padding: 16px 18px;
+    }
+
+    .filter-row .form-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #4b5563;
+    }
+
+    .filter-row .form-select {
+        font-size: 13px;
+    }
+
+    .btn-filter {
+        margin-top: 24px;
+        padding: 8px 20px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .kpi-card {
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 14px 16px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        height: 100%;
+    }
+
+    .kpi-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #6b7280;
+    }
+
+    .kpi-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .kpi-sub {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+
+    .chart-container {
+        position: relative;
+        min-height: 260px;
+    }
+
+    .table-stats thead th {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .table-stats tbody td {
+        font-size: 13px;
+    }
+
+    .table-stats thead th,
+    .table-stats tbody td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-stats tbody td.text-start {
+        text-align: left !important;
+    }
+
+    .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 24px 0 12px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #111827;
+    }
+
+    .section-title i {
+        font-size: 18px;
+        color: #6366f1;
+    }
+
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+
+        .contentbar {
+            padding: 0;
+        }
+
+        .card {
+            box-shadow: none !important;
+        }
+
+        .btn,
+        select,
+        input,
+        .badge-annee {
+            box-shadow: none !important;
+        }
+
+        .table {
+            border-collapse: collapse !important;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #9ca3af !important;
+        }
+    }
+</style>
+
+<div class="contentbar">
     <div class="row">
-      <!-- Start col -->
-      <div class="col-lg-12">
+        <div class="col-lg-12">
 
-        <div id="loader" class="text-center">
-          <img src="{{ user.etablissement.logo.url }}" alt="Loading...">
+            <!-- HEADER / TITRE -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <div class="logo-box">
+                        {% if request.user.etablissement.logo %}
+                            <img src="{{ request.user.etablissement.logo.url }}" alt="Logo">
+                        {% else %}
+                            <i class="feather icon-bar-chart-2" style="font-size:30px;color:#e5e7eb;"></i>
+                        {% endif %}
+                    </div>
+                    <div class="page-title-block">
+                        <h1>{{ titre|upper }}</h1>
+                        <div class="subtitle">
+                            {% if request.user.etablissement %}
+                                {{ request.user.etablissement.nom }}
+                                {% if request.user.etablissement.sigle %} ({{ request.user.etablissement.sigle }}){% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="mt-1">
+                            <span class="badge-annee">
+                                <i class="feather icon-calendar"></i>
+                                {% if selected_annee %}
+                                    Année académique : {{ selected_annee }}
+                                {% else %}
+                                    Année académique : Courante / Dernière définie
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions no-print">
+                    <button class="btn-print" onclick="window.print()">
+                        <i class="feather icon-printer"></i>
+                        Imprimer / Export PDF
+                    </button>
+                    <div class="last-update">
+                        Généré le {% now "d/m/Y à H:i" %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILTRES -->
+            <div class="card mb-3 no-print">
+                <div class="card-header">
+                    <h5><i class="feather icon-filter"></i> Filtres</h5>
+                </div>
+                <div class="card-body">
+                    <form method="GET" action="{% url 'statistiques' %}">
+                        <div class="row filter-row g-3">
+                            <!-- Établissement -->
+                            <div class="col-md-5">
+                                <label for="etablissement" class="form-label">Établissement</label>
+                                <select name="etablissement_id" id="etablissement" class="form-select">
+                                    <option value="">-- Sélectionnez un établissement --</option>
+                                    {% for etab in etablissements %}
+                                        <option value="{{ etab.id }}" {% if etab.id == selected_etablissement %}selected{% endif %}>
+                                            {{ etab.nom }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Année académique -->
+                            <div class="col-md-5">
+                                <label for="annee" class="form-label">Année académique</label>
+                                <select name="annee_id" id="annee" class="form-select">
+                                    <option value="">-- Sélectionnez une année académique --</option>
+                                    {% for annee in annees_academiques %}
+                                        <option value="{{ annee.id }}" {% if annee.id|stringformat:"s" == selected_annee|stringformat:"s" %}selected{% endif %}>
+                                            {{ annee.debut }} - {{ annee.fin }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-2 d-flex align-items-end justify-content-md-end">
+                                <button type="submit" class="btn btn-primary btn-filter w-100">
+                                    <i class="feather icon-refresh-ccw me-1"></i>Filtrer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Total étudiants inscrits</div>
+                        <div class="kpi-value">{{ total_inscriptions|default:0 }}</div>
+                        <div class="kpi-sub">Toutes natures confondues</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Nouvelles inscriptions</div>
+                        <div class="kpi-value">{{ total_new_inscriptions|default:0 }}</div>
+                        <div class="kpi-sub">Nature = INSCRIPTION</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Ré-inscriptions</div>
+                        <div class="kpi-value">{{ total_re_inscriptions|default:0 }}</div>
+                        <div class="kpi-sub">Nature = RE-INSCRIPTION</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-label">En attente de paiement</div>
+                        <div class="kpi-value">{{ inscriptions_attente_paiement|default:0 }}</div>
+                        <div class="kpi-sub">Paye = 0 & non soldé</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPIs 2 -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Étudiants affectés</div>
+                        <div class="kpi-value">{{ affectes|default:0 }}</div>
+                        <div class="kpi-sub">Type = Affecté(e)</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Étudiants non affectés</div>
+                        <div class="kpi-value">{{ non_affectes|default:0 }}</div>
+                        <div class="kpi-sub">Type = Non Affecté(e)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRAPHIQUES -->
+            <div class="section-title">
+                <i class="feather icon-activity"></i> Synthèse visuelle
+            </div>
+            <div class="row g-3 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="feather icon-bar-chart-2"></i> Répartition par cycle</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="cycleChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="feather icon-pie-chart"></i> Nouvelles vs ré-inscriptions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="inscriptionNatureChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="feather icon-users"></i> Affectés vs non affectés</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="affectationChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLEAU GLOBAL -->
+            <div class="section-title">
+                <i class="feather icon-list"></i> Statistiques globales
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-stats mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>NOMBRE D'ÉTUDIANTS INSCRITS</th>
+                                    <th>NOUVELLES INSCRIPTIONS</th>
+                                    <th>RE-INSCRIPTIONS</th>
+                                    <th>AFFECTÉ(E)S</th>
+                                    <th>NON AFFECTÉ(E)S</th>
+                                    <th>EN ATTENTE DE PAIEMENT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ total_inscriptions|default:0 }}</td>
+                                    <td>{{ total_new_inscriptions|default:0 }}</td>
+                                    <td>{{ total_re_inscriptions|default:0 }}</td>
+                                    <td>{{ affectes|default:0 }}</td>
+                                    <td>{{ non_affectes|default:0 }}</td>
+                                    <td>{{ inscriptions_attente_paiement|default:0 }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLEAU PAR CYCLE -->
+            <div class="section-title">
+                <i class="feather icon-layers"></i> Statistiques par cycles
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-stats">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>CYCLE</th>
+                                    <th>ÉTUDIANTS AFFECTÉS</th>
+                                    <th>ÉTUDIANTS NON AFFECTÉS</th>
+                                    <th>INSCRIPTIONS</th>
+                                    <th>RE-INSCRIPTIONS</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cycle, stats in cycle_stats.items %}
+                                    <tr>
+                                        <td class="text-start">{{ cycle }}</td>
+                                        <td>{{ stats.etudiant_affecte }}</td>
+                                        <td>{{ stats.etudiant_non_affecte }}</td>
+                                        <td>{{ stats.inscriptions }}</td>
+                                        <td>{{ stats.re_inscriptions }}</td>
+                                        <td><strong>{{ stats.total }}</strong></td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Aucune donnée disponible.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLEAU PAR NIVEAUX -->
+            <div class="section-title">
+                <i class="feather icon-grid"></i> Statistiques par niveaux
+            </div>
+
+            {% for cycle, niveaux in niveau_stats.items %}
+                <h5 class="mt-3 mb-2">{{ cycle }}</h5>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-stats mb-0">
+                                <thead class="table-info">
+                                    <tr>
+                                        <th>NIVEAU</th>
+                                        <th>ÉTUDIANTS AFFECTÉS</th>
+                                        <th>ÉTUDIANTS NON AFFECTÉS</th>
+                                        <th>INSCRIPTIONS</th>
+                                        <th>RE-INSCRIPTIONS</th>
+                                        <th>TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for niveau, stats in niveaux.items %}
+                                        <tr>
+                                            <td class="text-start">{{ niveau }}</td>
+                                            <td>{{ stats.etudiant_affecte }}</td>
+                                            <td>{{ stats.etudiant_non_affecte }}</td>
+                                            <td>{{ stats.inscriptions }}</td>
+                                            <td>{{ stats.re_inscriptions }}</td>
+                                            <td><strong>{{ stats.total }}</strong></td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">Aucun niveau disponible pour ce cycle.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
         </div>
-        <!-- Ajoutez le titre -->
-        <center><h2>{{ titre | upper }}</h2></center>
-        <br>
-
-        <!-- Affichez le logo comme loader -->
-      
-
-        <!-- Contenu des statistiques -->
-        <div id="content" class="table-responsive">
-          <table class="table table-bordered table-hover table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>NOMBRE D'ETUDIANTS INSCRIS</th>
-                <th>NOUVELLES INSCRIPTIONS</th>
-                <th>RE-INSCRIPTIONS</th>
-                <th>AFFECTÉ(E)S</th>
-                <th>NON AFFECTÉ(E)S</th>
-                <th>EN ATTENTE DE PAIEMENT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><a href="{% url 'scolarites_par_statut' 'total' %}" class="btn btn-primary">{{ total_inscriptions }}</a></td>
-                <td><a href="{% url 'scolarites_par_statut' 'new' %}" class="btn btn-success">{{ total_new_inscriptions }}</a></td>
-                <td><a href="{% url 'scolarites_par_statut' 're' %}" class="btn btn-warning">{{ total_re_inscriptions }}</a></td>
-                <td><a href="{% url 'scolarites_par_statut' 'affectes' %}" class="btn btn-info">{{ affectes }}</a></td>
-                <td><a href="{% url 'scolarites_par_statut' 'non_affectes' %}" class="btn btn-danger">{{ non_affectes }}</a></td>
-                <td><a href="{% url 'scolarites_par_statut' 'attente_paiement' %}" class="btn btn-secondary">{{ inscriptions_attente_paiement }}</a></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <center>
-            <h2 class="my-4">STATISTIQUES PAR CYCLES</h2>
-          </center>
-
-          <table class="table table-bordered table-hover table-striped">
-            <thead class="table-light">
-              <tr>
-                <th>CYCLE</th>
-                <th>ETUDIANT AFFECTÉ</th>
-                <th>ETUDIANT NON AFFECTÉ</th>
-                <th>INSCRIPTIONS</th>
-                <th>RE-INSCRIPTIONS</th>
-                <th>TOTAL</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for cycle, stats in cycle_stats.items %}
-                <tr>
-                  <td>{{ cycle }}</td>
-                  <td>{{ stats.etudiant_affecte }}</td>
-                  <td>{{ stats.etudiant_non_affecte }}</td>
-                  <td>{{ stats.inscriptions }}</td>
-                  <td>{{ stats.re_inscriptions }}</td>
-                  <td>{{ stats.total }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-
-          <center>
-            <h2 class="my-4">STATISTIQUES NIVEAUX</h2>
-          </center>
-
-          {% for cycle, niveaux in niveau_stats.items %}
-          <br>
-            <h3>{{ cycle }}</h3>
-            <br>
-            <table class="table table-bordered table-hover table-striped">
-              <thead class="table-info">
-                <tr>
-                  <th>NIVEAU</th>
-                  <th>ETUDIANT AFFECTÉ</th>
-                  <th>ETUDIANT NON AFFECTÉ</th>
-                  <th>INSCRIPTIONS</th>
-                  <th>RE-INSCRIPTION</th>
-                  <th>TOTAL</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for niveau, stats in niveaux.items %}
-                  <tr>
-                    <td>{{ niveau }}</td>
-                    <td>{{ stats.etudiant_affecte }}</td>
-                    <td>{{ stats.etudiant_non_affecte }}</td>
-                    <td>{{ stats.inscriptions }}</td>
-                    <td>{{ stats.re_inscriptions }}</td>
-                    <td>{{ stats.total }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            <br>
-          {% endfor %}
-        </div>
-
-      </div>
     </div>
-  </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#loader').hide(); // Cachez le loader au chargement
+<script>
+    // Chargement dynamique des années académiques selon l'établissement
+    $(document).ready(function () {
+        $('#etablissement').change(function () {
+            const etablissementId = $(this).val();
+            const anneeSelect = $('#annee');
 
-      $('#loader').ajaxStart(function() {
-        $(this).show();
-        $('#content').hide();
-      });
+            anneeSelect.empty();
+            anneeSelect.append('<option value="">-- Chargement... --</option>');
 
-      $('#loader').ajaxStop(function() {
-        $(this).hide();
-        $('#content').show();
-      });
+            if (etablissementId) {
+                $.ajax({
+                    url: '{% url "get_annees_academiques" %}',
+                    data: { etablissement_id: etablissementId },
+                    success: function (data) {
+                        anneeSelect.empty();
+                        anneeSelect.append('<option value="">-- Sélectionnez une année académique --</option>');
+                        data.forEach(function (annee) {
+                            anneeSelect.append(
+                                `<option value="${annee.id}">${annee.debut} - ${annee.fin}</option>`
+                            );
+                        });
+                    },
+                    error: function () {
+                        anneeSelect.empty();
+                        anneeSelect.append('<option value="">Erreur de chargement</option>');
+                        alert('Erreur lors du chargement des années académiques.');
+                    }
+                });
+            } else {
+                anneeSelect.empty();
+                anneeSelect.append('<option value="">-- Sélectionnez un établissement d\'abord --</option>');
+            }
+        });
+
+        // Charts
+        initCharts();
     });
-  </script>
+
+    function initCharts() {
+        // Données pour le graphique par cycle
+        const cycleLabels = [
+            {% for cycle, stats in cycle_stats.items %}
+                '{{ cycle|escapejs }}'{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        const cycleTotals = [
+            {% for cycle, stats in cycle_stats.items %}
+                {{ stats.total|default:0 }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        const newIns = {{ total_new_inscriptions|default:0 }};
+        const reIns = {{ total_re_inscriptions|default:0 }};
+        const affectes = {{ affectes|default:0 }};
+        const nonAffectes = {{ non_affectes|default:0 }};
+
+        // Chart 1 : barres par cycle
+        const cycleCtx = document.getElementById('cycleChart');
+        if (cycleCtx && cycleLabels.length) {
+            new Chart(cycleCtx, {
+                type: 'bar',
+                data: {
+                    labels: cycleLabels,
+                    datasets: [{
+                        label: 'Total inscrits',
+                        data: cycleTotals,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 5 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 2 : doughnut nouvelles vs ré-inscriptions
+        const natureCtx = document.getElementById('inscriptionNatureChart');
+        if (natureCtx) {
+            new Chart(natureCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Nouvelles inscriptions', 'Ré-inscriptions'],
+                    datasets: [{
+                        data: [newIns, reIns],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    cutout: '55%'
+                }
+            });
+        }
+
+        // Chart 3 : barres affectés vs non affectés
+        const affectCtx = document.getElementById('affectationChart');
+        if (affectCtx) {
+            new Chart(affectCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Affectés', 'Non affectés'],
+                    datasets: [{
+                        data: [affectes, nonAffectes],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 5 }
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>
+
 {% endblock %}

@@ -145,7 +145,7 @@
 					<font size=1 color="#000000">
 						Moy: {{note.moyenne}}<br>
 						<hr>
-						Moy UE : {{note.moyenne_unite}}
+						Moy UE : {{note.moyenne_unite_vue}}
 						<br>
 					</font></td>
 	
@@ -170,7 +170,7 @@
 	<tr>
 	</tr>
 	<tr>
-		<!-- {% for ue in maquette.unites  %}
+		 {% for ue in maquette.unites  %}
 		
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan={{ue.matieres_count}} align="left" valign=top>
 			<font color="#000000">
@@ -184,7 +184,7 @@
 				</font>				
 				</td>
 			
-		{% endfor %} -->
+		{% endfor %}
 	</tr>
 	{% endfor %}
 </table>
@@ -192,3 +192,8 @@
 </body>
 
 </html>
+
+
+
+
+

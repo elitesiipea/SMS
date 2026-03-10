@@ -1,0 +1,258 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block page %}
+
+<style>
+    /* Styles par défaut pour l'affichage à l'écran */
+    .alert {
+        background-color: #ff4c4c;
+        color: white;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
+    .alert-icon {
+        margin-right: 10px;
+    }
+    .alert-text {
+        flex: 1;
+    }
+
+    /* Styles pour l'impression */
+    @media print {
+        .alert {
+            background-color: #ff4c4c; /* Couleur de fond rouge */
+            color: white; /* Couleur du texte blanc */
+            padding: 15px; /* Espacement */
+            margin: 20px 0; /* Marge */
+            border-radius: 5px; /* Coins arrondis */
+            display: flex; /* Flexbox */
+            align-items: center; /* Alignement */
+            font-family: Arial, sans-serif; /* Police */
+        }
+        .alert-icon {
+            margin-right: 10px; /* Marge à droite de l'icône */
+        }
+        .alert-text {
+            flex: 1; /* Prend tout l'espace disponible */
+        }
+
+        /* Masquer d'autres éléments si nécessaire */
+        body {
+            -webkit-print-color-adjust: exact; /* Forcer l'impression des couleurs */
+            print-color-adjust: exact; /* Pour les autres navigateurs */
+        }
+    }
+</style>
+
+<!-- Start Contentbar -->    
+<div class="contentbar">  
+   
+                <!-- End row -->
+                <div class="row justify-content-center">
+
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                            <a style="float:right" href="{% url 'classes_progress_details' pk=object.classe.pk  %}"class="btn btn-info" >{{user.etablissement.code}}-DASX{{object.id}}</a>
+                                   <br>
+                            <div class="card-body">
+                                
+                                <div class="invoice">
+                                    <div class="invoice-head">
+                                        
+                                        <div class="row">
+                                            <div class="col-12 col-md-7 col-lg-7">
+                                                <div class="invoice-logo">
+                                                    <h4>{{user.etablissement}}</h4>
+                                                </div>
+                                                <h4>{{user.etablissement.email}}</h4>
+                                                 <p>{{user.etablissement.contact}}</p>
+                                                <p class="mb-0"></p>
+                                            </div>
+                                            <div class="col-12 col-md-5 col-lg-5">
+                                                <div class="invoice-name">
+                                                    <span class="badge badge-info-inverse font-14"><h4>{{user.etablissement.code}}-DASX{{object.id}}</h4></span>
+                                                    <br>
+                                                    <br>
+                                                    <p class="mb-0">Dernière mise à jour  : {{object.date_update}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <br>
+                                   <u> <h2><center>FICHE D'IDENTIFICATION ET DE SUIVI DE PROGRAMME </center></h2></u>
+                                   <br>
+                                    <div class="invoice-billing">
+                                        <div class="row">
+                                           
+                                            <div class="col-12">
+                                                <div class="invoice-address">
+                                                 
+                                                    <div class="invoice-address">
+                                                        <hr>
+                                                        <h2 class="mb-4"><strong>1-INFORMATION DE BASE</strong></h2>
+                                                        <hr>
+                                                        <h4 class="text-muted mb-3">
+                                                            <strong>ENSEIGNANT :</strong> {{ object.enseignant|upper }}
+                                                        </h4>
+                                                        
+                                                        <ul class="list-unstyled">
+                                                            <li>
+                                                                <h4><strong>ANNEE ACADEMIQUE :</strong> {{ object.classe.annee_academique }}</h4>
+                                                            </li>
+                                                            <li>
+                                                                <h4><strong>FILIERE :</strong> {{ object.classe.filiere|upper }}</h4>
+                                                            </li>
+                                                            <li>
+                                                                <h4><strong>NIVEAU :</strong> {{ object.classe.niveau|upper }}</h4>
+                                                            </li>
+                                                            <li>
+                                                                <h4><strong>CLASSE :</strong> {{ object.classe|upper }}</h4>
+                                                            </li>
+                                                            <li>
+                                                                <h4><strong>MATIERE :</strong> {{ object.matiere |upper }}</h4>
+                                                            </li>
+                                                            <hr>
+                                                            <h2 class="mb-4"><strong>2-VOLUMES ET TAUX HORAIRES</strong></h2>
+                                                            <li>
+                                                                <h4>VOLUME HORAIRE CM : {{ object.matiere.volume_horaire }} Heure(s)       |       TAUX HORAIRE CM : {{ object.matiere.taux_horaire|intcomma }} FCFA</h4>
+                                                            </li>
+                                                         
+                                                            <hr>
+                                                            
+                                                            {% if object.classe.classe_universitaire %}
+
+                                                            <li>
+                                                                <h4>VOLUME HORAIRE TD : {{ object.matiere.volume_horaire_td }} Heure(s)   | TAUX HORAIRE  TD : {{ object.matiere.taux_horaire_td|intcomma }} FCFA</h4>
+                                                            </li>
+                                                          
+                                                            <hr>
+                                                                
+                                                            {% endif %}
+                                                            <li>
+                                                                <h4><strong>COURS EFFECTUE EN TRONC COMMUN  :</strong> 
+                                                                
+                                                                {% if object.cours_en_tronc_commun %}OUI
+                                                                {% else %}NON
+                                                                    
+                                                                {% endif %}
+                                                                    
+                                                                </h4>
+                                                            </li>
+                                                          
+                                                            <li>
+                                                                <h4><strong>ESTIMATION DE LA PAIE  :</strong>
+                                                                    {% if object.cours_en_tronc_commun %}
+                                                                    (PAR ASSOCIATION DES CLASSES DE TRONC COMMUN)
+                                                                    {% else %}
+                                                                    (PAIEMENT UNIQUE)
+                                                                    {% endif %}
+                                                                </h4>
+                                                            </li>
+<hr>
+                                                            <li>
+                                                                <h4><strong>Net à Payer :</strong> {{ object.price |intcomma }} FCFA</h4>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <h2 class="mb-4"><strong>3-DOCUMENTATIONS</strong></h2>
+                                        <hr>
+
+                                        <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Support de cours</th>
+            <th>Syllabus</th>
+            <th>Notes</th>
+            <th>Cahier de Texte</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-center">
+              
+              {% if object.support %}
+
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://myiipea.com{{ object.support.url }}" width="150px" />
+              {% else %}
+
+              SUPPORT DE COURS ABSCENT
+                
+              {% endif %}
+                
+            </td>
+            <td class="text-center">
+                {% if object.syllabys %}
+
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://myiipea.com{{ object.syllabys.url }}" width="150px" />
+              {% else %}
+
+              SYLLABUS DE COURS ABSCENT
+                
+              {% endif %}
+            </td>
+            <td>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <!-- Zone pour la signature et le cachet pour les Notes -->
+                <p style="border-bottom: 1px solid #000; text-align:center;">LE SERVICE INFORMATIQUE</p>
+            </td>
+            <td>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <!-- Zone pour la signature et le cachet pour le Cahier de Texte -->
+                <p style="border-bottom: 1px solid #000; text-align:center;">LE RESPONSABLE PEDAGOGIQUE</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+                                       
+                                
+                                  
+                                    <div class="invoice-footer">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+
+                                                <p class="mb-0">{{user.etablissement.code }} vous remercie </p><p id="currentDate"></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="invoice-footer-btn">
+                                                    <a href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+    

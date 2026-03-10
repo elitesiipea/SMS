@@ -1,0 +1,154 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block page %}
+
+<style>
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+    
+
+    .floating-btn .btn {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .floating-btn .btn:hover {
+        background-color: #218838; /* Couleur de survol */
+        color: #fff;
+    }
+    
+</style>
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="floating-btn">
+            <a href="{% url 'export_paiements_to_excel' %}{% if request.GET.annee_id %}?annee_id={{ request.GET.annee_id }}{% endif %}" 
+               class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Télécharger tout en Excel
+            </a>
+        </div>
+        <br>
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+              
+                <div class="card-body">
+
+
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Id-Reference</th>
+                                <th>Année Académique</th>
+                                <th>Etudiant</th>
+                                <th>Filiere</th>
+                                <th>Niveau</th>
+                                <th>Montant du Paiement</th>
+                                <th>Source</th>
+                                <th>Parcerelle Wave</th>
+                                <th>Effectué Par :</th>
+                                <th>Sytêm-Ref</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            
+                            </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {% for paiement in  page_obj %}
+                                <tr>
+                                    <th>{{ paiement.id }}</th>
+                                    <th>{{ paiement.inscription.annee_academique }}</th>
+                                    <th>{{ paiement.inscription.etudiant }}</th>
+                                    <th>{{ paiement.inscription.filiere }}</th>
+                                    <th>{{ paiement.inscription.niveau }}</th>
+                                    <th>{{ paiement.montant|floatformat:0|intcomma }}</th>
+                                    <th>{{ paiement.source }}</th> 
+                                    <th>
+                                        {% if paiement.wave_launch_url %}
+                                            DIRECT API
+                                        {% else %}
+                                            PAIEMENT MARCHAND
+                                        {% endif %}
+                                    </th>
+                                  
+                                    <th>{{ paiement.effectue_par }}</th>
+                                    <th>{{ paiement.reference }}</th>
+                                    <th>{{ paiement.created }}</th>
+                                    <th>
+                                        <form method="post" action="{% url 'paiement_historique_list_details' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="paiement_id" value="{{ paiement.id }}">
+                                            <button type="submit" name="validate_payment" class="btn btn-success">VALIDER</button>
+                                        </form>
+                                    </th>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination d-flex justify-content-center mt-3">
+                        <nav aria-label="Pagination">
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if request.GET.annee_id %}&annee_id={{ request.GET.annee_id }}{% endif %}">Première</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.annee_id %}&annee_id={{ request.GET.annee_id }}{% endif %}">Précédente</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Première</span>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Précédente</span>
+                                    </li>
+                                {% endif %}
+                    
+                                <li class="page-item disabled">
+                                    <span class="page-link">
+                                        Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                                    </span>
+                                </li>
+                    
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.annee_id %}&annee_id={{ request.GET.annee_id }}{% endif %}">Suivante</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.annee_id %}&annee_id={{ request.GET.annee_id }}{% endif %}">Dernière</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Suivante</span>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Dernière</span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+
+{% endblock page %}
+    

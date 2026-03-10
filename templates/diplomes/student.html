@@ -63,12 +63,12 @@
     
                                 <br>
                                 <br>
-                                <b>Le Directeur Général</b>
+                                <b>Le Secrétaire Général</b>
                              
                                 <br>
                                 <br>
                                 <br>
-                                <b>&nbsp;&nbsp;&nbsp;&nbsp;KONE Ismaël</b>
+                                <b>&nbsp;&nbsp;&nbsp;&nbsp;OURAGA Jonathan</b>
                         </h4>
                        </div>
                         </div>
@@ -100,7 +100,7 @@
                         <b>{{attestation.nom | upper }} {{attestation.prenom | upper }}, </b> 
                         Né(e) le {{attestation.date_de_naissance | date:'d/m/Y' }} À {{attestation.lieu_de_naissance | upper }},<br>
                         Inscrit sous le matricule <b>{{attestation.matricule | upper }}</b>, a obtenu le : 
-                        <br><b>Dîplome de {{attestation.diplome | capfirst}}</b>,
+                        <br><b>Diplôme de {{attestation.diplome | capfirst}}</b>,
                             <br>
                         Au titre de l’année académique {{attestation.annee_academique}}.
     
@@ -175,7 +175,7 @@
                         </h3>
                       
                         <h5>
-                            Conformément au procès verbal en date du <b style="" class="gras">{{attestation.date_soutenance}}</b> établit par le jury de délibération.
+                            Conformément au procès verbal en date du <b style="" class="gras">{{attestation.date_soutenance  }}</b> établit par le jury de délibération.
                         </h5>
                    
                 </center>
@@ -246,7 +246,7 @@
                         </p>
                     {% endif %}
                     <p>
-                        Vu le procès-verbal du jury en date du <b style="" class="gras">{{attestation.date_soutenance}}</b> attestant que l’intéressé(e) a satisfait toutes les obligations du règlement des études.<br>
+                        Vu le procès-verbal du jury en date du <b style="" class="gras">{{attestation.date_soutenance | date:"d F Y" }}</b> attestant que l’intéressé(e) a satisfait toutes les obligations du règlement des études.<br>
                         Sur proposition du {% if attestation.cycle == "UNIVERSITAIRE" %} Président {% elif attestation.cycle == "PROFESSIONNEL" %} Directeur Général {% endif %} de l’Institut International Polytechnique des Elites d’Abidjan sis Abidjan Cocody,<br>
                         Le Ministre de l’Enseignement Supérieur et de la Recherche Scientifique délivre au titre de l’année académique <b style="">{{attestation.annee_academique}}</b><br>
                         À {{ attestation.genre }}  <b style=""  class="gras">{{attestation.nom }} {{attestation.prenom }}</b><br>

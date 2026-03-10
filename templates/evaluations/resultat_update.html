@@ -1,0 +1,57 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        
+        <div class="col-lg-12">
+                <!-- Start col -->
+            <div class="card m-b-30">
+               
+                <div class="card-body">
+                    <h2>Etudiant :  {{ object.etudiant.etudiant }}</h2>
+                    <h2>Matiere :  {{ object.note.matiere }}</h2>
+                    <div class="container mt-5">
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="id_note_1" class="form-label">Note 1</label>
+                                {{ form.note_1 }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_note_2" class="form-label">Note 2</label>
+                                {{ form.note_2 }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_note_3" class="form-label">Note 3</label>
+                                {{ form.note_3 }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_note_partiel" class="form-label">Note Partiel</label>
+                                {{ form.note_partiel }}
+                            </div>
+                            <div class="form-check">
+                                {{ form.non_classe }}
+                                <label class="form-check-label" for="id_non_classe">Non classé</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+
+{% endblock page %}

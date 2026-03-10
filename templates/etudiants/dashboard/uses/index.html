@@ -3,12 +3,97 @@
 {% load static %}
 {% block content %}
 
+<style>
+
+    @keyframes clignote {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    
+    .clignotant {
+        animation: clignote 0.5s infinite;
+    }
+
+    
+    /* Styles par défaut pour l'affichage à l'écran */
+    .alert {
+        background-color: #ff4c4c;
+        color: white;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
+    .alert-icon {
+        margin-right: 10px;
+    }
+    .alert-text {
+        flex: 1;
+    }
+
+    /* Styles pour l'impression */
+    @media print {
+        .alert {
+            background-color: #ff4c4c; /* Couleur de fond rouge */
+            color: white; /* Couleur du texte blanc */
+            padding: 15px; /* Espacement */
+            margin: 20px 0; /* Marge */
+            border-radius: 5px; /* Coins arrondis */
+            display: flex; /* Flexbox */
+            align-items: center; /* Alignement */
+            font-family: Arial, sans-serif; /* Police */
+        }
+        .alert-icon {
+            margin-right: 10px; /* Marge à droite de l'icône */
+        }
+        .alert-text {
+            flex: 1; /* Prend tout l'espace disponible */
+        }
+
+        /* Masquer d'autres éléments si nécessaire */
+        body {
+            -webkit-print-color-adjust: exact; /* Forcer l'impression des couleurs */
+            print-color-adjust: exact; /* Pour les autres navigateurs */
+        }
+    }
+</style>
+
 <div class="container">
     <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
         <h2 class="title">Bienvenue {{user}}</h2>
         <span class="shape-line"><i class="icon-19"></i></span>
         <p>Sélectionnez la rubrique à laquelle vous souhaitez accéder</p>
         <p>Votre Classe est : <b>{{cursus.classe}}</b></p>
+
+        <hr>
+        {% if not user.etudiant.last_class.dossier_complet %}
+
+        <div class="alert-dossier">
+            <div class="alert-icon">⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️</div>
+            <div class="alert-text">
+                <strong>
+                    <p style="font-size: large;color:red">
+                        Votre dossier d'inscription n'est pas complet</strong>. Il vous manque le(s) document(s) suivant :  <br>
+                    </p>
+               <p>
+                {% if not user.etudiant.last_class.extrait %}- 02 Extraits de naissance originaux<br>{% endif %}
+                {% if not user.etudiant.last_class.piece %}- 02 Copies CNI / PASSEPORT / Attetstation d'identité / Carte de séjour<br>{% endif %}
+                {% if not user.etudiant.last_class.bac %}- 02 Copies légalisé du dernier diplôme obtenu<br>{% endif %}
+                {% if not user.etudiant.last_class.photo %}- 04 Photo d'identité de même tirage<br>{% endif %}
+                
+               </p>
+
+               <p style="font-size: large;color:black">
+                Merci de bien vouloir fournir ces éléments avant le <b style="color:red">06 Décembre 2024</b> faute de quoi votre inscription sera invalidée.
+                </p>
+                
+            </div>
+        </div>
+        {% endif %}
+        <hr>
     </div>
 
     <div class="row g-5">
@@ -156,18 +241,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-6" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'logout' %}'">
-            <div class="categorie-grid categorie-style-2 color-extra01-style">
-                <div class="icon">
-                    <i class="icon-11 personal-development"></i>
-                </div>
-                <div class="content">
-                    <a href="{% url 'logout' %}">
-                        <h5 class="title">Déconnexion</h5>
-                    </a>
-                </div>
-            </div>
-        </div>
+    
 
         <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_transport' %}'">
             <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
@@ -186,8 +260,8 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'cartes' %}'">
-            <div class="categorie-grid categorie-style-2 color-extra04-style">
+        <div class="col-lg-4 col-md-6 clignotant" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'cartes' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra03-style">
                 <div class="icon">
                     <i class="icon-15"></i>
                 </div>
@@ -198,6 +272,39 @@
                 </div>
             </div>
         </div>
+        
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='href="mailto:reclamations@iipea.com?from={{ user.email }}&subject=Reclamations MyIIPEA &body=REC-IIPEA-00{{ user.id }},'">
+            <div class="categorie-grid categorie-style-2 color-extra04-style">
+                <div class="icon">
+                    <i class="icon-20"></i>
+                </div>
+                <div class="content">
+                    <a href="mailto:reclamations@iipea.com?from={{ user.email }}&subject=Reclamations MyIIPEA &body=REC-IIPEA-00{{ user.id }},">
+                        <h5 class="title">Écrire à l'administration</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Formulaire caché pour le logout -->
+<form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+    {% csrf_token %}
+</form>
+
+<!-- Bloc de déconnexion stylisé -->
+<div class="col-lg-4 col-md-6" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800" 
+     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <div class="categorie-grid categorie-style-2 color-extra01-style">
+        <div class="icon">
+            <i class="icon-11 personal-development"></i>
+        </div>
+        <div class="content">
+            <a href="#">
+                <h5 class="title">Déconnexion</h5>
+            </a>
+        </div>
+    </div>
+</div>
 
     </div>
 </div>

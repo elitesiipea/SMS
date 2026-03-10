@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de votre demande de démo – SMS</title>
+</head>
+<body style="margin:0;padding:0;background-color:#020617;font-family:Poppins,system-ui,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#020617;padding:24px 0;">
+    <tr>
+        <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background:#020617;border-radius:24px;border:1px solid #1f2937;overflow:hidden;">
+                <tr>
+                    <td style="padding:24px 28px 16px 28px;background:linear-gradient(135deg,#0B1F4B,#00A6CE);color:#f9fafb;">
+                        <table width="100%">
+                            <tr>
+                                <td align="left">
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <div style="width:32px;height:32px;border-radius:16px;background:#FF9F1C;display:flex;align-items:center;justify-content:center;color:#0B1F4B;font-weight:800;font-size:14px;">
+                                            SMS
+                                        </div>
+                                        <div style="line-height:1.3;">
+                                            <div style="font-size:14px;font-weight:600;">School Management System</div>
+                                            <div style="font-size:10px;opacity:.9;">by OCTOGONE TECHNOLOGIES</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td align="right" style="font-size:11px;opacity:.9;">
+                                    Démo &bull; Gestion scolaire intelligente
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:24px 28px 8px 28px;color:#e5e7eb;font-size:13px;">
+                        <p style="margin:0 0 12px 0;">Bonjour {{ demo.full_name }},</p>
+                        <p style="margin:0 0 12px 0;">
+                            Merci d’avoir demandé une démo de <strong>SMS – School Management System</strong>.
+                            Nous sommes ravis de l’intérêt que porte <strong>{{ demo.school_name }}</strong> à la
+                            digitalisation de sa gestion scolaire.
+                        </p>
+                        <p style="margin:0 0 12px 0;">
+                            Notre équipe vous contactera très rapidement pour fixer un créneau de démonstration
+                            adapté à votre disponibilité
+                            {% if demo.preferred_slot %} (vous avez indiqué&nbsp;: <strong>{{ demo.preferred_slot }}</strong>){% endif %}.
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:0 28px 12px 28px;">
+                        <div style="border-radius:18px;border:1px solid #1f2937;background:#020617;padding:14px 16px;">
+                            <p style="margin:0 0 8px 0;color:#9ca3af;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;">
+                                Récapitulatif de votre demande
+                            </p>
+                            <table width="100%" cellpadding="0" cellspacing="0" style="font-size:12px;color:#e5e7eb;">
+                                <tr>
+                                    <td style="padding:2px 0;width:38%;color:#9ca3af;">Établissement</td>
+                                    <td style="padding:2px 0;">{{ demo.school_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 0;color:#9ca3af;">Type</td>
+                                    <td style="padding:2px 0;">{{ demo.get_school_type_display }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 0;color:#9ca3af;">Fonction</td>
+                                    <td style="padding:2px 0;">{{ demo.position|default:"-" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 0;color:#9ca3af;">Téléphone</td>
+                                    <td style="padding:2px 0;">{{ demo.phone|default:"-" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 0;color:#9ca3af;">Nombre d’élèves</td>
+                                    <td style="padding:2px 0;">{{ demo.students_count|default:"Non précisé" }}</td>
+                                </tr>
+                                {% if demo.message %}
+                                <tr>
+                                    <td style="padding:6px 0;color:#9ca3af;vertical-align:top;">Message</td>
+                                    <td style="padding:6px 0;white-space:pre-line;">{{ demo.message }}</td>
+                                </tr>
+                                {% endif %}
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:0 28px 24px 28px;color:#9ca3af;font-size:11px;">
+                        <p style="margin:0 0 8px 0;">
+                            À très bientôt,
+                        </p>
+                        <p style="margin:0 0 8px 0;">
+                            L’équipe <strong>OCTOGONE TECHNOLOGIES</strong><br/>
+                            <span style="color:#e5e7eb;">SMS – School Management System</span>
+                        </p>
+                        <p style="margin:0;color:#6b7280;font-size:10px;">
+                            Cet e-mail vous a été envoyé suite à une demande de démo réalisée sur notre site.
+                            Si vous pensez qu’il s’agit d’une erreur, vous pouvez simplement l’ignorer.
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:12px 28px 16px 28px;background:#020617;border-top:1px solid #1f2937;color:#6b7280;font-size:10px;">
+                        <table width="100%">
+                            <tr>
+                                <td>© {{ demo.created_at|date:"Y" }} OCTOGONE TECHNOLOGIES</td>
+                                <td align="right">
+                                    <a href="https://www.myoctogone.com" style="color:#9ca3af;text-decoration:none;">www.myoctogone.com</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

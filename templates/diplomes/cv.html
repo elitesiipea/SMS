@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CV Professionnel">
+    <title>CV Professionnel</title>
+    <style>
+        /* Général */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        h1, h2, h3 {
+            margin: 0;
+            color: #007bff;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        h2 {
+            font-size: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 18px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+
+        /* En-tête */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #007bff;
+            margin-bottom: 10px;
+        }
+        .contact {
+            text-align: center;
+        }
+        .contact p {
+            margin: 2px 0;
+        }
+
+        /* Expérience et formation */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+        .item {
+            margin-bottom: 15px;
+        }
+        .item h3 {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .item p {
+            margin: 0;
+        }
+
+        /* Compétences */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skills span {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        /* Impression */
+        @media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+   {% for diplome in diplomes  %}
+
+   <div class="container">
+    <!-- En-tête -->
+    <div class="header">
+      
+        <h1>{{diplome.nom | upper }} {{diplome.prenom | upper }}</h1>
+    </div>
+
+    <!-- Contact -->
+    <div class="section contact">
+        <p><strong>Email :</strong> {{diplome.email}}</p>
+        <p><strong>Téléphone :</strong>{{diplome.contact1 | upper }}</p>
+        <p><strong>Adresse :</strong> Abidjan, Côte d'Ivoire</p>
+    </div>
+
+    <!-- Expérience professionnelle -->
+    <div class="section">
+        {% comment %} <h2>Expérience Professionnelle</h2>
+        <ul>
+           <li class="item">
+                <h3>Développeur Full Stack - XYZ Tech</h3>
+                <p>2021 - Présent</p>
+                <p>Développement d'applications web performantes en React et Django.</p>
+            </li>
+            <li class="item">
+                <h3>Développeur Backend - ABC Solutions</h3>
+                <p>2019 - 2021</p>
+                <p>Conception d'API robustes et sécurisées avec Python.</p>
+            </li> 
+        </ul> {% endcomment %}
+    </div>
+
+    <!-- Formation -->
+    <div class="section">
+        <h2>Formation Académique</h2>
+        <ul>
+           
+           {% if diplome.niveau == "MASTER" %}
+           <li class="item">
+            <h3>Master 2  {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2023 - 2024</p>
+        </li>
+        <li class="item">
+            <h3>Master 1  {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2022 - 2023</p>
+        </li>
+        <li class="item">
+            <h3>Licence 3  {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2021 - 2022</p>
+        </li>
+        <li class="item">
+            <h3>Licence 2  {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2020 - 2021</p>
+        </li>
+        <li class="item">
+            <h3>Licence 1 {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2019 - 2020</p>
+        </li>
+        {% else %}
+        <li class="item">
+       
+        <li class="item">
+            <h3>Licence 3  {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2023 - 2024</p>
+        </li>
+        <li class="item">
+            <h3>Licence 2  {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2022 - 2023</p>
+        </li>
+        <li class="item">
+            <h3>Licence 1 {{diplome.diplome | capfirst }} - IIPEA </h3>
+            <p>2021 - 2022</p>
+        </li>
+           {% endif %}
+            
+           
+        </ul>
+    </div>
+
+    <!-- Compétences -->
+    <div class="section">
+        <h2>Compétences</h2>
+        <br>
+        <div class="skills">
+            <span>WORD</span>
+            <span>EXEL</span>
+            <span>POWERPOINT</span>
+            <span>SUITE BUREAUTIQUE</span>
+            <span>MICROSOFT OPTUS PLUS</span>
+           
+        </div>
+    </div>
+
+    <!-- Langues -->
+    <div class="section">
+        <h2>Langues</h2>
+        <ul>
+            <li>Français : Langue Maternelle</li>
+            <li>Anglais : Intermédiaire</li>
+            
+        </ul>
+    </div>
+
+    <!-- Loisirs -->
+    <div class="section">
+        <h2>Loisirs</h2>
+        <ul>
+            <li>Lecture </li>
+            <li>Randonnée</li>
+            <li>Musique</li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 {{diplome.nom | upper }} {{diplome.prenom | upper }}.</p>
+    </div>
+</div>
+
+<p style="page-break-before: always;"></p>
+    
+   {% endfor %}
+    
+</body>
+</html>
+
+  

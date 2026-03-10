@@ -1,0 +1,792 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 14px;
+        color: #1f2933;
+    }
+
+    .page-header-etab {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 22px 26px;
+        color: #ffffff;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+    }
+
+    .page-header-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .logo-etab-box {
+        width: 68px;
+        height: 68px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo-etab-box img {
+        max-height: 60px;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 4px;
+    }
+
+    .page-title-block h1 {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 0 4px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .page-title-block .subtitle {
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    .badge-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        background: rgba(255,255,255,0.12);
+    }
+
+    .badge-type i {
+        font-size: 14px;
+    }
+
+    .page-header-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .badge-status {
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.12);
+    }
+
+    .badge-status.active {
+        color: #bbf7d0;
+    }
+
+    .badge-status.inactive {
+        color: #fee2e2;
+    }
+
+    .btn-print-etab {
+        background: #f97316;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(249,115,22,0.4);
+    }
+
+    .btn-print-etab i {
+        font-size: 16px;
+    }
+
+    .btn-print-etab:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+    }
+
+    .last-update-etab {
+        font-size: 11px;
+        opacity: 0.9;
+    }
+
+    .card {
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 14px rgba(15,23,42,0.06);
+    }
+
+    .card-header {
+        border-radius: 14px 14px 0 0 !important;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 12px 18px;
+    }
+
+    .card-header h5 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .card-header h5 i {
+        font-size: 18px;
+    }
+
+    .card-body {
+        padding: 16px 18px;
+    }
+
+    .fiche-etablissement {
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .fiche-etablissement::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(11,31,75,0.05), rgba(0,166,206,0.04));
+        pointer-events: none;
+    }
+
+    .fiche-etablissement .card-body {
+        position: relative;
+        z-index: 1;
+    }
+
+    .fiche-logo-container {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .fiche-logo-container img {
+        max-height: 120px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        padding: 6px;
+    }
+
+    .fiche-nom {
+        font-size: 18px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 2px;
+    }
+
+    .fiche-alias {
+        font-size: 13px;
+        text-align: center;
+        color: #6b7280;
+        margin-bottom: 10px;
+    }
+
+    .fiche-section-title {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+        margin-bottom: 6px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .info-row span:first-child {
+        color: #6b7280;
+    }
+
+    .info-row span:last-child {
+        font-weight: 500;
+        color: #111827;
+        text-align: right;
+    }
+
+    .badge-etab-type {
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4338ca;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .badge-etab-wave {
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #047857;
+        font-size: 11px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .fiche-footer-bull {
+        font-size: 12px;
+        color: #4b5563;
+        white-space: pre-line;
+        border-radius: 8px;
+        background: #f9fafb;
+        padding: 8px 10px;
+        border: 1px dashed #e5e7eb;
+    }
+
+    .cachet-img {
+        max-height: 110px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        padding: 6px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #374151;
+    }
+
+    .form-text {
+        font-size: 11px;
+    }
+
+    .form-check label {
+        font-size: 13px;
+    }
+
+    .btn-submit-etab {
+        border-radius: 999px;
+        padding: 8px 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .section-intro {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 12px;
+    }
+
+    @media print {
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+            background: #ffffff !important;
+        }
+
+        body.vertical-layout {
+            background: #ffffff !important;
+        }
+
+        .leftbar,
+        .topbar,
+        .breadcrumbbar,
+        .footerbar,
+        .no-print,
+        .btn,
+        .page-header-etab {
+            display: none !important;
+        }
+
+        #containerbar,
+        .rightbar,
+        .contentbar,
+        .row,
+        .col-lg-12,
+        .col-lg-8,
+        .col-lg-4 {
+            margin: 0 !important;
+            padding: 0 !important;
+            max-width: 100% !important;
+        }
+
+        #fiche-etablissement {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            margin: 0 !important;
+            padding: 12mm 14mm !important;
+            min-height: 297mm;
+            background: #ffffff !important;
+        }
+    }
+</style>
+
+<div class="contentbar">
+    <div class="row">
+
+        {% if etablissement %}
+            <!-- HEADER -->
+            <div class="col-lg-12 no-print">
+                <div class="page-header-etab">
+                    <div class="page-header-left">
+                        <div class="logo-etab-box">
+                            {% if etablissement.logo %}
+                                <img src="{{ etablissement.logo.url }}" alt="{{ etablissement.nom }}">
+                            {% else %}
+                                <i class="feather icon-home" style="font-size:30px;color:#e5e7eb;"></i>
+                            {% endif %}
+                        </div>
+                        <div class="page-title-block">
+                            <h1>{{ titre|upper }}</h1>
+                            <div class="subtitle">
+                                {{ etablissement.nom }}
+                                {% if etablissement.sigle %} ({{ etablissement.sigle }}){% endif %}
+                            </div>
+                            <div class="mt-1">
+                                <span class="badge-type">
+                                    <i class="feather icon-layers"></i>
+                                    {% if etablissement.is_college %}
+                                        Collège / Lycée
+                                    {% else %}
+                                        Enseignement supérieur
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-header-right">
+                        <span class="badge-status {% if etablissement.active %}active{% else %}inactive{% endif %}">
+                            <i class="feather icon-activity"></i>
+                            {% if etablissement.active %}Établissement actif{% else %}Établissement inactif{% endif %}
+                        </span>
+                        <button type="button" class="btn-print-etab" onclick="window.print()">
+                            <i class="feather icon-printer"></i>
+                            Imprimer la fiche
+                        </button>
+                        <div class="last-update-etab">
+                            Mise à jour le {% now "d/m/Y à H:i" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FICHE + FORMULAIRE -->
+            <div class="col-lg-4">
+                <div id="fiche-etablissement" class="card fiche-etablissement m-b-30">
+                    <div class="card-body">
+                        <div class="fiche-logo-container">
+                            {% if etablissement.logo %}
+                                <img src="{{ etablissement.logo.url }}" alt="{{ etablissement.nom }}">
+                            {% else %}
+                                <span class="badge badge-secondary">Aucun logo défini</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="fiche-nom">{{ etablissement.full_name|default:etablissement.nom }}</div>
+                        <div class="fiche-alias">
+                            {{ etablissement.nom }}
+                            {% if etablissement.sigle %} ({{ etablissement.sigle }}){% endif %}
+                        </div>
+
+                        <hr>
+
+                        <div class="fiche-section-title">Informations générales</div>
+                        <div class="info-row">
+                            <span>Code</span>
+                            <span>{{ etablissement.code|default:"-" }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Type</span>
+                            <span>
+                                <span class="badge-etab-type">
+                                {% if etablissement.is_college %}
+                                    Collège / Lycée
+                                {% else %}
+                                    Enseignement supérieur
+                                {% endif %}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span>Actif</span>
+                            <span>
+                                {% if etablissement.active %}
+                                    Oui
+                                {% else %}
+                                    Non
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <hr>
+
+                        <div class="fiche-section-title">Contact</div>
+                        <div class="info-row">
+                            <span>Téléphone</span>
+                            <span>{{ etablissement.contact|default:"-" }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Email</span>
+                            <span>{{ etablissement.email|default:"-" }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Site web</span>
+                            <span>
+                                {% if etablissement.site %}
+                                    <a href="{{ etablissement.site }}" target="_blank">{{ etablissement.site }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-2">
+                            <div class="fiche-section-title">Pied de page des bulletins</div>
+                            <div class="fiche-footer-bull">
+                                {{ etablissement.footer_bull|default:"(Aucun texte défini pour le pied de page des bulletins.)" }}
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <div class="fiche-section-title">Cachet scolarité</div>
+                            {% if etablissement.cachet_scolarite %}
+                                <img src="{{ etablissement.cachet_scolarite.url }}" class="cachet-img" alt="Cachet scolarité">
+                            {% else %}
+                                <span class="badge badge-secondary">Aucun cachet défini</span>
+                            {% endif %}
+                        </div>
+
+                        {% if etablissement.wave_api_key %}
+                            <hr>
+                            <div class="fiche-section-title">Intégration Wave</div>
+                            <p class="mb-0">
+                                <span class="badge-etab-wave">
+                                    <i class="feather icon-zap"></i>
+                                    Clé API Wave configurée
+                                </span>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORMULAIRE MISE À JOUR -->
+            <div class="col-lg-8">
+                <div class="card m-b-30">
+                    <div class="card-header">
+                        <h5><i class="feather icon-edit-3"></i> Mettre à jour les informations</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="section-intro">
+                            Modifiez ici les informations administratives, les coordonnées, les éléments graphiques (logo, cachet)
+                            ainsi que les paramètres d’intégration (Wave, etc.).
+                        </p>
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.nom.label }}</label>
+                                        {{ form.nom }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>{{ form.sigle.label }}</label>
+                                        {{ form.sigle }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>{{ form.code.label }}</label>
+                                        {{ form.code }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ form.full_name.label }}</label>
+                                        {{ form.full_name }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.logo.label }}</label><br>
+                                        {{ form.logo }}
+                                        {% if etablissement.logo %}
+                                            <small class="form-text text-muted">Logo actuel : {{ etablissement.logo.name }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.cachet_scolarite.label }}</label><br>
+                                        {{ form.cachet_scolarite }}
+                                        {% if etablissement.cachet_scolarite %}
+                                            <small class="form-text text-muted">Cachet actuel : {{ etablissement.cachet_scolarite.name }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ form.footer_bull.label }}</label>
+                                        {{ form.footer_bull }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ form.contact.label }}</label>
+                                        {{ form.contact }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ form.email.label }}</label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ form.site.label }}</label>
+                                        {{ form.site }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group form-check mt-3">
+                                        {{ form.is_college }}
+                                        <label class="form-check-label" for="{{ form.is_college.id_for_label }}">
+                                            {{ form.is_college.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group form-check mt-3">
+                                        {{ form.active }}
+                                        <label class="form-check-label" for="{{ form.active.id_for_label }}">
+                                            {{ form.active.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ form.wave_api_key.label }}</label>
+                                        {{ form.wave_api_key }}
+                                        <small class="form-text text-muted">
+                                            Laissez vide si vous n'utilisez pas encore les paiements Wave.
+                                        </small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-success btn-submit-etab">
+                                    <i class="feather icon-save mr-1"></i> Enregistrer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- MODE CRÉATION -->
+            <div class="col-lg-12 no-print">
+                <div class="page-header-etab">
+                    <div class="page-header-left">
+                        <div class="logo-etab-box">
+                            <i class="feather icon-home" style="font-size:30px;color:#e5e7eb;"></i>
+                        </div>
+                        <div class="page-title-block">
+                            <h1>{{ titre|upper }}</h1>
+                            <div class="subtitle">
+                                Aucun établissement n'est encore associé à votre compte.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-header-right">
+                        <div class="last-update-etab">
+                            Création de l’établissement – {% now "d/m/Y" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="card m-b-30">
+                    <div class="card-header">
+                        <h5><i class="feather icon-plus-circle"></i> Créer mon établissement</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="section-intro">
+                            Renseignez les informations de votre établissement. Il sera automatiquement
+                            rattaché à votre profil après enregistrement.
+                        </p>
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.nom.label }}</label>
+                                        {{ form.nom }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>{{ form.sigle.label }}</label>
+                                        {{ form.sigle }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>{{ form.code.label }}</label>
+                                        {{ form.code }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ form.full_name.label }}</label>
+                                        {{ form.full_name }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.logo.label }}</label><br>
+                                        {{ form.logo }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.cachet_scolarite.label }}</label><br>
+                                        {{ form.cachet_scolarite }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ form.footer_bull.label }}</label>
+                                        {{ form.footer_bull }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ form.contact.label }}</label>
+                                        {{ form.contact }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ form.email.label }}</label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ form.site.label }}</label>
+                                        {{ form.site }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group form-check mt-3">
+                                        {{ form.is_college }}
+                                        <label class="form-check-label" for="{{ form.is_college.id_for_label }}">
+                                            {{ form.is_college.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group form-check mt-3">
+                                        {{ form.active }}
+                                        <label class="form-check-label" for="{{ form.active.id_for_label }}">
+                                            {{ form.active.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ form.wave_api_key.label }}</label>
+                                        {{ form.wave_api_key }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary btn-submit-etab">
+                                    <i class="feather icon-save mr-1"></i> Créer l'établissement
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+</div>
+{% endblock page %}

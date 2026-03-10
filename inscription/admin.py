@@ -2,6 +2,20 @@ from django.contrib import admin
 from .models import Inscription, Paiement
 from gestion_academique.models import Classe, Filiere, Niveau
 # Register the Inscription model
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.contrib import admin
+from django.core.exceptions import PermissionDenied
+from django.contrib.admin.models import LogEntry, CHANGE
+from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from import_export import resources
+from import_export.fields import Field
 
 @admin.register(Inscription)
 class InscriptionAdmin(admin.ModelAdmin):
@@ -46,19 +60,33 @@ class InscriptionAdmin(admin.ModelAdmin):
                 # Handle the case when request.instance is None
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+class PaieResource(resources.ModelResource):
+    inscription = Field(column_name='Inscription')  # Rename the column
 
-# Register the Paiement model
+    class Meta:
+        model = Paiement
+        fields = ('inscription', 'montant', 'source', 'reference', 'active', 'created', 'date_update', 'confirmed')
 
+    def dehydrate_inscription(self, paiement):
+        return str(paiement.inscription)  # Return the string representation
+        
+# Admin class with optimizations
 @admin.register(Paiement)
-class PaiementAdmin(admin.ModelAdmin):
-    list_display = ('inscription', 'montant', 'source', 'reference', 'active', 'created', 'date_update')
-    list_filter = ('active', 'created', 'date_update')
-    search_fields = ('inscription__etudiant__nom', 'inscription__etudiant__prenom', 'inscription__etudiant__matricule')
-    # readonly_fields = ('inscription', 'montant', 'source', 'reference', 'active', 'created', 'date_update')
+class PaiementAdmin(ImportExportModelAdmin):
+    list_display = ('inscription', 'montant', 'source', 'reference', 'active', 'created', 'date_update', 'confirmed')
+    list_display_links = ('inscription',)  # Allow editing from list view
+    #list_editable = ('montant', 'source', 'reference', 'confirmed','created')  # Make fields editable inline
+    search_fields = ('inscription__etudiant__nom', 'inscription__etudiant__prenom', 'montant', 'source', 'reference')  # Search across multiple fields
+    readonly_fields = ('date_update', 'wave_launch_url', 'wave_id')  # Prevent modification of specific fields
+    date_hierarchy = 'created'  # Allow filtering by creation date
+    ordering = ('-created',)  # Order by creation date descending
+    list_filter = ('inscription__etudiant__etablissement', 'active', 'confirmed')  # Filter by establishment, active/inactive, confirmed/unconfirmed
+    resource_classes = [PaieResource]
+
+
+    @method_decorator(cache_page(60*15))  # Cache cette page pour 15 minutes
+    def changelist_view(self, request, extra_context=None):
+        return super().changelist_view(request, extra_context)
     
-    def get_queryset(self, request):
-        # Récupérer l'établissement de l'utilisateur connecté
-        etablissement = request.user.etablissement
-        # Appeler la méthode personnalisée pour filtrer les utilisateurs
-        queryset = Paiement.objects.filter(inscription__etudiant__etablissement=etablissement)
-        return queryset
+    
+ 

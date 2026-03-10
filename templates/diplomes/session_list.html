@@ -19,10 +19,7 @@
             <div class="card m-b-30">
                 
                 <div class="card-body">
-                    {% if user.is_super_admin %}
-                    <button type="button" style="float:right" class="tabledit-save-button btn btn-sm btn-primary open-popup" data-toggle="modal" data-target="#sessionModal"><span class="ti-plus"></span>  NOUVELLE SESSION</button>
-                    <br> 
-                    {% endif %}
+                  
                    
                     <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
                     <div class="table-responsive">
@@ -51,6 +48,7 @@
                                         <a target="__blank"  href="{% url 'authenticite' session.id %}" type="button"  class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"><span class="ti-eye"></span> Attestation d'Authenticité</a>
                                         <a target="__blank"  href="{% url 'admission' session.id %}" type="button"  class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-eye"></span> Certificats d'Admission</a>
                                         <a target="__blank"  href="{% url 'diplome' session.id %}" type="button"  class="tabledit-save-button btn btn-sm btn-warning" style="float: none; margin: 5px;"><span class="ti-eye"></span> Dîplomes</a>
+                                        <a target="__blank"  href="{% url 'cv' session.id %}" type="button"  class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span> Cv</a>
                                     
                                     </td>
 
@@ -77,18 +75,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-body">
-                    {{ form.as_p }}
-                    {{ upload_form.as_p }}
-                  
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
-            </form>
+           
         </div>
     </div>
 </div>

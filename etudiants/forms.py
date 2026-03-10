@@ -1,8 +1,7 @@
 from django import forms
 from .models import Etudiant, EtablissementDorigine,  SessionSoutenanceNew, SessionDiplome, Diplome, Certificat, CertificatSession
 from django.contrib.auth.forms import PasswordChangeForm
-
-
+from django_countries.widgets import CountrySelectWidget
 
 class StudentPhotoForm(forms.ModelForm):
     class Meta:
@@ -14,6 +13,10 @@ class EtudiantForm(forms.ModelForm):
     class Meta:
         model = Etudiant
         exclude = ['utilisateur','etablissement','active', 'created', 'date_update']
+
+        widgets = {
+            'nationalite': CountrySelectWidget(),
+        }
 
     def __init__(self, *args, **kwargs):
         super(EtudiantForm, self).__init__(*args, **kwargs)

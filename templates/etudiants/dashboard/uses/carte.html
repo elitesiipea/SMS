@@ -1,53 +1,113 @@
-{% extends 'etudiants/dashboard/components/base.html' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte Étudiant</title>
+    <!-- Importation de Tailwind CSS depuis CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Style pour le terminal mode */
+        .terminal-bg {
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            font-family: "Courier New", Courier, monospace;
+        }
+    </style>
+</head>
+<body class="terminal-bg">
 
-{% load static %}
-{% block content %}
+    <!-- Conteneur principal -->
+    <div class="container mx-auto p-8">
 
-<div class="container">
-    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
-        <h2 class="title">Bienvenue {{user}}</h2>
-        <span class="shape-line"><i class="icon-19"></i></span>
-     
-    </div>
+        <!-- Section principale avec flex pour organiser la carte et les informations -->
+        <div class="flex flex-col md:flex-row gap-12">
 
-    <div class="row g-5">
-            <div class="row g-5">
-                <div class="container">
-                        <div class="card" style="border:5px solid black;background-color:#165288;">
-                            <br>
-                            
-                            <!-- Add this part in your HTML template to display the form -->
-                           
-                            <div class="container">
-                               <div class="row">
-                                <div class="col-3">
-                                   
-                                    <img class="card-img-top" src="{{user.etudiant.photo.url}}" height="225" width="250" alt="Photo">
-                                 <br>
-                                </div>
-                                <br>
-                                <div class="col-9">
-                                    <h3 style="text-align:center;color:white">CARTE ETUDIANT</h3>
-                                    <div class="card-body" style="border:2px solid;color:white">
-                                        <h5 style="color:white" class="card-title">Matricule : {{user.etudiant.matricule     | upper }}</h5>
-                                        <h5 style="color:white" class="card-title">Nom & Prénoms : {{user.etudiant.nom | upper }} {{user.etudiant.prenom | upper }}</h5>
-                                        <h5 style="color:white" class="card-title">Date de naissance : {{user.etudiant.date_de_naissance |date:'d/m/Y'  }} | Téléphone : +225{{user.etudiant.contact}}</h5>
-                                        <h5 style="color:white" class="card-title">Filiere : {{user.etudiant.last_class.filiere | upper   }} | Niveau : {{user.etudiant.last_class.niveau | upper   }}</h5>
-                                      
-                                        <!-- Ajoutez d'autres informations selon vos besoins -->
-                                    </div>    
-                                    <br>
-                                  
-                                   
-                               </div>
-                            
-                                
-                            <br>
+           <!-- Carte de l'étudiant à gauche -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex-1 w-full md:w-1/2">
+                <div class="flex flex-col items-center space-y-6">
+                    <!-- Photo de l'étudiant -->
+                    <div class="w-32 h-32 border-4 border-gray-700 rounded-full overflow-hidden">
+                        <img class="object-cover w-full h-full" src="{{user.etudiant.photo.url}}" alt="Photo Étudiant">
+                    </div>
+            
+                    <!-- Informations de l'étudiant -->
+                    <div class="space-y-4 text-white w-full">
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Nom :</span>
+                            <span>{{user.etudiant.nom | upper }}</span>
                         </div>
-                  </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Prénom(s) :</span>
+                            <span>{{user.etudiant.prenom | upper }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Matricule :</span>
+                            <span>{{user.etudiant.matricule | upper }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Email :</span>
+                            <span>{{user.email }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Filière :</span>
+                            <span>{{scolarite.filiere | upper }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Niveau :</span>
+                            <span>{{scolarite.niveau | upper }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Contact :</span>
+                            <span>+225{{user.etudiant.contact }}</span>
+                        </div>
+                    </div>
+                    <a style="float:right; margin-right:50px" href="{% url 'student_home' %}" class="mt-6 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">Retour</a>
+                </div>
+            </div>
+
+            <!-- Informations et conditions à droite -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex-1 w-full md:w-1/2">
+                <!-- Titre et introduction -->
+                <h3 class="text-2xl font-semibold mb-4 text-white">Conditions pour la photo d'identité</h3>
+
+                <!-- Liste des conditions -->
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Le format de la photo doit mesurer 35mm de large sur 45mm de haut.</li>
+                    <li>La taille du visage doit être de 32 à 36mm, du bas du menton au sommet du crâne.</li>
+                    <li>La photo doit être nette, sans pliure, ni trace.</li>
+                    <li>La photo ne doit pas être sur-exposée ou sous-exposée et doit avoir un bon contraste.</li>
+                    <li>Le fond de la photo doit être uni, de couleur claire (bleu clair, gris clair). Le blanc est interdit.</li>
+                    <li>La tête doit être nue, sans couvre-chefs. La tête doit être droite.</li>
+                    <li>Le visage doit être dégagé, les yeux doivent être ouverts et visibles.</li>
+                    <li>Les cheveux ne doivent pas recouvrir le visage et les oreilles doivent être visibles.</li>
+                    <li>Les lunettes à monture épaisse et les verres teintés sont interdits.</li>
+                </ul>
+
+                <!-- Formulaire de mise à jour de photo et contact -->
+                <div class="mt-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Modifier votre photo et contact</h3>
+                    <form action="{% url 'cartes' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- Champ de photo -->
+                        <div class="mb-4">
+                            <label for="photo" class="block text-gray-300">Photo</label>
+                            <input type="file" id="photo" name="photo" class="mt-2 p-2 w-full border border-gray-600 rounded-md">
+                            <p class="mt-2 text-sm text-red-500">Une seule modification est autorisée.</p>
+                        </div>
+                        <!-- Champ de contact -->
+                        <div class="mb-4">
+                            <label for="contact" class="block text-gray-300">Numéro de contact</label>
+                            <input type="text" id="contact" name="contact" class="mt-2 p-2 w-full border border-gray-600 rounded-md" value="1234567890">
+                        </div>
+                        <!-- Bouton de soumission -->
+                        <button type="submit" class="w-full px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Mettre à jour</button>
+                    </form>
+                </div>
             </div>
 
         </div>
     </div>
-{% endblock content %}
-    
+
+</body>
+</html>

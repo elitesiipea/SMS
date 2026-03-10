@@ -10,58 +10,74 @@
         <!--=====================================-->
         <section class="edu-section-gap course-details-area">
             <div class="container">
+                <h3>📘 Intitulé du Cours : {{cours.matiere | upper }}</h3>
                 <div class="row row--30">
                     <div class="col-lg-8">
                         <div class="course-details-content">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Présentation</button>
+                                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true"> 🗂️ Ressources du Cours</button>
                                 </li>
+                             
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="carriculam-tab" data-bs-toggle="tab" data-bs-target="#carriculam" type="button" role="tab" aria-controls="carriculam" aria-selected="false">Ressources</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="instructor-tab" data-bs-toggle="tab" data-bs-target="#instructor" type="button" role="tab" aria-controls="instructor" aria-selected="false">Enseignant</button>
+                                    <button class="nav-link" id="instructor-tab" data-bs-toggle="tab" data-bs-target="#instructor" type="button" role="tab" aria-controls="instructor" aria-selected="false"> 👨‍🏫 Enseignant</button>
                                 </li>
                             </ul>
 
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                                     <div class="course-tab-content">
-                                        <div class="course-overview">
-                                            <h3 class="heading-title"> Description du Cours</h3>
-                                            <p>{{cours.description | safe }}</p>
-                                           
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="carriculam" role="tabpanel" aria-labelledby="carriculam-tab">
-                                    <div class="course-tab-content">
                                         <div class="course-curriculam">
-                                            <h3 class="heading-title">Ressources du Cours</h3>
+                                            <h3 class="heading-title"> 🗂️ Ressources du Cours</h3>
 
                                             <div class="course-lesson">
                                                 
                                                 <ul>
                                                     <li>
-                                                        {% if cours.support %}
-                                                            <div class="text"><i class="icon-65"></i> <a target="_blank" href="{{cours.syllabus.url}}">Syllabus</a></div>
+                                                        {% if cours.syllabus %}
+                                                            <div class="text">
+                                                                <i class="icon-65"></i> 
+                                                                <a target="_blank" href="https://myiipea.com{{cours.syllabus.url}}">Syllabus</a>
+                                                                <button class="btn btn-info" onclick="copyToClipboard('https://myiipea.com{{cours.syllabus.url}}', this)">Copier le lien</button>
+                                                            </div>
                                                         {% endif %}
                                                         <div class="icon"><i class="icon-24"></i></div>
                                                     </li>
                                                     <li>
-                                                        {% if cours.syllabus %}
-                                                            <div class="text"><i class="icon-65"></i><a  target="_blank" href="{{cours.support.url}}">Support de Cours</a></div>4
+                                                        {% if cours.support %}
+                                                            <div class="text">
+                                                                <i class="icon-65"></i> 
+                                                                <a target="_blank" href="https://myiipea.com{{cours.support.url}}">Support de Cours</a>
+                                                                <button class="btn btn-info" onclick="copyToClipboard('https://myiipea.com{{cours.support.url}}', this)">Copier le lien</button>
+                                                            </div>
                                                         {% endif %}
                                                         <div class="icon"><i class="icon-24"></i></div>
                                                     </li>
-                                                   
                                                 </ul>
+                                                
+                                                <script>
+                                                    function copyToClipboard(text, button) {
+                                                        // Copier le texte dans le presse-papiers
+                                                        navigator.clipboard.writeText(text).then(() => {
+                                                            // Changer le texte du bouton pour indiquer que le lien a été copié
+                                                            button.textContent = 'Lien copié !';
+                                                            button.disabled = true; // Désactiver le bouton pour éviter une nouvelle copie immédiate
+                                                            setTimeout(() => {
+                                                                button.textContent = 'Copier le lien';
+                                                                button.disabled = false; // Réactiver le bouton après quelques secondes
+                                                            }, 2000); // Réinitialisation après 2 secondes
+                                                        }).catch(err => {
+                                                            console.error('Erreur lors de la copie du lien : ', err);
+                                                        });
+                                                    }
+                                                </script>
+                                                
                                             </div>
                                            
                                         </div>
                                     </div>
                                 </div>
+                              
                                 <div class="tab-pane fade" id="instructor" role="tabpanel" aria-labelledby="instructor-tab">
                                     <div class="course-tab-content">
                                         <div class="course-instructor">
@@ -71,12 +87,7 @@
                                             <div class="author-content">
                                                 <h6 class="title">{{cours.enseignant}}</h6>
                                                 <span class="subtitle"></span>
-                                                <p>
-                                                    {{cours.enseignant.utilisateur.email}}
-                                                </p>
-                                                <p>
-                                                    {{cours.enseignant.contact}}
-                                                </p>
+                                             
                                                 <ul class="social-share">
                                                     <li><a href="#"><i class="icon-facebook"></i></a></li>
                                                     <li><a href="#"><i class="icon-twitter"></i></a></li>
@@ -117,32 +128,26 @@
                                             </li>
                                             <li>
                                                 <span class="label"><i class="icon-61"></i>Durée :</span>
-                                                <span class="value">{{cours.volume_horaire}} Heures</span>
+                                                <span class="value">{{cours.matiere.volume_horaire}} Heures</span>
                                             </li>
                                             <li>
                                                 <span class="label">
                                                     <img class="svgInject" src="{% static 'etudiant/assets/images/svg-icons/books.svg' %}" alt="book icon">
                                                    </span>
-                                                <span class="value">{{cours.filiere}}</span>
+                                                <span class="value">{{cours.matiere.unite.maquette.filiere}}</span>
                                             </li>
                                             <li>
                                                 <span class="label"><i class="icon-63"></i>Niveau :</span>
-                                                <span class="value">{{cours.niveau}}</span>
+                                                <span class="value">{{cours.matiere.unite.maquette.niveau}}</span>
                                             </li>
-                                            <li>
-                                                <span class="label"><i class="icon-59"></i>Language:</span>
-                                                <span class="value">English</span>
-                                            </li>
-                                            <li>
-                                                <span class="label"><i class="icon-64"></i>Certificat :</span>
-                                                <span class="value">Non</span>
-                                            </li>
+                                          
+                                          
                                         </ul>
                                         <div class="read-more-btn">
                                             
                                             {% if cours.support %}
 
-                                            <a  target="_blank" href="{{cours.support.url}}" class="edu-btn">Support de Cours <i class="icon-4"></i></a>
+                                            <a  target="_blank" href="https://myiipea.com{{cours.support.url}}" class="edu-btn">Support de Cours <i class="icon-4"></i></a>
                                                 
                                             {% endif %}
                                                 

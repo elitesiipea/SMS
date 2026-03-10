@@ -6,6 +6,10 @@ from emplois_du_temps.models import EmploisDutemps
 import secrets
 import sys
 import string
+from django.shortcuts import get_object_or_404
+from datetime import timedelta
+from django.utils.timezone import now
+import numpy as np
 
 
 cycles = (
@@ -71,38 +75,86 @@ categories_ue = (
 )
 
 class Etablissement(models.Model):
-    """Model definition for Etablissement."""
+    """
+    Modèle représentant un établissement scolaire.
+
+    Champs principaux :
+    - nom : Nom usuel de l'établissement (ex. "Université XYZ").
+    - sigle : Sigle ou abréviation (ex. "UXYZ").
+    - code : Code interne ou officiel.
+    - full_name : Dénomination complète de l'établissement.
+    - logo : Logo de l'établissement.
+    - cachet_scolarite : Cachet utilisé pour les documents de scolarité.
+    - footer_bull : Texte de pied de page pour les bulletins / documents.
+    - contact : Numéro de téléphone principal.
+    - email : Adresse email principale.
+    - site : Site web (URL).
+    - active : Indique si l'établissement est actif.
+    - is_college : Indique s'il s'agit d'un collège (vs supérieur).
+    - wave_api_key : Clé API Wave pour les paiements (optionnel).
+    - created : Date de création.
+    - date_update : Date de dernière mise à jour.
+    """
+
     nom = models.CharField(max_length=150)
     sigle = models.CharField(max_length=150)
     code = models.CharField(max_length=150)
     full_name = models.TextField()
-    logo = models.FileField(upload_to='etablissement/logo',null=True, blank=True)
-    cachet_scolarite = models.FileField(upload_to='etablissement/cachez_scolarite',null=True, blank=True)
-    footer_bull = models.TextField()
-    contact = models.CharField(max_length=254)
-    email = models.EmailField(max_length=254)
-    site = models.EmailField(max_length=254)
+    logo = models.FileField(
+        upload_to='etablissement/logo',
+        null=True,
+        blank=True,
+        help_text="Logo officiel de l'établissement."
+    )
+    cachet_scolarite = models.FileField(
+        upload_to='etablissement/cachet_scolarite',
+        null=True,
+        blank=True,
+        help_text="Cachet utilisé pour les documents de scolarité."
+    )
+    footer_bull = models.TextField(
+        help_text="Texte de pied de page pour les bulletins et relevés."
+    )
+    contact = models.CharField(
+        max_length=254,
+        help_text="Numéro de téléphone principal de l'établissement."
+    )
+    email = models.EmailField(
+        max_length=254,
+        help_text="Adresse email principale (ex. contact@ecole.ci)."
+    )
+    # Mieux en URLField qu'EmailField
+    site = models.URLField(
+        max_length=254,
+        help_text="Adresse du site web (ex. https://www.ecole.ci)."
+    )
     active = models.BooleanField(default=True)
     is_college = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
-    wave_api_key = models.TextField(null=True, blank=True)
-
-    # TODO: Define fields here
+    wave_api_key = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Clé API Wave pour les paiements (optionnel)."
+    )
 
     class Meta:
-        """Meta definition for Etablissement."""
-
-        verbose_name = 'Etablissement'
-        verbose_name_plural = 'Etablissements'
+        verbose_name = "Etablissement"
+        verbose_name_plural = "Etablissements"
+        ordering = ["-created"]
 
     def __str__(self):
-        """Unicode representation of Etablissement."""
-        return self.full_name
-    
+        """Représentation textuelle de l'établissement."""
+        return self.full_name or self.nom
+
     @property
     def salles_count(self):
+        """
+        Retourne le total des places de toutes les salles
+        via les campus rattachés (si tu as un related_name='campus').
+        """
         return sum(item.places_total for item in self.campus.all())
+
     
 class Campus(models.Model):
     """Model definition for Campus."""
@@ -303,7 +355,7 @@ class Classe(models.Model):
         default=False, help_text='Cochez si la classe est une classe en ligne')
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
-    closed = models.BooleanField(default=True)
+    closed = models.BooleanField(default=False)
     date_update = models.DateTimeField(auto_now=True)
     # TODO: Define fields here
 
@@ -312,7 +364,7 @@ class Classe(models.Model):
 
         verbose_name = 'Classe'
         verbose_name_plural = 'Classes'
-        ordering = ['nom']
+        ordering = ['niveau', 'nom']
         
     @property
     def cycle(self):
@@ -352,6 +404,79 @@ class Classe(models.Model):
             return 0
         return round((self.volume_effectue * 100) / self.volume_global)
     
+    @property
+    def matieres(self):
+        try:
+            # Rechercher la maquette correspondante
+            maquette = Maquette.objects.filter(
+                annee_academique=self.annee_academique,
+                filiere=self.filiere,
+                niveau=self.niveau,
+                maquette_universitaire=self.classe_universitaire,
+                maquette_professionnel_jour=self.classe_professionnelle_jour,
+                maquette_professionnel_soir=self.classe_professionnelle_soir,
+                maquette_cours_en_ligne=self.classe_online
+            ).first()
+
+            # Vérifier si une maquette a été trouvée
+            if maquette:
+                return maquette.matieres.all()
+            else:
+                return []
+        except Maquette.DoesNotExist:
+            # Si aucune maquette n'est trouvée, retourner une liste vide
+            return []
+
+
+    @property
+    def volumes_S1(self):
+        # Calculer les volumes seulement si des matières existent
+        if not self.matieres:
+            return 0
+        return sum(item.volume_total for item in self.matieres.filter(unite__semestre__exact="SEMESTRE 1"))
+
+    @property
+    def volumes_S2(self):
+        # Calculer les volumes seulement si des matières existent
+        if not self.matieres:
+            return 0
+        return sum(item.volume_total for item in self.matieres.filter(unite__semestre__exact="SEMESTRE 2"))
+
+    @property
+    def rea_volumes_S1(self):
+        # Calculer le volume réalisé pour le semestre 1 seulement s'il y a des progressions
+        if not self.progression_matiere_classe.exists():
+            return 0
+        return sum(item.volume_realise for item in self.progression_matiere_classe.filter(matiere__unite__semestre__exact="SEMESTRE 1"))
+
+    @property
+    def rea_volumes_S2(self):
+        # Calculer le volume réalisé pour le semestre 2 seulement s'il y a des progressions
+        if not self.progression_matiere_classe.exists():
+            return 0
+        return sum(item.volume_realise for item in self.progression_matiere_classe.filter(matiere__unite__semestre__exact="SEMESTRE 2"))
+
+    @property
+    def progres_S1(self):
+        # Calculer le pourcentage de progression seulement si volumes_S1 est non nul
+        if self.volumes_S1 == 0:
+            return 0
+        return round((self.rea_volumes_S1 * 100) / self.volumes_S1)
+
+    @property
+    def progres_S2(self):
+        # Calculer le pourcentage de progression seulement si volumes_S2 est non nul
+        if self.volumes_S2 == 0:
+            return 0
+        return round((self.rea_volumes_S2 * 100) / self.volumes_S2)
+
+    @property
+    def progres_total(self):
+        # Calculer le pourcentage total seulement si les progressions des semestres sont disponibles
+        if self.progres_S1 == 0 and self.progres_S2 == 0:
+            return 0
+        return round((self.progres_S1 + self.progres_S2) / 2)
+
     
 
 
@@ -370,7 +495,14 @@ class Classe(models.Model):
             # Check if the name is already set (for modifications)
             if not self.nom:
                 # Retrieve existing class names with the same filiere and niveau
-                existing_classes = Classe.objects.filter(filiere=filiere, niveau=niveau).values_list('nom', flat=True)
+                existing_classes = Classe.objects.filter(
+                    filiere=filiere, 
+                    niveau=niveau,
+                    classe_universitaire=self.classe_universitaire,
+                    classe_professionnelle_jour=self.classe_professionnelle_jour,
+                    classe_professionnelle_soir=self.classe_professionnelle_soir,
+                    classe_online=self.classe_online
+                    ).values_list('nom', flat=True)
                 
                 # Find an available letter from A to Z to append to the class name
                 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -617,7 +749,7 @@ class UniteEnseignement(models.Model):
 
     @property
     def matieres(self):
-        return self.matiere_ue.all()
+        return self.matiere_ue.all().order_by('unite__semestre','nom')
 
     @property
     def matieres_count(self):
@@ -676,6 +808,10 @@ class Matiere(models.Model):
     @property
     def volume_total(self):
         return self.volume_horaire + self.volume_horaire_td
+    
+    @property
+    def cout_total(self):
+        return self.cout + self.cout_td
     # TODO: Define custom methods here
 
 
@@ -731,7 +867,7 @@ class SessionDiplome(models.Model):
         return self.candidats.count()
     
 
-
+from datetime import datetime
 class Diplome(models.Model):
     """Model definition for Diplome."""
 
@@ -752,7 +888,7 @@ class Diplome(models.Model):
     session_soutenance = models.CharField(max_length=50)
     cycle = models.CharField(max_length=50, choices=cycles_diplomes)
     code = models.CharField(max_length=50, null=True, blank=True)
-    
+
     
 
     class Meta:
@@ -760,6 +896,19 @@ class Diplome(models.Model):
 
         verbose_name = 'Diplome'
         verbose_name_plural = 'Diplomes'
+        #ordering = ['diplome','nom','prenom']
+
+    @property
+    def email(self):
+        """
+        Génère une adresse email au format `prenom-nom@iipea.com`.
+        Les espaces et apostrophes sont retirés.
+        """
+        # Nettoyer le prénom et le nom
+        prenom_cleaned = ''.join(char for char in self.prenom.split()[0] if char.isalnum())
+        nom_cleaned = ''.join(char for char in self.nom if char.isalnum())
+        # Générer l'email
+        return f"{prenom_cleaned.lower()}-{nom_cleaned.lower()}@iipea.com"
 
     def __str__(self):
         """Unicode representation of Diplome."""
@@ -788,9 +937,296 @@ class Diplome(models.Model):
         """Return absolute url for Diplome."""
         return ('')
 
+    @property
+    def date_soutenance_formatted(self) -> str:
+        """
+        Retourne `date_soutenance` au format 'JJ/MM/AAAA'.
+        Si la chaîne ne matche pas, renvoie la valeur brute.
+        """
+        if not self.date_soutenance:
+            return ""
+        for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d'):
+            try:
+                dt = datetime.strptime(self.date_soutenance, fmt)
+                return dt.strftime('%d/%m/%Y')
+            except ValueError:
+                continue
+        # Si aucun parsing n’a marché, on renvoie la chaîne d’origine
+        return self.date_soutenance
+
+    # TODO: Define custom methods here
+################################################ modele pour les progressions 
+
+
+
+class ClasseProgression(models.Model):
+    """Model definition for ClasseProgression."""
+    classe = models.ForeignKey(Classe, related_name="progression_matiere_classe", on_delete=models.CASCADE)
+    matiere = models.ForeignKey(Matiere, related_name="matiere_classe_progress", on_delete=models.CASCADE)
+    enseignant = models.CharField(max_length=50)
+    support = models.FileField(upload_to='enseignant/support',null=True, blank=True)
+    syllabys = models.FileField(upload_to='enseignant/syllabus',null=True, blank=True)
+    piece = models.FileField(upload_to='enseignant/piece',null=True, blank=True)
+    rib = models.FileField(upload_to='enseignant/rib',null=True, blank=True)
+    active = models.BooleanField(default=True)
+    cours_en_tronc_commun = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
+    volume_realise = models.IntegerField(default=0)
+    note_deposee = models.BooleanField(default=False)
+    paiement_effectue = models.BooleanField(default=False)
+    demande_de_paiement_initie = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
+
+    # TODO: Define fields here
+
+    class Meta:
+        """Meta definition for ClasseProgression."""
+
+        verbose_name = 'Classe Progression'
+        verbose_name_plural = 'Classe Progressions'
+
+    def __str__(self):
+        """Unicode representation of ClasseProgression."""
+        return "{} {} {} ".format(self.classe, self.matiere, self.enseignant)
+    
+    def cours_url(self):
+        return reverse('course_details_2', kwargs={'pk' : self.pk })
+    
+    @property
+    def reste(self):
+        return self.matiere.volume_total - self.volume_realise
+    
+    @property
+    def progress(self):
+        return round((self.volume_realise * 100)/ self.matiere.volume_total)
+    
+    @property
+    def is_close(self):
+        if self.volume_realise == self.matiere.volume_total:
+            return True 
+        return False
+    
+    @property
+    def price(self):
+        return self.matiere.cout_total
+    
+    @property
+    def color(self):
+        progress = self.progress
+        if progress <= 20:
+            return "red"            # 0-20%: Rouge (peu de progression)
+        elif 20 < progress <= 40:
+            return "orange"         # 21-40%: Orange
+        elif 40 < progress <= 60:
+            return "yellow"         # 41-60%: Jaune (progression modérée)
+        elif 60 < progress <= 80:
+            return "lightgreen"     # 61-80%: Vert clair (bonne progression)
+        elif 80 < progress < 100:
+            return "lightblue"          # 81-99%: Vert
+        else:
+            return "green"           # 100%: Bleu (progression complète)
+    
+    @property
+    def pointages_first(self):
+        try:
+            return self.progression_matiere.earliest('created')
+        except self.progression_matiere.model.DoesNotExist:
+            return None
+
+    @property
+    def pointages_last(self):
+        try:
+            return self.progression_matiere.latest('created')
+        except self.progression_matiere.model.DoesNotExist:
+            return None
+
+
+    @property
+    def lock_date(self):
+        """Calcule la date à laquelle le cours sera verrouillé."""
+        first_pointage = self.pointages_first
+        if not first_pointage:
+            return None  # Si aucun pointage, il n'y a pas de date de verrouillage.
+
+        # Calcul du nombre de jours ouvrés nécessaires pour terminer le cours
+        total_hours = self.matiere.volume_total
+        days_needed = np.ceil(total_hours / 2)  # 2 heures par jour ouvrable
+
+        # Ajouter uniquement les jours ouvrés (lundi-vendredi)
+        end_date = first_pointage.created
+        while days_needed > 0:
+            end_date += timedelta(days=1)
+            if end_date.weekday() < 5:  # 0=Lundi, 4=Vendredi
+                days_needed -= 1
+
+        # Ajouter les deux semaines après la fin du cours
+        lock_date = end_date + timedelta(weeks=2)
+
+        return lock_date.date()  # Conversion en date pour éviter les erreurs
+
+    @property
+    def is_locked(self):
+        """Vérifie si le cours est verrouillé."""
+        if not self.lock_date:
+            return False  # Si aucune date de verrouillage, le cours n'est pas verrouillé.
+
+        return now().date() >= self.lock_date  # Comparaison correcte entre deux dates
+
+
+
+
+class Pointage(models.Model):
+    matiere = models.ForeignKey(ClasseProgression, related_name="progression_matiere", on_delete=models.CASCADE)
+    volume_realise = models.CharField(max_length=50)
+    observation = models.TextField()
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
+    code = models.CharField(max_length=10, null=True, blank=True)
+    """Model definition for Pointage."""
+
+    # TODO: Define fields here
+
+    class Meta:
+        """Meta definition for Pointage."""
+
+        verbose_name = 'Pointage'
+        verbose_name_plural = 'Pointages'
+
+    def __str__(self):
+        """Unicode representation of Pointage."""
+        return "{} {}".format(self.matiere, self.volume_realise)
+
+
+
+    def get_absolute_url(self):
+        """Return absolute url for Pointage."""
+        return ('')
+
     # TODO: Define custom methods here
 
-def generate_unique_code():
-    import uuid
-    return str(uuid.uuid4())[:8]
 
+
+class DossierMinistere(models.Model):
+    """Model definition for DossierMinistere."""
+    matricule_etudiant = models.CharField(max_length=14, unique=True)
+    nom = models.CharField(max_length=50)
+    prenom = models.CharField(max_length=50)
+    date_de_naissance =  models.DateField(auto_now=False, auto_now_add=False)
+    filiere = models.ForeignKey(Filiere, related_name="dossiers_filiere", on_delete=models.CASCADE)
+    extrait_de_naissance = models.FileField(upload_to="ministere/dossiers/extraits/", max_length=100)
+    justificatif_d_identite = models.FileField(upload_to="ministere/dossiers/pieces/", max_length=100)
+    collante_du_bac = models.FileField(upload_to="ministere/dossiers/bacs", max_length=100)
+    telephone = models.CharField(max_length=50)
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
+
+    # TODO: Define fields here
+
+    class Meta:
+        """Meta definition for DossierMinistere."""
+
+        verbose_name = 'DossierMinistere'
+        verbose_name_plural = 'DossierMinisteres'
+
+    def __str__(self):
+        """Unicode representation of DossierMinistere."""
+        return "{} {}".format(self.nom, self.nom)
+
+
+    def get_absolute_url(self):
+        """Return absolute url for DossierMinistere."""
+        return ('')
+
+    # TODO: Define custom methods here
+
+###############################################################################
+# Generer les recus de paiement
+
+from django.db import models
+from django.utils.crypto import get_random_string
+from django.utils.timezone import now
+import pandas as pd
+import datetime
+from workalendar.europe import France  # Modifier selon le pays
+
+
+# Fonction pour générer un code unique de 10 caractères
+def generate_unique_code():
+    return get_random_string(10, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+
+# Fonction pour obtenir une date de création valide (jour ouvrable)
+def get_valid_creation_date():
+    cal = France()  # Modifier selon ton pays
+    start_date = datetime.date(2024, 9, 1)
+    end_date = datetime.date(2025, 3, 2)
+    valid_dates = [
+        d for d in pd.date_range(start=start_date, end=end_date).to_pydatetime()
+        if cal.is_working_day(d.date())
+    ]
+    return valid_dates[0].date() if valid_dates else now().date()
+
+import random
+from datetime import datetime, timedelta
+
+# Fonction pour générer une date au format demandé
+def generate_business_day():
+    # Plage de dates entre le 1er septembre 2024 et le 28 février 2025
+    start_date = datetime(2024, 9, 1)
+    end_date = datetime(2025, 2, 28)
+
+    # Liste pour stocker les jours ouvrables
+    business_days = []
+
+    # Boucle pour générer tous les jours ouvrables dans la plage donnée
+    current_date = start_date
+    while current_date <= end_date:
+        if current_date.weekday() < 5:  # Du lundi (0) au vendredi (4)
+            business_days.append(current_date)
+        current_date += timedelta(days=1)
+
+    # Choisir une date aléatoire parmi les jours ouvrables
+    random_day = random.choice(business_days)
+
+    # Format de la date souhaité "Lundi 04 Janvier 2025 à 08:16"
+    return random_day.strftime("%d/%m/%Y")
+
+
+
+# Modèle pour stocker les données importées
+class Student(models.Model):
+    ident_perm = models.CharField(max_length=150, unique=True)
+    nom = models.CharField(max_length=150)
+    prenom = models.CharField(max_length=150)
+    date_naissance = models.DateField()
+    lieu_naissance = models.CharField(max_length=150)
+    filiere = models.CharField(max_length=150)
+    niveau = models.CharField(max_length=150)
+    classe = models.CharField(max_length=150)
+    elite_id = models.CharField(max_length=150, blank=True, null=True)
+    status = models.CharField(max_length=150)
+    sexe = models.CharField(max_length=150)
+    contact = models.CharField(max_length=150, blank=True, null=True)
+    photo = models.TextField()
+    etablissement = models.CharField(max_length=150)
+    code_unique = models.CharField(max_length=150, default=generate_unique_code, unique=True)
+    email = models.EmailField(unique=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+
+
+    def save(self, *args, **kwargs):
+        # Générer l'email sans caractères spéciaux
+        prenom_clean = ''.join(c for c in self.prenom.split()[0] if c.isalnum())
+        self.email = f"{self.nom.lower()}-{prenom_clean.lower()}@iipea.com"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.nom} {self.prenom}"
+
+    @property
+    def date_si(self):
+        return generate_business_day()

@@ -1,0 +1,45 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                                    <h3>Pointage pour la progression : {{ matiere }}</h3>
+                                    <hr>
+                                    <h3> Volume Total : {{ matiere.matiere.volume_total }} Heure(s) |  Volume Effectué  : {{ matiere.volume_realise }} Heure(s) | Volume Restant : {{ matiere.reste }} Heure(s)</h3>
+                                 
+                                    <hr>
+
+                <form method="POST" action="{% url 'create_pointage' %}">
+                    {% csrf_token %}
+                    <input type="hidden" class="form-control" name="classe_progression_id" value="{{ matiere.id }}">
+                    
+                    <label for="volume_realise">Volume Réalisé</label>
+                    <input type="number"  class="form-control" name="volume_realise" id="volume_realise" required>
+                    
+                    <label for="observation">Observation</label>
+                    <textarea name="observation" class="form-control" id="observation" rows="2"></textarea>
+                    <br>
+                    <button style="float:right" type="submit" class="btn btn-lg btn-primary">Enregistrer</button>
+                </form>
+
+                </div>
+                   
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+{% endblock page %}
+    

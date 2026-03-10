@@ -34,7 +34,7 @@ class EtablissementDorigineAdmin(ImportExportModelAdmin,admin.ModelAdmin):
 class EtudiantAdmin(admin.ModelAdmin):
     list_display = ('utilisateur', 'type_etudiant', 'etablissement', 'etablissement_d_origine', 
                     'date_de_naissance', 'lieu_de_naissance', 'matricule_mers', 'numero_table_bac', 
-                    'nationalite', 'matricule', 'matricule', 'lieu_de_residence', 'sexe',
+                   'matricule', 'matricule', 'lieu_de_residence', 'sexe',
                     'serie_bac', 'contact', 'contactparent', 'code_paiement',
                     )
     search_fields = ('utilisateur__nom','utilisateur__prenom','code_paiement')

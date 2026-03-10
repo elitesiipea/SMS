@@ -282,7 +282,7 @@
                             <table class="table table-striped">
                                 <thead>
                                   <tr>
-                                    <th scope="col">Date</th>
+                                    <th scope="col">Jours</th>
                                     <th scope="col">Matière</th>
                                     <th scope="col">Salle</th>
                                     <th scope="col">Début</th>
@@ -295,7 +295,7 @@
                                     
                                     {% for programme in programmes  %}
                                     <tr>
-                                        <th scope="row">{{ programme.date|date:"l j F Y" }}</th>
+                                        <th scope="row">{{ programme.date|date:"l" | upper  }}</th>
                                         <td>{{ programme.matiere | upper  }}</td>
                                         <td>{{ programme.salle | upper  }}</td>
                                         <td>{{ programme.debut }}</td>

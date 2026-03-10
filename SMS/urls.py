@@ -1,22 +1,27 @@
+
 from django.contrib import admin
-from django.urls import path, include
+
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path, include
+
+from administration.views import sms_landing_view
 from authentication.views import redirection
 from parents.views import parents_home
 
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.conf import settings
+
+
+
 from ajax_select import urls as ajax_select_urls
 
 admin.autodiscover()
 
-urlpatterns = [
 
+urlpatterns = [
+   
     path('admin/', admin.site.urls),
     path("admin/lookups/", include(ajax_select_urls)),
-    path('',                     include("authentication.urls")     ),
+    path('authentication/',                     include("authentication.urls")     ),
     path('administration/',      include("administration.urls")     ),
     path('bibliotheque/',        include("bibliotheque.urls")       ),
     path('comptabilite/',        include("comptabilite.urls")       ),
@@ -34,7 +39,7 @@ urlpatterns = [
     path('transport/',             include("transport.urls"       )),
     path('stock/',             include("gestion_stock.urls"       )),
 
-    path('dashboard/redirect/',   redirection),
+    path('',   redirection),
     path('dashboard/parents/SchoolHome/',   parents_home),
    
 ]

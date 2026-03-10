@@ -1,0 +1,113 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<div class="contentbar">
+  <div class="row">
+
+    {% if etablissement and not edit_mode %}
+      <!-- FICHE ÉTABLISSEMENT -->
+      <div class="col-lg-12">
+        <div class="card m-b-30">
+          <div class="card-body">
+            <div class="invoice">
+              <div class="invoice-billing">
+                <div class="row">
+                  <div class="col-sm-6 col-md-4 col-lg-4">
+                    <h4 class="mb-3">Établissement</h4>
+                    <ul class="list-unstyled">
+                      <li><strong>Nom :</strong> {{ etablissement.nom }}</li>
+                      <li><strong>Sigle :</strong> {{ etablissement.sigle }}</li>
+                      <li><strong>Code :</strong> {{ etablissement.code }}</li>
+                      <li><strong>Dénomination :</strong> {{ etablissement.full_name }}</li>
+                      <li><strong>Contact :</strong> {{ etablissement.contact }}</li>
+                      <li><strong>Email :</strong> {{ etablissement.email }}</li>
+                      <li><strong>Site :</strong> {{ etablissement.site }}</li>
+                      <li><strong>Actif :</strong> {{ etablissement.active|yesno:"Oui,Non" }}</li>
+                      <li><strong>Collège :</strong> {{ etablissement.is_college|yesno:"Oui,Non" }}</li>
+                      <li><strong>Salles (total places) :</strong> {{ etablissement.salles_count }}</li>
+                    </ul>
+                  </div>
+
+                  <div class="col-sm-6 col-md-4 col-lg-4">
+                    <h4 class="mb-3">Affichages</h4>
+                    <ul class="list-unstyled">
+                      <li><strong>Pied de bulletin :</strong><br>{{ etablissement.footer_bull|default:"—" }}</li>
+                      <li><strong>Cachet scolarité :</strong><br>
+                        {% if etablissement.cachet_scolarite %}
+                          <a href="{{ etablissement.cachet_scolarite.url }}" target="_blank">Voir le cachet</a>
+                        {% else %}
+                          <span class="badge badge-info-inverse">Non défini</span>
+                        {% endif %}
+                      </li>
+                      <li><strong>Clé API Wave :</strong> {{ etablissement.wave_api_key|default:"—" }}</li>
+                    </ul>
+                  </div>
+
+                  <div class="col-sm-12 col-md-4 col-lg-4">
+                    <h4 class="mb-3">Identité visuelle</h4>
+                    <div class="card">
+                      <div class="card-body bg-info-rgba text-center">
+                        {% if etablissement.logo %}
+                          <img style="border-radius: 8px;" height="180" src="{{ etablissement.logo.url }}" alt="{{ etablissement.nom }}">
+                        {% else %}
+                          <p class="mb-3"><span class="badge badge-info-inverse font-14">Aucun logo</span></p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-12 text-right">
+                    <a class="btn btn-primary" href="?edit=1">Modifier</a>
+                  </div>
+                </div>
+
+              </div> <!-- invoice-billing -->
+            </div> <!-- invoice -->
+          </div> <!-- card-body -->
+        </div> <!-- card -->
+      </div> <!-- col -->
+
+    {% else %}
+      <!-- CRÉATION / MISE À JOUR -->
+      <div class="col-lg-12">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="card m-b-30">
+            <div class="card-body">
+              <h4 class="mb-3">
+                {% if etablissement %}Modifier l'établissement{% else %}Créer mon établissement{% endif %}
+              </h4>
+              <div class="row">
+                {% for field in form %}
+                  <div class="form-group col-md-6">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+                    {% for error in field.errors %}<div class="text-danger">{{ error }}</div>{% endfor %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="card m-b-30">
+            <div class="card-body">
+              <div class="row justify-content-end">
+                <div class="col-md-4">
+                  <button type="submit" class="btn btn-success btn-md btn-block font-18">
+                    {% if etablissement %}Enregistrer les modifications{% else %}Créer l'établissement{% endif %}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div> <!-- col -->
+    {% endif %}
+
+  </div> <!-- row -->
+</div> <!-- contentbar -->
+{% endblock page %}

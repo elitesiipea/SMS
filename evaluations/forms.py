@@ -38,3 +38,21 @@ class NoteForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control' , 'style' : 'border:2px solid black'})
 
+
+from django import forms
+from .models import Resultat
+
+class ResultatForm(forms.ModelForm):
+    """Formulaire limité aux champs modifiables"""
+    
+    class Meta:
+        model = Resultat
+        fields = ['note_1', 'note_2', 'note_3', 'note_partiel', 'non_classe']
+        widgets = {
+            'note_1': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 20}),
+            'note_2': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 20}),
+            'note_3': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 20}),
+            'note_partiel': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 20}),
+            'non_classe': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+

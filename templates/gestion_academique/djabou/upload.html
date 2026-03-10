@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importation Excel 📂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold mb-4">🚀 Importation des étudiants</h1>
+        <p class="text-gray-700 mb-6">Ce module vous permet d'importer une liste d'étudiants via un fichier Excel. Suivez les étapes ci-dessous :</p>
+        
+        <div class="mb-6 p-4 bg-gray-50 border-l-4 border-blue-500">
+            <p class="text-gray-800"><strong>1️⃣ Télécharger le fichier modèle :</strong></p>
+            <a href="https://docs.google.com/spreadsheets/d/178Zo6jvmIWMWAZB8XH3UEOK3T98gC7lW/edit?usp=sharing" 
+               target="_blank" class="text-blue-600 underline">📥 Télécharger le modèle</a>
+        </div>
+
+        <div class="mb-6 p-4 bg-gray-50 border-l-4 border-green-500">
+            <p class="text-gray-800"><strong>2️⃣ Remplissez le fichier</strong> en suivant les colonnes indiquées.</p>
+        </div>
+
+        <div class="mb-6 p-4 bg-gray-50 border-l-4 border-yellow-500">
+            <p class="text-gray-800"><strong>3️⃣ Importer votre fichier Excel</strong> :</p>
+            <form method="POST" enctype="multipart/form-data" class="space-y-4 mt-3">
+                {% csrf_token %}
+                <input type="file" name="file" required class="block w-full p-2 border rounded">
+                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                    📤 Importer
+                </button>
+            </form>
+        </div>
+
+        {% if messages %}
+            <div class="mt-4 p-4 bg-green-100 border-l-4 border-green-600">
+                {% for message in messages %}
+                    <p class="text-green-800">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h2 class="text-xl font-semibold mt-8">🛠 Fonctionnement du traitement des données</h2>
+        <p class="text-gray-700 mb-4">Voici un extrait du code qui gère l'importation :</p>
+
+        <div class="bg-gray-900 text-white p-4 rounded-lg text-sm">
+            <pre>
+                <code>
+def upload_excel(request):
+    if request.method == "POST" and request.FILES['file']:
+        file = request.FILES['file']
+        wb = openpyxl.load_workbook(file)
+        sheet = wb.active
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            Student.objects.create(
+                ident_perm=row[1],
+                nom=row[2],
+                prenom=row[3],
+                date_naissance=row[4],
+                filiere=row[7]
+            )
+        messages.success(request, "✅ Importation réussie !")
+        return redirect('student_list')
+    return render(request, 'upload.html')
+                </code>
+            </pre>
+        </div>
+
+        <p class="text-gray-600 mt-6">📌 <em>Les emails sont générés automatiquement sous la forme <strong>nom-prenom@iipea.com</strong>.</em></p>
+
+        <a href="{% url 'student_list' %}" class="block mt-8 text-blue-600 underline">👉 Voir la liste des étudiants</a>
+    </div>
+</body>
+</html>

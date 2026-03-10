@@ -1,0 +1,524 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block base %}
+<body class="vertical-layout">    
+    <!-- Start Infobar Setting Sidebar -->
+    
+    <!-- End Infobar Setting Sidebar -->
+    <!-- Start Containerbar -->
+    <div id="containerbar">
+        <!-- Start Leftbar -->
+        <div class="leftbar">
+            <!-- Start Sidebar -->
+            <div class="sidebar">
+                <!-- Start Logobar -->
+                <div class="logobar">
+    
+                    <a href="{% if user.is_staff %}{% url 'admin-home' %} {% else %}{% url 'teacher_home' %} {% endif %}" class="logo logo-large">{% if user.etablissement %}<img src="{{user.etablissement.logo.url}}" class="img-fluid" alt="logo">{% endif %} </a>
+                    <a href="{% if user.is_staff %}{% url 'admin-home' %} {% else %}{% url 'teacher_home' %} {% endif %}" class="logo logo-small">{% if user.etablissement %}<img src="{{user.etablissement.logo.url}}" class="img-fluid" alt="logo">{% endif %}</a>
+                </div>
+                <!-- End Logobar -->
+                <!-- Start Navigationbar -->
+                <div class="navigationbar">
+                
+                {% if user.is_staff %}
+                    {# ===== Menu STAFF / ADMIN ===== #}
+                    {% if user.is_staff %}
+                    <ul class="vertical-menu">
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/dashboard.svg' %}" class="img-fluid" alt="dashboard">
+                          <span>Gestion</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          <li><a href="{% url 'mon_etablissement' %}"><i class="feather icon-home mr-1"></i>Mon Établissement</a></li>
+                          <li><a href="{% url 'annees_academiques_list' %}">  <i class="feather icon-calendar mr-1"></i>Année Académique</a></li>
+                          <li><a href="{% url 'salles_list' %}">   <i class="feather icon-home mr-1"></i>Campus & Salles</a></li>
+                          <li><a href="{% url 'filieres_list' %}"> <i class="feather icon-layers mr-1"></i>Filières</a></li>
+                          <li><a href="{% url 'niveaux_list' %}">     <i class="feather icon-trending-up mr-1"></i>Niveaux</a></li>
+                          <li><a href="{% url 'classes_list' %}">   <i class="feather icon-grid mr-1"></i>Classes</a></li>
+                          <li><a href="{% url 'maquettes_list' %}">    <i class="feather icon-book-open mr-1"></i>Maquettes</a></li>
+                          <li><a href="{% url 'statistiques' %}"> <i class="feather icon-bar-chart-2 mr-1"></i>Statistiques</a></li>
+                          <li><a href="{% url 'effectifs' %}">  <i class="feather icon-users mr-1"></i>Effectifs</a></li>
+                          {% if user.overloader %}
+                            <li><a href="{% url 'global_results' %}"><i class="feather icon-award mr-1"></i>Results</a></li>
+                            <li><a href="{% url 'migrate_students' %}">  <i class="feather icon-corner-up-right mr-1"></i>Migrations</a></li>
+                            <li><a href="{% url 'move_uto_other_class_students' %}">  <i class="feather icon-shuffle mr-1"></i>Fusion</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/basic.svg' %}" class="img-fluid" alt="">
+                          <span>Etudiants</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_register_student %}
+                            <li><a href="{% url 'admission' %}">Nouvelle Admission</a></li>
+                            <li><a href="{% url 'reinscription' %}">Ré-Inscription</a></li>
+                          {% endif %}
+                          <li><a href="{% url 'liste_etudiants' %}">Dossier</a></li>
+                          <li><a href="{% url 'all_student_inscription_list' %}">Effectifs</a></li>
+                          <li><a href="{% url 'carte_print_details' %}">Cartes</a></li>
+                          <li><a href="{% url 'emargement_list' %}">Listes Ministère</a></li>
+                          <li><a href="{% url 'all_student_inscription_list_dossiers' %}">Verify</a></li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/tables.svg' %}" class="img-fluid" alt="">
+                          <span>Enseignants</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_register_teacher %}
+                            <li><a href="{% url 'admission_enseignant' %}">Enregistrement</a></li>
+                            <li><a href="{% url 'contrat_list_admin' %}">Contrats</a></li>
+                          {% endif %}
+                          <li><a href="{% url 'liste_enseignants' %}">Liste des enseignants</a></li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Emplois du Temps</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          <li><a href="{% url 'emploi_du_temps_list' %}">Listes</a></li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/basic.svg' %}" class="img-fluid" alt="">
+                          <span>Accomptes</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_view_teacher_acccompte %}
+                            <li><a href="{% url 'demande_accompte_list' demande=True traiter=False %}">Demandes en attentes</a></li>
+                            <li><a href="{% url 'demande_accompte_list' demande=True traiter=True %}">Demandes Validée</a></li>
+                            <li><a href="{% url 'demande_accompte_list' demande=False traiter=False %}">Demandes à Venir</a></li>
+                          {% else %}
+                            <li><a href="##" style="color:red">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/tables.svg' %}" class="img-fluid" alt="">
+                          <span>Scolarités</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_manage_fees %}
+                            <li><a href="{% url 'scolarite_list' %}">Statuts</a></li>
+                            <li><a href="{% url 'paiement_historique_list' %}">Historique des Paiements</a></li>
+                            {% if user.can_update_fees %}
+                              <li><a href="{% url 'nouveau_paiement' %}">Nouveau Paiement</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'all_student_inscription_list_attentes' %}">Inscriptions en attentes</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="#new_autorisation">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+
+                          {% if user.is_comptable %}
+                            <li><a href="{% url 'paiement_historique_list_details' %}">Validation Paiments</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/tables.svg' %}" class="img-fluid" alt="">
+                          <span>Moyens Généraux</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_view_stock %}
+                            {% if user.is_stock %}
+                              <li><a href="{% url 'produit_view' %}">Etat du Stock</a></li>
+                              <li><a href="{% url 'fournisseur_list' %}">Fournisseurs</a></li>
+                              <li><a href="{% url 'commande_list' %}">Commandes</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'remise_kits' %}">Remise / Reception</a></li>
+                            <li><a href="{% url 'all_student_kits_list' %}">Kits & Accéssoires</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="#new_autorisation_stock">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Infirmerie</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.is_medecin %}
+                            <li><a href="{% url 'dossier_medical_views' %}">Dossier médial</a></li>
+                            <li><a href="{% url 'consultation_list' %}">Historiques/Infirmerie</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="###new_autorisation_medical">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Notifications</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_register_student %}
+                            <li><a href="{% url 'create_notification' %}">Nouvelle Notification</a></li>
+                            <li><a href="{% url 'consultation_list' %}">Historiques</a></li>
+                            <li><a href="{% url 'notification_list_json' %}">Api</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="#new_autorisation_Notifications">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/tables.svg' %}" class="img-fluid" alt="">
+                          <span>Comptes</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.is_super_admin %}
+                            <li><a href="{% url 'create_user' %}">Nouvel utilisateur</a></li>
+                            <li><a href="{% url 'list_user' %}">Liste utilisateurs</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="#new_autorisation_compte">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Transports</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.is_transport %}
+                            <li><a href="{% url 'car_list' %}">Cars</a></li>
+                            <li><a href="{% url 'trajet_list' %}">Trajets</a></li>
+                            <li><a href="{% url 'AbonnementListAll' %}">Abonnements</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="#new_autorisation_Notification_cars">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Dîplomes</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          {% if user.can_manage_diplome %}
+                            <li><a href="{% url 'session_list' %}">Liste des  Dîplomes</a></li>
+                            <li><a href="{% url 'SessionListViewCreation' %}">Nouveau Diplomes</a></li>
+                          {% else %}
+                            <li><a style="color:red" href="#new_autorisation_Notification_cars">AUTORISATIONS NECESSAIRES</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+
+
+                      <li>
+                        <a href="{% url 'global_progress' %}">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Global Progress</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'progression_classes_list_' %}">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Progressions</span>
+                        </a>
+                      </li>
+
+                    </ul>
+                    {% elif user.is_teacher %}
+                    {# ===== Menu ENSEIGNANT ===== #}
+                    <ul class="vertical-menu">
+
+                      <li>
+                        <a href="{% url 'teacher_home' %}">
+                          <img src="{% static 'administration/assets/images/svg-icon/maps.svg' %}" class="img-fluid" alt="">
+                          <span>Tableau de Bord</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/basic.svg' %}" class="img-fluid" alt="">
+                          <span>Mes Contrats</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          <li><a href="{% url 'contrat_enseignant_list'  code=user.enseignant.code %}">Cours</a></li>
+                          <li><a href="{% url 'td_list' %}">Td</a></li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="javaScript:void();">
+                          <img src="{% static 'administration/assets/images/svg-icon/basic.svg' %}" class="img-fluid" alt="">
+                          <span>Mes Classes</span>
+                          <i class="feather icon-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="vertical-submenu">
+                          <li><a href="{% url 'classe_list' %}">Listes</a></li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'rib_create_and_list' %}">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Mon RIB</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'teachers_password' %}">
+                          <img src="{% static 'administration/assets/images/svg-icon/form_elements.svg' %}" class="img-fluid" alt="form_elements">
+                          <span>Mot de Passe</span>
+                        </a>
+                      </li>
+
+                    </ul>
+                    {% endif %}
+
+
+                {% endif %}
+
+                </div>
+                <!-- End Navigationbar -->
+            </div>
+            <!-- End Sidebar -->
+        </div>
+        <!-- End Leftbar -->
+        <!-- Start Rightbar -->
+        <div class="rightbar">
+            <!-- Start Topbar Mobile -->
+            <div class="topbar-mobile">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="mobile-logobar">
+                            <a href="{% url 'admin-home' %}" class="mobile-logo"><img src="{{user.etablissement.logo.url}}" class="img-fluid" alt="logo"></a>
+                        </div>
+                        <div class="mobile-togglebar">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <div class="topbar-toggle-icon">
+                                        <a class="topbar-toggle-hamburger" href="javascript:void();">
+                                            <img src="{% static 'administration/assets/images/svg-icon/horizontal.svg' %}" class="img-fluid menu-hamburger-horizontal" alt="horizontal">
+                                            <img src="{% static 'administration/assets/images/svg-icon/verticle.svg' %}" class="img-fluid menu-hamburger-vertical" alt="verticle">
+                                         </a>
+                                     </div>
+                                </li>
+                                <li class="list-inline-item">
+                                    <div class="menubar">
+                                        <a class="menu-hamburger" href="javascript:void();">
+                                            <img src="{% static 'administration/assets/images/svg-icon/collapse.svg' %}" class="img-fluid menu-hamburger-collapse" alt="collapse">
+                                            <img src="{% static 'administration/assets/images/svg-icon/close.svg' %}" class="img-fluid menu-hamburger-close" alt="close">
+                                         </a>
+                                     </div>
+                                </li>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Start Topbar -->
+            <div class="topbar">
+                <!-- Start row -->
+                <div class="row align-items-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 align-self-center">
+                        <div class="togglebar">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <div class="menubar">
+                                        <a class="menu-hamburger" href="javascript:void();">
+                                           <img src="{% static 'administration/assets/images/svg-icon/collapse.svg' %}" class="img-fluid menu-hamburger-collapse" alt="collapse">
+                                           <img src="{% static 'administration/assets/images/svg-icon/close.svg' %}" class="img-fluid menu-hamburger-close" alt="close">
+                                         </a>
+                                     </div>
+                                </li>
+                                <li class="list-inline-item">
+                                    <div class="searchbar">
+                                        <form>
+                                            <div class="input-group">
+                                              <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+                                              <div class="input-group-append">
+                                                <button class="btn" type="submit" id="button-addon2"><img src="{% static 'administration/assets/images/svg-icon/search.svg' %}" class="img-fluid" alt="search"></button>
+                                              </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        
+                        <div class="infobar">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <div class="profilebar">
+                                        <div class="dropdown">
+                                          <a class="dropdown-toggle" href="#" role="button" id="profilelink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'administration/assets/images/users/profile.svg' %}" class="img-fluid" alt="profile"><span class="feather icon-chevron-down live-icon"></span></a>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profilelink">
+                                                <div class="dropdown-item">
+                                                    <div class="profilename">
+                                                      <h5>{{user}}</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="userbox">
+                                                    <ul class="list-unstyled mb-0">
+                                                       
+                                                       
+                                                       {% if user.is_super_admin %}
+                                                       <li class="media dropdown-item"> 
+                                                        <a target="_blank" href="{% if user.is_staff %}{% url 'admin:index'%} {% endif %}" class="profile-icon"><img src="{% static 'administration/assets/images/svg-icon/email.svg' %}" class="img-fluid" alt="email">ADMINISTRATIONS</a>
+                                                    </li> 
+                                                       {% endif %}
+                                                        
+                                                       <li class="media dropdown-item">
+                                                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="profile-icon">
+                                                            <img src="{% static 'administration/assets/images/svg-icon/logout.svg' %}" class="img-fluid" alt="logout">Déconnexion
+                                                        </a>
+                                                    </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        
+                    </div>
+                    <!-- End col -->
+                </div> 
+                <!-- End row -->
+            </div>
+            <!-- End Topbar -->
+
+                 <!-- Start Breadcrumbbar -->                    
+                 <div class="breadcrumbbar">
+                    <div class="row align-items-center">
+                        <div class="col-md-8 col-lg-8">
+                            <h4 class="page-title">{{titre}}</h4>
+                            <div class="breadcrumb-list">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">{{info}}</a></li>
+                                    <li class="breadcrumb-item"><a href="#">{{info2}}</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{titre}}</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        {% if can_select_annee  %}
+                        <div class="col-md-4 col-lg-4">
+                            <div class="widgetbar">
+                                <form action="#" method="GET">
+                                    <select name="annee_id" id="annee_id" class="form-control">
+                                        <option value="">Année Académique</option>
+                                        {% for annee in annees_academiques %}
+                                            <option value="{{ annee.id }}">{{ annee.debut }} - {{ annee.fin }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </form>
+                            </div>                        
+                        </div>
+                        {% endif %}
+
+                        
+                        {% if can_add_contrat %}
+                        <div class="col-md-4 col-lg-4">
+                            <div class="widgetbar">
+                               <form action="{% url 'enseignant_profile' code=enseignant.code %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="code" value="{{enseignant.code}}">
+                                    <button type="submit" class="btn btn-primary-rgba"><i class="feather icon-plus mr-2"></i>Nouveau contrat</button>
+                               </form>
+                            </div>                        
+                        </div>
+                        {% endif %}
+                            
+                            
+                    </div>          
+                </div>
+                {% if form %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Oops! Il y a des erreurs :</strong>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %} 
+                 
+                {% endif %}
+                 
+                 
+                 
+                {% if messages %}
+                    <br>
+                    {% for message in messages %}
+                        <div class="container alert {% if message.tags %}{{ message.tags }}{% endif %}" id="myAlert" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %} 
+                {% endif %}
+        
+                {% block page %}
+                
+                {% endblock page %}
+                    
+
+            <!-- Start Footerbar -->
+            <div class="footerbar">
+                <footer class="footer">
+                    <p class="mb-0">© - Tous droits réservés.</p>
+                </footer>
+            </div>
+            <!-- End Footerbar -->
+        </div>
+        <!-- End Rightbar -->
+    </div>
+    <!-- End Containerbar -->
+    <!-- Start js -->        
+
+    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+{% endblock base %}

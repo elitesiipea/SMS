@@ -59,7 +59,7 @@
                                     <a type="button" target="__blank" href='{{ maquette.url }}' class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span>  CONSULTER</a>
                                       
                                       
-                                      {% if user.can_manage_diplome %}
+                                      {% if user.can_update_maquette %}
                                       <a type="button" target="__blank" href="{% url 'maquette_matiere_update' maquette.pk %}" class="tabledit-save-button btn btn-sm btn-warning" style="float: none; margin: 5px;"><span class="ti-pencil"></span>  Modifier</a>
 
                                      <a type="button" target="__blank" href="{{ maquette.url_to_edit_object }}" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-pencil"></span>  Admin</a>

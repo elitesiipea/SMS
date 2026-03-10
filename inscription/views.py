@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect,reverse
+
+from gestion_academique.views import _get_user_etablissement
 from .models import Inscription, Paiement
 from etudiants.models import Etudiant
 from .forms import InscriptionForm
@@ -134,147 +136,394 @@ def student_list_ministere(request):
     }
     return render(request, 'inscription/ministere.html', context=context)
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Inscription, Paiement
+from .forms import PaiementForm2
+from django.utils import timezone
+
+
+def home(request):
+    return render(request, 'inscription/home.html', {
+        'titre': "Accueil",
+    })
+
 @login_required
 @staff_required
-def student_inscription_details(request,pk):
-    scolarite = Inscription.objects.get(pk=pk)
+def student_inscription_details(request, pk):
+    scolarite = get_object_or_404(Inscription, pk=pk)
+    paiements = scolarite.inscription_paiement.filter(confirmed=True).order_by('created')
+    
+    # Si un paiement est édité
+    if request.method == 'POST':
+        paiement_id = request.POST.get('paiement_id')
+        paiement = get_object_or_404(Paiement, id=paiement_id)
+        
+        # Récupérer les données soumises et formater l'heure
+        reference = request.POST.get('reference')
+        montant = request.POST.get('montant')
+        source = request.POST.get('source')
+        effectue_par = request.POST.get('effectue_par')
+        active = 'active' in request.POST  # Si le champ est coché, active=True
+        
+        created = request.POST.get('created')
+        
+        # Si une valeur a été fournie pour 'created', la convertir en datetime
+        if created:
+            created_datetime = timezone.datetime.strptime(created, '%Y-%m-%dT%H:%M')
+        else:
+            created_datetime = paiement.created  # Laisser l'heure inchangée si non modifiée
+
+        # Mettre à jour l'objet paiement
+        paiement.reference = reference
+       
+        paiement.source = source
+        paiement.effectue_par = effectue_par
+        paiement.active = active
+        paiement.created = created_datetime  # Mettre à jour la date et l'heure
+        paiement.save()
+        
+        # Rediriger vers la même page
+        return redirect(request.path)  # Cela redirige vers la même URL
+    
     context = {
-        'scolarite' : scolarite,
-        "titre" : "Détail Scolarité",
-        "info": "Détail Scolarité",
-        "info2" : scolarite,
-        "datatable": False,
-        "etudiant" : scolarite.etudiant,
-        "paiements" : scolarite.inscription_paiement.filter(confirmed=True).order_by('created')
+        'scolarite': scolarite,
+        'titre': "Détail Scolarité",
+        'info': "Détail Scolarité",
+        'info2': scolarite,
+        'datatable': False,
+        'etudiant': scolarite.etudiant,
+        'paiements': paiements,
     }
+    
     return render(request, 'inscription/inscription_details.html', context=context)
 
+
+def recu_djabou(request, pk):
+    scolarite = get_object_or_404(Inscription, pk=pk)
+    paiements = scolarite.inscription_paiement.filter(confirmed=True).order_by('created')
+    
+    # Si un paiement est édité
+    if request.method == 'POST':
+        paiement_id = request.POST.get('paiement_id')
+        paiement = get_object_or_404(Paiement, id=paiement_id)
+        
+        # Récupérer les données soumises et formater l'heure
+        reference = request.POST.get('reference')
+        montant = request.POST.get('montant')
+        source = request.POST.get('source')
+        effectue_par = request.POST.get('effectue_par')
+        active = 'active' in request.POST  # Si le champ est coché, active=True
+        
+        created = request.POST.get('created')
+        
+        # Si une valeur a été fournie pour 'created', la convertir en datetime
+        if created:
+            created_datetime = timezone.datetime.strptime(created, '%Y-%m-%dT%H:%M')
+        else:
+            created_datetime = paiement.created  # Laisser l'heure inchangée si non modifiée
+
+        # Mettre à jour l'objet paiement
+        paiement.reference = reference
+       
+        paiement.source = source
+        paiement.effectue_par = effectue_par
+        paiement.active = active
+        paiement.created = created_datetime  # Mettre à jour la date et l'heure
+        paiement.save()
+        
+        # Rediriger vers la même page
+        return redirect(request.path)  # Cela redirige vers la même URL
+    
+    context = {
+        'scolarite': scolarite,
+        'titre': "Détail Scolarité",
+        'info': "Détail Scolarité",
+        'info2': scolarite,
+        'datatable': False,
+        'etudiant': scolarite.etudiant,
+        'paiements': paiements,
+    }
+    
+    return render(request, 'inscription/recu_djabou.html', context=context)
 
 @login_required
 @staff_required
 def all_student_inscription_list(request):
-    selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    
-    scolarites = Inscription.objects.filter(etudiant__etablissement_id=request.user.etablissement.id).order_by('filiere','niveau','etudiant__nom',)
+    etablissement = _get_user_etablissement(request)
+
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Liste des Scolarités",
+            "info": "Liste des Scolarités",
+            "info2": "Liste des Scolarités",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "inscription/all_inscrit.html", context=context)
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    scolarites = Inscription.objects.filter(
+        etudiant__etablissement_id=etablissement.id
+    ).order_by("filiere", "niveau", "etudiant__nom")
 
     if selected_annee_id:
         scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
     else:
-        scolarites = scolarites.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+        last_annee = etablissement.annee_academiques.order_by("created").last()
+        if last_annee:
+            scolarites = scolarites.filter(annee_academique_id=last_annee.id)
 
     context = {
-        'scolarites' : scolarites,
-        "titre" : f"Liste des Scolarités {request.user.etablissement}",
+        "scolarites": scolarites,
+        "titre": f"Liste des Scolarités {etablissement}",
         "info": "Liste des Scolarités",
-        "info2" : "Liste des Scolarités",
+        "info2": "Liste des Scolarités",
         "datatable": True,
         "can_select_annee": True,
         "annees_academiques": annees_academiques,
+        "no_etablissement": False,
     }
-    return render(request, 'inscription/all_inscrit.html', context=context)
-
-############################################################################################################################
+    return render(request, "inscription/all_inscrit.html", context=context)
 
 @login_required
 @staff_required
 def carte_print_details(request):
-    selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    
-    scolarites = Inscription.objects.filter(etudiant__etablissement_id=request.user.etablissement.id)
+    etablissement = _get_user_etablissement(request)
+
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Cartes étudiants",
+            "info": "Liste des Scolarités",
+            "info2": "Liste des Scolarités",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "inscription/carte_print.html", context=context)
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    scolarites = Inscription.objects.filter(
+        etudiant__etablissement_id=etablissement.id
+    )
 
     if selected_annee_id:
         scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
     else:
-        scolarites = scolarites.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+        last_annee = etablissement.annee_academiques.order_by("created").last()
+        if last_annee:
+            scolarites = scolarites.filter(annee_academique_id=last_annee.id)
 
     context = {
-        
-        'scolarites' : scolarites,
-        "titre" : f"Liste des Scolarités {request.user.etablissement}",
+        "scolarites": scolarites,
+        "titre": f"Liste des Scolarités {etablissement}",
         "info": "Liste des Scolarités",
-        "info2" : "Liste des Scolarités",
+        "info2": "Liste des Scolarités",
         "datatable": True,
         "can_select_annee": True,
         "annees_academiques": annees_academiques,
-        
+        "no_etablissement": False,
     }
-    return render(request, 'inscription/carte_print.html', context=context)
-
-
-
+    return render(request, "inscription/carte_print.html", context=context)
 
 @login_required
 @staff_required
 def all_student_inscription_list_attentes(request):
-    selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    
-    scolarites = Inscription.objects.filter(etudiant__etablissement_id=request.user.etablissement.id, confirmed=False)
+    etablissement = _get_user_etablissement(request)
+
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Inscriptions en attente",
+            "info": "Inscriptions en Attentes",
+            "info2": "Inscriptions en Attentes",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(
+            request, "inscription/all_inscrit_attentes.html", context=context
+        )
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    scolarites = Inscription.objects.filter(
+        etudiant__etablissement_id=etablissement.id, confirmed=False
+    )
 
     if selected_annee_id:
         scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
     else:
-        scolarites = scolarites.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+        last_annee = etablissement.annee_academiques.order_by("created").last()
+        if last_annee:
+            scolarites = scolarites.filter(annee_academique_id=last_annee.id)
 
     context = {
-        'scolarites' : scolarites,
-        "titre" : f"Liste des Inscriptions en Attentes {request.user.etablissement}",
+        "scolarites": scolarites,
+        "titre": f"Liste des Inscriptions en Attentes {etablissement}",
         "info": "Inscriptions en Attentes",
-        "info2" : "Inscriptions en Attentes",
+        "info2": "Inscriptions en Attentes",
         "datatable": True,
         "can_select_annee": True,
         "annees_academiques": annees_academiques,
+        "no_etablissement": False,
     }
-    return render(request, 'inscription/all_inscrit_attentes.html', context=context)
-
-
-
-
+    return render(
+        request, "inscription/all_inscrit_attentes.html", context=context
+    )
 
 @login_required
 @staff_required
 def scolarite_list(request):
-    selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    scolarites = Inscription.objects.filter(etudiant__etablissement_id=request.user.etablissement.id)
+    etablissement = _get_user_etablissement(request)
+
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Liste des Scolarités",
+            "info": "Liste des Scolarités",
+            "info2": "Liste des Scolarités",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "inscription/list_scolarite.html", context=context)
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    scolarites = (
+        Inscription.objects.filter(
+            etudiant__etablissement_id=etablissement.id
+        )
+        .select_related("etudiant", "filiere", "niveau", "classe", "annee_academique")
+        .order_by("filiere__nom", "niveau__nom", "etudiant__nom")
+    )
+
     if selected_annee_id:
         scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
     else:
-        scolarites = scolarites.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+        last_annee = etablissement.annee_academiques.order_by("created").last()
+        if last_annee:
+            scolarites = scolarites.filter(annee_academique_id=last_annee.id)
+
     context = {
-        'scolarites' : scolarites,
-        "titre" : f"Liste des Scolarités {request.user.etablissement}",
+        "scolarites": scolarites,
+        "titre": f"Liste des Scolarités {etablissement}",
         "info": "Liste des Scolarités",
-        "info2" : "Liste des Scolarités",
+        "info2": "Liste des Scolarités",
         "datatable": True,
         "can_select_annee": True,
         "annees_academiques": annees_academiques,
+        "no_etablissement": False,
     }
-    return render(request, 'inscription/list_scolarite.html', context=context)
-
+    return render(request, "inscription/list_scolarite.html", context=context)
 
 @login_required
 @staff_required
 def paiement_historique_list(request):
-    selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    paiements = Paiement.objects.filter(inscription__etudiant__etablissement_id=request.user.etablissement.id, confirmed=True)
+    etablissement = _get_user_etablissement(request)
+
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "paiements": [],
+            "titre": "Historique des paiements",
+            "info": "Historique des paiements",
+            "info2": "Historique des paiements",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(
+            request, "inscription/paiements/historique.html", context=context
+        )
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    paiements = Paiement.objects.filter(
+        inscription__etudiant__etablissement_id=etablissement.id,
+        confirmed=True,
+    ).select_related("inscription", "inscription__etudiant")
+
     if selected_annee_id:
-        paiements = paiements.filter(inscription__annee_academique_id=selected_annee_id)
+        paiements = paiements.filter(
+            inscription__annee_academique_id=selected_annee_id
+        )
     else:
-        paiements = paiements.filter(inscription__annee_academique_id=request.user.etablissement.annee_academiques.last())
+        last_annee = etablissement.annee_academiques.order_by("created").last()
+        if last_annee:
+            paiements = paiements.filter(
+                inscription__annee_academique_id=last_annee.id
+            )
+
     context = {
-        'paiements' : paiements,
-        "titre" : f"Historique des paiements {request.user.etablissement}",
+        "paiements": paiements,
+        "titre": f"Historique des paiements {etablissement}",
         "info": "Historique des paiements",
-        "info2" : "Historique des paiements",
+        "info2": "Historique des paiements",
         "datatable": True,
         "can_select_annee": True,
         "annees_academiques": annees_academiques,
+        "no_etablissement": False,
     }
-    return render(request, 'inscription/paiements/historique.html', context=context)
+    return render(
+        request, "inscription/paiements/historique.html", context=context
+    )
+
 
 
 
@@ -365,32 +614,66 @@ def validate_remise_kits(request):
 
 
 
-
 @login_required
 @staff_required
 def all_student_kits_list(request):
-    selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    
-    scolarites = Inscription.objects.filter(etudiant__etablissement_id=request.user.etablissement.id)
+    # 1) Récupération de l'établissement de l'utilisateur
+    etablissement = _get_user_etablissement(request)
 
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation.",
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Emission des Kits & Accéssoires",
+            "info": "Emission des Kits & Accéssoires",
+            "info2": "Emission des Kits & Accéssoires",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "inscription/kits/all_kits.html", context=context)
+
+    # 2) Gestion de l'année académique
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    annee_active = None
     if selected_annee_id:
-        scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
-    else:
-        scolarites = scolarites.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+        annee_active = annees_academiques.filter(id=selected_annee_id).first()
 
+    if annee_active is None:
+        annee_active = annees_academiques.first()
+
+    # 3) Récupération des inscriptions (scolarités) de l'établissement
+    scolarites = (
+        Inscription.objects
+        .filter(etudiant__etablissement_id=etablissement.id)
+    )
+    if annee_active:
+        scolarites = scolarites.filter(annee_academique_id=annee_active.id)
+
+    # 4) Contexte
     context = {
-        'scolarites' : scolarites,
-        "titre" : f"Emission des Kits & Accéssoires {request.user.etablissement}",
+        "scolarites": scolarites,
+        "titre": f"Emission des Kits & Accéssoires {etablissement}",
         "info": "Emission des Kits & Accéssoires",
-        "info2" : "Emission des Kits & Accéssoires",
+        "info2": "Emission des Kits & Accéssoires",
         "datatable": True,
         "can_select_annee": True,
         "annees_academiques": annees_academiques,
+        "annee_active": annee_active,
+        "no_etablissement": False,
     }
-    return render(request, 'inscription/kits/all_kits.html', context=context)
 
-
+    return render(request, "inscription/kits/all_kits.html", context=context)
 
 @login_required
 @staff_required
@@ -417,41 +700,66 @@ def nouveau_paiement(request):
 
 
 
+###############################################################################
+###############################################################################
 @login_required
 @staff_required
 def student_scolarite_list(request, slug):
-    etudiant = Etudiant.objects.get(code_paiement=slug)
-    scolarites = Inscription.objects.filter(etudiant__code_paiement=slug).order_by('-created')
+    try:
+        etudiant = get_object_or_404(Etudiant, code_paiement=slug)
+        scolarites = Inscription.objects.filter(etudiant__code_paiement=slug).order_by('-created')
+    except Exception as e:
+        messages.error(request, "Erreur lors du chargement des données de l'étudiant : {e}.")
+        return redirect('student_inscription_details', pk=scolarite.id)
 
     if request.method == 'POST':
-        scolarite_id = request.POST.get('scolarite_id')
-        montant = int(request.POST.get('montant'))
-        source = request.POST.get('source')
-        reference = request.POST.get('reference')
+        try:
+            scolarite_id = request.POST.get('scolarite_id')
+            montant = int(request.POST.get('montant', 0))
+            source = request.POST.get('source', '').strip()
+            reference = request.POST.get('reference', '').strip()
 
-        scolarite = Inscription.objects.get(id=scolarite_id)
+            # Validation des entrées
+            if not scolarite_id or not montant or not source or not reference:
+                messages.error(request, "Tous les champs sont requis.")
+                return redirect(request.path)
 
-        # Vérifier si un paiement avec la même référence existe déjà
-        existing_paiement = Paiement.objects.filter(
-            Q(inscription=scolarite) & Q(reference=reference)
-        ).exists()
+            scolarite = get_object_or_404(Inscription, id=scolarite_id)
 
-        if existing_paiement:
-            messages.error(request, "Un paiement avec la même référence existe déjà.")
-        else:
-            reste_a_payer = scolarite.reste
-            if montant <= reste_a_payer:
-                nouveau_paiement = Paiement.objects.create(
-                    inscription=scolarite,
-                    montant=montant,
-                    source=source,
-                    reference=reference,
-                    confirmed=True,
-                )
-                messages.success(request, "Paiement enregistré avec succès !!")
-                return redirect('student_inscription_details', pk=scolarite.id)
+            # Vérifier si un paiement avec la même référence existe déjà
+            existing_paiement = Paiement.objects.filter(
+                Q(inscription=scolarite) & Q(reference=reference)
+            ).exists()
+
+            if existing_paiement:
+                messages.error(request, "Un paiement avec la même référence existe déjà.")
             else:
-                messages.error(request, f"Montant supérieur. Il reste {reste_a_payer} Francs à payer.")
+                reste_a_payer = scolarite.reste
+
+                if montant <= 0:
+                    messages.error(request, "Le montant doit être supérieur à zéro.")
+                elif montant > reste_a_payer:
+                    messages.error(request, f"Montant supérieur. Il reste {reste_a_payer} Francs à payer.")
+                else:
+                    non_direct_api = True if source == "WAVE MONEY" else False
+
+                    Paiement.objects.create(
+                        inscription=scolarite,
+                        montant=montant,
+                        source=source,
+                        reference=reference,
+                        confirmed=True,
+                        effectue_par=request.user,
+                        non_wave_direct_api=non_direct_api
+                    )
+
+                    messages.success(request, "Paiement enregistré avec succès !!")
+                    return redirect('student_inscription_details', pk=scolarite.id)
+
+        except ValueError:
+            messages.error(request, "Veuillez entrer un montant valide.")
+        except Exception as e:
+            messages.error(request, "Une erreur s'est produite lors de l'enregistrement du paiement: {e}.")
 
     context = {
         'etudiant': etudiant,
@@ -463,10 +771,6 @@ def student_scolarite_list(request, slug):
         'remise_kits': True
     }
     return render(request, 'inscription/paiements/list.html', context=context)
-
-
-###############################################################################
-###############################################################################
 
 ###############################################################################
 ##############                API ET MOBILE PAYEMENT          #################
@@ -529,6 +833,23 @@ def verify_webhook_signature(request, body):
     ).hexdigest()
     
     return hmac.compare_digest(signature, expected_signature)
+
+
+def success_view1(request):
+    # Vous pouvez inclure une logique ici si nécessaire
+    return JsonResponse({'path': 'Paiement IIPEA'}, status=200)
+
+def success_view2(request):
+    # Vous pouvez inclure une logique ici si nécessaire
+    return JsonResponse({'path': 'Paiement  iipeaci * intouch'}, status=200)
+
+def success_view3(request):
+    # Vous pouvez inclure une logique ici si nécessaire
+    return JsonResponse({'path': 'Paiement  iipeaci * outtouch'}, status=200)
+
+def success_view4(request):
+    # Vous pouvez inclure une logique ici si nécessaire
+    return JsonResponse({'path': 'PAIEMENT IIPEA VERIFY'}, status=200)
 
 @csrf_exempt
 def webhook_handler(request):
@@ -594,6 +915,7 @@ def waveMakePaiment(request, pk):
         # Update Paiement model with wave_launch_url and wave_id
         paiement.wave_launch_url = response_data.get('wave_launch_url')
         paiement.wave_id = response_data.get('id')
+        paiement.effectue_par = request.user.nom + " " + request.user.prenom
         paiement.save()
 
         # Redirect the user to wave_launch_url
@@ -707,46 +1029,7 @@ def get_inscription_data(inscription):
 
 @csrf_exempt
 def common_api_view(request, action):
-    if request.method == 'POST':
-        try:
-            json_data = json.loads(request.body)  # Parse the JSON data from the request body.
-            matricule = json_data.get('matricule', None)
-            secret_id = json_data.get('secret_id', None)
-            montant = json_data.get('montant', None)
-            
-            if secret_id in secret:
-                if matricule:
-                    try:
-                        # Search for the Inscription record based on the provided matricule and solded=False.
-                        inscription = Inscription.objects.filter(etudiant__code_paiement=matricule, solded=False).latest('created')
-
-                        if action == 'get_inscription':
-                            inscription_data = get_inscription_data(inscription)
-                            return JsonResponse(inscription_data, status=200)
-                        elif action == 'make_payment':
-                            if montant is not None and isinstance(montant, int) and montant > 0:
-                                ref = str(inscription.id) + "-ECOB-API-" + str(datetime.datetime.now())
-                                paiement = Paiement.objects.create(
-                                    inscription=inscription, 
-                                    reference=ref,
-                                    montant=montant,
-                                    source="Ecobank Api",
-                                    confirmed=True,
-                                )
-                                inscription_data = get_inscription_data(inscription)
-                                return JsonResponse(inscription_data, status=200)
-                            else:
-                                return JsonResponse({'status': 'error', 'message': 'Montant Invalid.'}, status=400)
-
-                    except Inscription.DoesNotExist:
-                        return HttpResponseNotFound(json.dumps({'status': 'not found', 'message': 'No matching Inscription found.'}), content_type="application/json")
-            else:
-                return JsonResponse({'status': 'error', 'message': 'Invalid Secret Id'}, status=400)
-
-        except json.JSONDecodeError:
-            return HttpResponseBadRequest(json.dumps({'status': 'error', 'message': 'Invalid JSON data.'}), content_type="application/json")
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    pass
 
 
 @csrf_exempt
@@ -756,3 +1039,162 @@ def get_inscription_by_matricule(request):
 @csrf_exempt
 def make_new_paiment_form_ecobank(request):
     return common_api_view(request, 'make_payment')
+
+@login_required
+@staff_required
+def all_student_inscription_list_dossiers(request):
+    etablissement = _get_user_etablissement(request)
+
+    # Si l'utilisateur n'a pas d'établissement associé
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Liste des Scolarités",
+            "info": "Liste des Scolarités",
+            "info2": "Liste des Scolarités",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "inscription/dossiers.html", context=context)
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    # Années académiques de l'établissement
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    # Base queryset des scolarités
+    scolarites = Inscription.objects.filter(
+        etudiant__etablissement_id=etablissement.id
+    ).order_by("filiere", "niveau", "etudiant__nom")
+
+    # Filtre par année académique
+    if selected_annee_id:
+        scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
+        annee_active = AnneeAcademique.objects.filter(
+            pk=selected_annee_id,
+            etablissement=etablissement
+        ).first()
+    else:
+        annee_active = etablissement.annee_academiques.order_by("created").last()
+        if annee_active:
+            scolarites = scolarites.filter(annee_academique=annee_active)
+
+    context = {
+        "scolarites": scolarites,
+        "titre": f"Liste des Scolarités {etablissement}",
+        "info": "Liste des Scolarités",
+        "info2": "Liste des Scolarités",
+        "datatable": True,
+        "can_select_annee": True,
+        "annees_academiques": annees_academiques,
+        "annee_active": annee_active,
+        "no_etablissement": False,
+    }
+    return render(request, "inscription/dossiers.html", context=context)
+
+@login_required
+@staff_required
+def scolarite_list_djabou(request):
+    selected_annee_id = request.GET.get('annee_id')
+    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
+    scolarites = Inscription.objects.filter(etudiant__etablissement_id=request.user.etablissement.id)
+    if selected_annee_id:
+        scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
+    else:
+        scolarites = scolarites.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+
+    context = {
+        'scolarites' : scolarites,
+        "titre" : f"Liste des Scolarités {request.user.etablissement}",
+        "info": "Liste des Scolarités",
+        "info2" : "Liste des Scolarités",
+        "datatable": True,
+        "can_select_annee": True,
+        "annees_academiques": annees_academiques,}
+        
+    return render(request, 'inscription/list_scolarite_djabou.html', context=context)
+
+
+@login_required
+@staff_required
+def inscription_data_detail(request,pk, titre):
+    inscription = get_object_or_404(Inscription, pk=pk)
+    context = {
+         "inscription" : inscription,
+         'cursus': Inscription.objects.filter(etudiant_id=inscription.etudiant.id, confirmed=True),
+         'titre': titre,   
+         'student_print' : True,
+         'hide':True
+    }
+    return render(request, 'inscription/documents/certificat_2.html', context=context)
+
+
+@login_required
+@staff_required
+def emargement_list(request):
+    etablissement = _get_user_etablissement(request)
+
+    # Cas où le compte n’est pas rattaché à un établissement
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation."
+        )
+        context = {
+            "scolarites": [],
+            "titre": "Liste des Scolarités",
+            "info": "Liste des Scolarités",
+            "info2": "Liste des Scolarités",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "inscription/emargement_list.html", context=context)
+
+    selected_annee_id = request.GET.get("annee_id")
+
+    # Années académiques de l’établissement
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    # Base queryset des inscriptions
+    scolarites = Inscription.objects.filter(
+        etudiant__etablissement_id=etablissement.id
+    ).order_by("filiere", "niveau", "etudiant__nom")
+
+    # Filtre par année
+    if selected_annee_id:
+        scolarites = scolarites.filter(annee_academique_id=selected_annee_id)
+        annee_active = AnneeAcademique.objects.filter(
+            pk=selected_annee_id,
+            etablissement=etablissement
+        ).first()
+    else:
+        annee_active = etablissement.annee_academiques.order_by("created").last()
+        if annee_active:
+            scolarites = scolarites.filter(annee_academique=annee_active)
+
+    context = {
+        "scolarites": scolarites,
+        "titre": f"Liste des Scolarités {etablissement}",
+        "info": "Liste des Scolarités",
+        "info2": "Liste des Scolarités",
+        "datatable": True,
+        "can_select_annee": True,
+        "annees_academiques": annees_academiques,
+        "annee_active": annee_active,
+        "no_etablissement": False,
+    }
+    return render(request, "inscription/emargement_list.html", context=context)

@@ -49,7 +49,7 @@
             </div>
             <p style="page-break-before: always;"></p>
             <br>
-{% for etudiant in classe.effectifs %}
+{% for etudiant in bulletin_liste %}
 
             <div class="container" style="background-color: white;background-color: white;">
 
@@ -119,7 +119,7 @@
                                     <tr style=" height: 15px; font-size: 15px; margin-left: 5px; border: 0;border-color: white;font-weight: bold; ">
 
                                         <td width="50%" style="text-align: left;">&nbsp; Nom et Prénoms(s) : {{etudiant.etudiant.utilisateur}}</td>
-                                        <td width="50%" style="right: ;" colspan="6">&nbsp; Matricule : {{etudiant.etudiant.matricule}}
+                                        <td width="50%" style="text-align: left;" colspan="6">&nbsp; Matricule : {{etudiant.etudiant.matricule}}
                                         </td>
 
 
@@ -188,24 +188,24 @@
                         </tr>
                        
                             
-                        {% for note in etudiant.notes_semestre_1 %}
-                        {% if note.etudiant.id == etudiant.id %}
-                            <tr style="font-size: 15px; text-align: center; height: 25px">
+                       {% for note in etudiant.notes_semestre1 %}
+                        <!-- {% if note.etudiant.id == etudiant.id %} -->
+
                                 
                                 {% if classe.classe_universitaire %}
 
                                 <td style="text-align: left; padding-left: 1%;">{{ note.note.matiere.matiere.nom | upper }}</td>
-                                <td>{{ note.moyenne }}</td>
-                                <td>{{ note.note.matiere.matiere.coefficient }}</td>   
+                                <td class="td">{{ note.moyenne }}</td>
+                                <td class="td">{{ note.note.matiere.matiere.coefficient }}</td>   
                                
-                                    {%  if note.moyenne >= 10 or note.moyenne_unite >= 10 %}
-                                            <td>{{ note.note.matiere.matiere.coefficient }}</td>  
+                                    {%  if note.moyenne >= 10 or note.moyenne_unite_vue >= 10 %}
+                                            <td class="td">{{ note.note.matiere.matiere.coefficient }}</td>  
                                         {% else %}
-                                        <td>0</td>
+                                        <td class="td">0</td>
                                     {% endif %}
                                
                                     {% if note.moyenne is not None %}
-                                            <td>
+                                            <td class="td">
                                                 {% if note.moyenne >= 0 and note.moyenne <= 4.99 %}
                                                     Mauvais
                                                 {% elif note.moyenne >= 5 and note.moyenne <= 9.99 %}
@@ -224,23 +224,23 @@
                                             </td>
                                         {% endif %}
                                  
-                                        {% if note.moyenne >= 10 or note.moyenne_unite >= 10 %}
-                                        <td>ADMIS(E)</td>  
+                                        {% if note.moyenne >= 10 or note.moyenne_unite_vue >= 10 %}
+                                        <td class="td">ADMIS(E)</td>  
                                         {% else %}
-                                        <td>REFUSE(E)</td>  
+                                        <td class="td">REFUSE(E)</td>  
                                         {% endif %}
 
-                                        <td>{{ note.session }}</td> 
+                                        <td class="td">{{ note.session }}</td> 
 
-                                {% else %}
+                                    {% else %}
 
 
                                     <td style="text-align: left; padding-left: 1%;">{{ note.note.matiere.matiere.nom | upper }}</td>
-                                    <td>{{ note.moyenne }}</td>
-                                    <td>{{ note.note.matiere.matiere.coefficient }}</td>
-                                    <td>{{ note.moyenne_coefficient }}</td>
+                                    <td class="td">{{ note.moyenne }}</td>
+                                    <td class="td">{{ note.note.matiere.matiere.coefficient }}</td>
+                                    <td class="td">{{ note.moyenne_coefficient }}</td>
                                     {% if note.moyenne is not None %}
-                                    <td>
+                                    <td class="td">
                                         {% if note.moyenne >= 0 and note.moyenne <= 4.99 %}
                                             Mauvais
                                         {% elif note.moyenne >= 5 and note.moyenne <= 9.99 %}
@@ -268,8 +268,8 @@
                                         <td style="text-align: center; padding-left: 1%;" colspan=""><b>TOTAL</b>
                                         </td>
                                         <td><b></b></td>
-                                        <td><b>{{etudiant.credit_notes_semestre_1}}</b></td>
-                                        <td><b>{{etudiant.total_notes_semestre_1}}</b></td>
+                                        <td><b>{{ etudiant.credit_semestre1 }}</b></td>
+                                        <td><b>{{ etudiant.total_semestre1|floatformat:2 }}</b></td>
                                     </tr>
                                 </table>
                             </div>
@@ -289,7 +289,7 @@
                                             {% else %}
                                             Semestre
                                             {% endif %}</div>
-                                        <div class="col-4"  style="font-weight:bold">{{etudiant.moyenne1}} / 20</div>
+                                        <div class="col-4"  style="font-weight:bold">{{ etudiant.moyenne1_semestre1|floatformat:2 }} / 20</div>
                                     </div>
 
                                    
@@ -298,39 +298,42 @@
                                    <div class="row" style="border:1px solid black; ">
                                     <div class="col-8" style="border-right: 1px solid black;">Crédit du 1
                                         <sup>er</sup> semestre</div>
-                                    <div class="col-4" style="font-weight:bold">{{etudiant.credit_obtenues_notes_semestre_1}} / 30</div>
+                                    <div class="col-4" style="font-weight:bold">{{ etudiant.credit_semestre1 }} / 30</div>
                                      </div>
 
                                     
                                    {% endif %}
                                     
                                   
-                                    <div class="row" style="border:1px solid black; ">
-                                        <div class="col-8" style="border-right: 1px solid black;">Rang</div>
-                                        {% for r in rang reversed %} {% if r.id == etudiant.id %} {% if forloop.first %}
-                                        <div class="col-4"  style="font-weight:bold">{{forloop.counter }} <sup>er</sup> </div>
-                                        {% else %}
-                                        <div class="col-4"  style="font-weight:bold">{{forloop.counter }} <sup>ème</sup> </div>
-                                        {% endif %} {% endif %} {% endfor %}
-    
-    
+                                    <div class="row" style="border:1px solid black;">
+                                    <div class="col-8" style="border-right: 1px solid black;">Rang</div>
+
+                                        {% for r in rang_liste %}
+                                            {% if r.id == etudiant.id %}
+                                                <div class="col-4" style="font-weight:bold">
+                                                    {{ r.rang }}
+                                                    {% if r.rang == 1 %}
+                                                        <sup>er</sup>
+                                                    {% else %}
+                                                        <sup>ème</sup>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
+
 
                                 <div class="row" style=" ">
                                     <div class="col-8" style="">Moyenne la plus forte de la classe</div>
-                                    {% for r in rang %} {% if forloop.last %}
-                                    <div class="col-4" style="font-weight:bold">{{r.moyenne1}}</div>
-                                    {% endif %} {% endfor %}
+                                    <div class="col-4" style="font-weight:bold">{{ moyenne_plus_forte|floatformat:2 }}</div>
+                                   
 
                                 </div>
                                 
                                 <div class="row" style=" ">
                                     <div class="col-8" style="">Moyenne la plus faible de la classe</div>
-                                    {% for r in rang %} {% if forloop.first %}
-                                    <div class="col-4" style="font-weight:bold">{{ r.moyenne1 }}</div>
-                                    {% endif %} {% endfor %}
-
-
+                                   
+                                    <div class="col-4" style="font-weight:bold">{{ moyenne_plus_faible|floatformat:2 }}</div>
                                 </div>
                               
 
@@ -466,6 +469,11 @@
 
 {% endfor %}
         </div>
+        <style>
+            .td{
+                text-align: center;
+            }
+        </style>
   
 </body>
 </html>

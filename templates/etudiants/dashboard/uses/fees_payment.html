@@ -34,7 +34,7 @@
 
                                 <div class="form-group">
                                     <label for="current-log-email"> Veuillez Saisir le Montant <b>(XOF)</b></label>
-                                    <input  type="number" inputmode="numeric" name="current-log-email" id="current-log-email" min="500" max="{{scolarite.reste }}"
+                                    <input required  type="number" inputmode="numeric" name="current-log-email" id="current-log-email" min="500" max="{{scolarite.reste }}"
                                      placeholder="Montant à payer" style="border:2px solid black">
                                      <input  type="hidden" name="scolarite_id" id="scolarite_id" value="{{scolarite.id}}">
                                      <input  type="hidden" name="scolarite_id" id="scolarite_id" value="{{scolarite.id}}">
@@ -97,7 +97,7 @@
                                      <!--PHONE ZONE-->
                                      <div class="form-group">
                                         <label for="current-log-email"> Veuillez Saisir numéro <b id="network"></b> à débiter </label>
-                                        <input type="text" maxlength="10" pattern="[0-9]*" inputmode="numeric" name="phone" placeholder="Numéro à débiter *" style="border:2px solid black">
+                                        <input required type="text" maxlength="10" pattern="[0-9]*" inputmode="numeric" name="phone" placeholder="Numéro à débiter *" style="border:2px solid black">
                                         <input  type="hidden" name="operateur_id" id="operateur_id">
                                         <p id="phone-error-message" style="color: red;"></p>
                                     </div>

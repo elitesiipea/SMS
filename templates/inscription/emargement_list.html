@@ -1,0 +1,90 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                
+                                <th>N°</th>
+                                <th>IDENT. PERM (IP)</th>
+                                <th>NOM</th>
+                                <th>PRENOM(S)</th>
+                                <th>NE (E) LE</th>
+                                <th>LIEU DE NAISSANCE</th>
+                                <th>EMARGEMENT</th>
+                                <th>SCOLARITE</th>
+                                <th>FILIERE</th>
+                                <th>NIVEAU</th>
+                                <th>CLASSE</th>
+                                <th>ELITE_ID</th>
+                                <th>STATUS</th>
+                                <th>SEXE</th>
+                                <th>CONTACT</th>
+                                <th>PHOTO</th>
+                                <th>NATIONALITE</th>
+
+                            
+
+                            </tr>
+                            </thead>
+                            
+                            <tbody>
+                           
+                            {% for scolarite in scolarites  %}
+
+                            <tr>
+                                <th>{{forloop.counter }}</th>
+                                <th>{{scolarite.etudiant.matricule | upper }}</th>
+                                <th>{{scolarite.etudiant.nom | upper }}</th>
+                                <th>{{scolarite.etudiant.prenom | upper }}</th>
+                                <th>{{scolarite.etudiant.date_de_naissance | date:'d/m/Y'  }}</th>
+                                <th>{{scolarite.etudiant.lieu_de_naissance | upper }}</th>
+                                <th>---</th>
+                                <th>{{scolarite.frais | intcomma  }}</th>
+                                <th>{{scolarite.filiere | upper }}</th>
+                                <th>{{scolarite.niveau | upper }}</th>
+                                <th>{{scolarite.classe | upper }}</th>
+                                <th>{{scolarite.etudiant.code_paiement | upper }}</th>
+                                <th>{{scolarite.etudiant.type_etudiant | upper }}</th>
+                                <th>{{scolarite.etudiant.sexe | upper }}</th>
+                                <th>+225{{scolarite.etudiant.contact | upper }}</th>
+                                <th>
+                                    {% if scolarite.etudiant.photo  %}
+                                        https://myiipea.com{{ scolarite.etudiant.photo.url }}
+                                    {% else %}
+                                    ---
+                                    {% endif %}
+                                </th>
+                                <th>{{scolarite.etudiant.nationalite.name | upper }}</th>
+                                
+                               
+                                
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+{% endblock page %}
+    

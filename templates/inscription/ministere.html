@@ -38,6 +38,8 @@
                                 <th>ORIGINE</th>
                                 <th>STATUS</th>
                                 <th>PHOTO</th>
+                                <th>SEXE</th>
+
                             </tr>
                             </thead>
                             
@@ -71,6 +73,7 @@
                                     ---
                                     {% endif %}
                                 </th>
+                                <th>{{scolarite.etudiant.sexe | upper }}</th>
                                
                                 
                             {% endfor %}

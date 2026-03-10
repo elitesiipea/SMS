@@ -3,374 +3,153 @@
 {% block content %}
 
 <style>
-    /* Pour agrandir la taille des éléments */
-    #annee_id option {
-        font-size: 16px; /* Modifier la taille de police selon vos préférences */
-    }
-    
-    /* Pour mettre les éléments en gras */
-    #annee_id option {
-        font-weight: bold;
-    }
-</style>
-<style type="text/css">
+    /* Styles généraux */
     .tg {
         border-collapse: collapse;
         border-spacing: 0;
     }
-
-    .tg td {
+    .tg td, .tg th {
         font-family: Arial, sans-serif;
         font-size: 14px;
         padding: 10px 5px;
-        border-style: solid;
-        border-width: 1px;
+        border: 1px solid black;
         overflow: hidden;
         word-break: normal;
-        border-color: black;
     }
-
-    .tg th {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        padding: 10px 5px;
-        border-style: solid;
-        border-width: 1px;
-        overflow: hidden;
-        word-break: normal;
-        border-color: black;
-    }
-
-    .tg .tg-teh8 {
-        background-color: #f3eec1;
-        border-color: inherit;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-6zfp {
-        font-weight: bold;
-        background-color: #8db4e3;
-        color: #000000;
-        text-align: center;
-        vertical-align: top
-    }
-
-    .tg .tg-6dzw {
-        background-color: #d2dae2;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-654s {
-        font-weight: bold;
-        background-color: #8800c9;
-        color: #ffffff;
-        border-color: inherit;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-qsz9 {
-        background-color: #f3eec1;
-        color: #000000;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-l660 {
-        background-color: #d2dae2;
-        color: #000000;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-dj9i {
-        background-color: #8800c9;
-        color: #ffffff;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-fzvx {
-        background-color: #31b267;
-        color: #ffffff;
-        text-align: center;
-        vertical-align: top
-    }
-
-    .tg .tg-zkk0 {
-        background-color: #f3eec1;
-        color: #000000;
-        border-color: inherit;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-gpzw {
-        font-weight: bold;
-        background-color: #8db4e3;
-        color: #000000;
-        border-color: inherit;
-        text-align: center;
-        vertical-align: top
-    }
-
-    .tg .tg-i31f {
-        background-color: #8db4e3;
-        border-color: inherit;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-7ye7 {
-        background-color: #31b267;
-        color: #ffffff;
-        text-align: left;
-        vertical-align: top
-    }
-
-    .tg .tg-z4m1 {
+    .tg .tg-6zfp, .tg .tg-z4m1 {
         font-weight: bold;
         background-color: #31b267;
         color: #ffffff;
-        border-color: inherit;
         text-align: center;
-        vertical-align: top
     }
 
-    @media screen and (max-width: 767px) {
-        .tg {
-            width: auto !important;
-        }
-
-        .tg col {
-            width: auto !important;
-        }
-
-        .tg-wrap {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+    /* Styles pour la sélection d'année */
+    #annee_id option {
+        font-size: 16px;
+        font-weight: bold;
     }
-</style>
-<style>
-    /* Styles pour l'impression */
+
+    /* Styles d'impression */
     @media print {
-        body * {
-            display: none; /* Cacher tous les éléments du corps */
-        }
-        
-        #to_print, #to_print * {
-            display: block; /* Afficher uniquement le contenu de la div avec l'ID "to_print" */
-        }
+        body * { display: none; }
+        #to_print, #to_print * { display: block; }
     }
 </style>
 
 <div class="container">
     <div class="row g-5">
-        <div class="">
-            <div class="">
-                <div class="">
-                    <form action="#" method="GET">
-                        <div class="row">
-                            <div class="col-6">
-                                <h6 class="showing-text">Sélectionnez l'année Académique</h6>
-                            </div>
-                            <div class="col-6">
-                                <select name="edu-select" id="annee_id" class="form-control">
-                                    <option value="">Année Académique</option>
-                                    {% for annee in annees_academiques %}
-                                        <option value="{{ annee.id }}">{{ annee.debut }} - {{ annee.fin }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-
+        <!-- Section sélection année académique -->
+        <form action="#" method="GET">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="showing-text">Sélectionnez l'année Académique</h6>
                 </div>
-            </div>
-
-           
-        </div>
-        <div>
-            
-            {% if found_cursus == False  %}
-            <br>
-            <br>
-            <div class="row g-5 row--45">
-                <div class="col-lg-6">
-                    <div class="edu-faq-gallery">
-                        <div class="faq-thumbnail thumbnail-1 sal-animate" data-sal-delay="50" data-sal="slide-right" data-sal-duration="800">
-                            <img src="{% static 'etudiant/assets/images/others/faq-5.webp' %}" alt="Faq Images">
-                        </div>
-                        <ul class="shape-group">
-                            <li class="shape-1 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                <img data-depth="1.5" src="{% static 'etudiant/assets/images/faq/shape-35.png' %}" alt="Shape Images" style="transform: translate3d(-23.5px, -1.5px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                            </li>
-                            <li class="shape-2 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                <img data-depth="-2" src="{% static 'etudiant/assets/images/faq/shape-36.png' %}" alt="Shape Images" style="transform: translate3d(24.5px, 1.6px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                            </li>
-                            <li class="shape-3">
-                                <img src="{% static 'etudiant/assets/images/faq/shape-34.png' %}" alt="Shape Images">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-6 sal-animate" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800">
-                    <div class="edu-faq-content">
-                        <div class="section-title section-left">
-                            <span class="pre-title">Oups</span>
-                            <h2 class="title">Aucun cours  <span class="color-secondary">disponible </h2>
-                            <span class="shape-line"><i class="icon-19"></i></span>
-                        </div>
-                        <div class="faq-accordion" id="faq-accordion">
-                            <div class="accordion">
-                                <div class="accordion-item">
-                                    <h5 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
-                                            Pourquoi ai-je aucun cours pour cette année ? 
-                                        </button>
-                                    </h5>
-                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faq-accordion">
-                                        <div class="accordion-body">
-                                            <p>Aucun cours n'est disponible pour vous pour le compte de cette Année Académique car vous n'étiez pas inscris cette année là. <br>
-                                                En cas d'erreur merci de contater les administrateurs
-                                                </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <ul class="shape-group">
-                            <li class="shape-1 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                <img data-depth="1.5" src="{% static 'etudiant/assets/images/about/shape-02.png' %}" alt="Shape Images" style="transform: translate3d(-41.9px, -2.7px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                            </li>
-                            <li class="shape-2 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                <span data-depth="-2.2" style="transform: translate3d(22.2px, 1.4px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;"></span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            
-            {% if cours is not none %}
-
-            <div class="edu-course-area course-area-1 gap-tb-text">
-                <div class="container">
-                    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
-                        <h4 class="title">Cours {{ cursus.filiere }} {{ cursus.niveau }}</h4>
-                        <span class="shape-line"><i class="icon-19"></i></span>
-                    </div>
-    
-                    <div class="edu-sorting-area">
-                        <div class="sorting-left">
-                            <h6 class="showing-text">Cours <span>{{ cursus.filiere }} {{ cursus.niveau }}</span></h6>
-                        </div>
-                    </div>
-    
-                    <div class="row g-5">
-                        
-                        
-                        {% for cour in cours %}
-                            <!-- Start Single Course  -->
-                        <div class="col-md-6 col-lg-4 col-xl-3 sal-animate" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800">
-                            <div class="edu-course course-style-1 course-box-shadow hover-button-bg-white">
-                                <div class="inner">
-                                    <div class="thumbnail">
-                                        <a href="{{cour.cours_url}}">
-                                            <img src="{% static 'etudiant/assets/images/course/course-07.jpg' %}" alt="Course Meta">
-                                        </a>
-                                        <div class="time-top">
-                                            <span class="duration"><i class="icon-61"></i>{{cour.volume_horaire}} Heures</span>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <span class="course-level">{{cour.matiere}}</span>
-                                        <h6 class="title">
-                                            <a href="#">{{cour.matiere}}</a>
-                                        </h6>
-                                       
-                                       
-                                        <ul class="course-meta">
-                                           
-                                            <li><i class="icon-25"></i>{{cour.enseignant}}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="course-hover-content-wrapper">
-                                    <button class="wishlist-btn"><i class="icon-22"></i></button>
-                                </div>
-                                <div class="course-hover-content-wrapper">
-                                    <button class="wishlist-btn"><i class="icon-22"></i></button>
-                                </div>
-                                <div class="course-hover-content">
-                                    <div class="content">
-                                        <button class="wishlist-btn"><i class="icon-22"></i></button>
-                                        <span class="course-level">{{cour.matiere}}</span>
-                                        <h6 class="title">
-                                            <a href="{{cour.cours_url}}">{{cour.matiere}}</a>
-                                        </h6>
-                                       
-                                     
-                                        <ul class="course-meta">
-                                            <li><i class="icon-24"></i>{{cour.enseignant}}</li>
-                                            
-                                        </ul>
-                                        <a href="{{cour.cours_url}}" class="edu-btn btn-secondary btn-small">Ouvrir <i class="icon-4"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Course  -->
-                        {% empty %}
-
-                        <div class="edu-cta-banner-area home-one-cta-wrapper bg-image">
-                            <div class="container">
-                                <div class="edu-cta-banner">
-                                    <div class="row justify-content-center">
-                                        <div class="col-lg-7">
-                                            <div class="section-title section-center sal-animate" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
-                                                <h2 class="title">Pas de Cours <span class="color-secondary">Pour le moment</span> </h2>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ul class="shape-group">
-                                        <li class="shape-01 scene" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                            <img data-depth="2.5" src="{% static 'etudiant/assets/images/cta/shape-10.png' %}" alt="shape" style="transform: translate3d(-15.4px, -11.1px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                                        </li>
-                                        <li class="shape-02 scene" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                            <img data-depth="-2.5" src="{% static 'etudiant/assets/images/cta/shape-09.png' %}" alt="shape" style="transform: translate3d(12.9px, 3.6px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                                        </li>
-                                        <li class="shape-03 scene" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                            <img data-depth="-2" src="{% static 'etudiant/assets/images/cta/shape-08.png' %}" alt="shape" style="transform: translate3d(16.2px, 12.9px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                                        </li>
-                                        <li class="shape-04 scene" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
-                                            <img data-depth="2" src="{% static 'etudiant/assets/images/about/shape-13.png' %}" alt="shape" style="transform: translate3d(-19.1px, -13.8px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-6">
+                    <select name="edu-select" id="annee_id" class="form-control">
+                        <option value="">Année Académique</option>
+                        {% for annee in annees_academiques %}
+                            <option value="{{ annee.id }}">{{ annee.debut }} - {{ annee.fin }}</option>
                         {% endfor %}
-                            
-                       
-                    </div>
-                    
+                    </select>
                 </div>
             </div>
-           
-            {% endif %}
-                
-                
+        </form>
+
+        <!-- Si aucun cursus trouvé -->
+        {% if not found_cursus %}
+        <div class="row g-5 row--45 mt-5">
+            <div class="col-lg-6">
+                <div class="edu-faq-gallery">
+                    <div class="faq-thumbnail">
+                        <img src="{% static 'etudiant/assets/images/others/faq-5.webp' %}" alt="Faq Images">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="edu-faq-content">
+                    <h2 class="title">Aucun cours <span class="color-secondary">disponible</span></h2>
+                    <p>Aucun cours n'est disponible pour vous pour le compte de cette Année Académique car vous n'étiez pas inscrit cette année-là. <br>
+                        En cas d'erreur, contactez les administrateurs.
+                    </p>
+                </div>
+            </div>
         </div>
+        {% endif %}
+
+        <!-- Affichage des cours -->
+        {% if cours_2 or cours %}
+        <div class="edu-course-area">
+            <div class="section-title section-center">
+                <h4 class="title">Cours {{ cursus.filiere }} {{ cursus.niveau }}</h4>
+            </div>
+
+            <div class="row g-5">
+                {% for cour in cours_2 %}
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="edu-course course-style-1">
+                        <div class="inner">
+                            <div class="thumbnail">
+                                <a href="{{ cour.cours_url }}">
+                                    <img src="{% static 'etudiant/assets/images/course/course-07.jpg' %}" alt="Course Meta">
+                                </a>
+                                <div class="time-top">
+                                    <span class="duration"><i class="icon-61"></i>{{ cour.matiere.volume_horaire }} Heures</span>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <span class="course-level">{{ cour.matiere }}</span>
+                                <h6 class="title">
+                                    <a href="{{ cour.cours_url }}">{{ cour.matiere }}</a>
+                                </h6>
+                                <ul class="course-meta">
+                                    <li><i class="icon-25"></i>{{ cour.enseignant }}</li>
+                                </ul>
+                                <a href="{{ cour.cours_url }}" class="edu-btn btn-secondary btn-small">Ouvrir <i class="icon-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="edu-cta-banner-area bg-image">
+                    <h2 class="title">Pas de cours <span class="color-secondary">pour le moment</span></h2>
+                </div>
+                {% endfor %}
+
+                <div class="row g-5">
+                    {% for cour in cours %}
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="edu-course course-style-1">
+                            <div class="inner">
+                                <div class="thumbnail">
+                                    <a href="{{ cour.cours_url }}">
+                                        <img src="{% static 'etudiant/assets/images/course/course-07.jpg' %}" alt="Course Meta">
+                                    </a>
+                                    <div class="time-top">
+                                        <span class="duration"><i class="icon-61"></i>{{ cour.volume_horaire }} Heures</span>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <span class="course-level">{{ cour.matiere }}</span>
+                                    <h6 class="title">
+                                        <a href="{{ cour.cours_url }}">{{ cour.matiere }}</a>
+                                    </h6>
+                                    <ul class="course-meta">
+                                        <li><i class="icon-25"></i>{{ cour.enseignant }}</li>
+                                    </ul>
+                                    <a href="{{ cour.cours_url }}" class="edu-btn btn-secondary btn-small">Ouvrir <i class="icon-4"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="edu-cta-banner-area bg-image">
+                        <h2 class="title">Pas de cours <span class="color-secondary">pour le moment</span></h2>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 
 {% endblock content %}
-    

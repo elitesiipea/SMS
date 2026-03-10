@@ -7,9 +7,12 @@ from etudiants.models import Etudiant
 from django.contrib import messages
 
 def parents_home(request):
+
     if request.method == 'POST':
         matricule = request.POST.get('matricule')
         contactparent = request.POST.get('contactparent')
+        print(matricule, contactparent)
+
         try:
             etudiant = Etudiant.objects.get(matricule=matricule, contactparent=contactparent)
             scolarites = Inscription.objects.filter(etudiant=etudiant).order_by('created')

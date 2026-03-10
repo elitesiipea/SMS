@@ -1,0 +1,29 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static crispy_forms_tags %}
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="">
+                    <h2>Mise à jour du Cours</h2>
+
+                    <form method="post" enctype="multipart/form-data" class="p-4 bg-light shadow rounded">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <br>
+                        <button type="submit" class="btn btn-primary w-100">Mettre à jour</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+{% endblock page %}

@@ -11,7 +11,8 @@ from .models import (Etablissement,
                      UniteEnseignement,
                      Matiere,
                      StudentMessage, 
-                     Campus
+                     Campus,
+                     Student 
                      )
 
 # Register your models here.
@@ -33,15 +34,6 @@ class EtablissementAdmin(admin.ModelAdmin):
     search_fields = ('nom',)
     inlines = [FiliereInline,NiveauInline,]
 
-    def get_queryset(self, request):
-        # Récupérer l'établissement de l'utilisateur connecté
-        etablissement = request.user.etablissement
-        # Appeler la méthode personnalisée pour filtrer les utilisateurs
-        if request.user.overloader:
-            queryset = Etablissement.objects.all()
-        else:
-            queryset = Etablissement.objects.filter(id=etablissement.id)
-        return queryset
 
 
 class SalleAdmin(admin.ModelAdmin):
@@ -304,3 +296,62 @@ class DiplomeAdmin(admin.ModelAdmin):
         # Appeler la méthode personnalisée pour filtrer les utilisateurs
         queryset = Diplome.objects.filter(session__etablissement=etablissement)
         return queryset
+
+
+from django.contrib import admin
+from .models import ClasseProgression, Pointage
+
+from django.contrib import admin
+from .models import ClasseProgression, Pointage
+
+class PointageInline(admin.TabularInline):  
+    """Affichage des pointages sous forme d'inline dans ClasseProgression"""
+    model = Pointage
+    extra = 1  # Nombre de champs vides à afficher
+    fields = ('volume_realise', 'observation', 'created', 'active')
+    readonly_fields = ('created', 'date_update')
+    can_delete = True
+
+@admin.register(ClasseProgression)
+class ClasseProgressionAdmin(admin.ModelAdmin):
+    list_display = ('classe', 'matiere', 'enseignant', 'volume_realise', 'progress', 'is_close', 'is_locked', 'created')
+    list_filter = ('active', 'cours_en_tronc_commun', 'note_deposee', 'paiement_effectue', 'demande_de_paiement_initie', 'matiere', 'enseignant')
+    search_fields = ('classe__nom', 'matiere__nom', 'enseignant')
+    date_hierarchy = 'created'
+    ordering = ('-created',)
+    inlines = [PointageInline]
+
+@admin.register(Pointage)
+class PointageAdmin(admin.ModelAdmin):
+    list_display = ('matiere', 'volume_realise', 'created', 'active')
+    list_filter = ('active', 'created')
+    search_fields = ('matiere__classe__nom', 'matiere__matiere__nom', 'volume_realise', 'observation')
+    date_hierarchy = 'created'
+    ordering = ('-created',)
+
+    
+    # Additional configurations can be added as needed.
+
+
+from django.contrib import admin
+from .models import Student
+
+@admin.register(Student)
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'prenom', 'ident_perm', 'filiere', 'niveau', 'classe', 'status', 'sexe', 'contact', 'email',)
+    list_filter = ('filiere', 'niveau', 'classe', 'status', 'sexe', 'etablissement')
+    search_fields = ('nom', 'prenom', 'ident_perm', 'email', 'contact')
+    ordering = ('nom',)
+    readonly_fields = ('code_unique', 'email')
+    fieldsets = (
+        ("Informations personnelles", {
+            'fields': ('ident_perm', 'nom', 'prenom', 'date_naissance', 'lieu_naissance', 'sexe', 'contact', 'photo')
+        }),
+        ("Détails académiques", {
+            'fields': ('filiere', 'niveau', 'classe', 'elite_id', 'status', 'etablissement')
+        }),
+        ("Informations système", {
+            'fields': ('code_unique', 'email', )
+        }),
+    )
+    list_per_page = 100

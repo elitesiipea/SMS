@@ -113,7 +113,9 @@ class Inscription(models.Model):
                     classe_professionnelle_jour=self.status_cursus['pro_jour'],
                     classe_professionnelle_soir = self.status_cursus['pro_soir'],
                     classe_online=self.status_cursus['en_ligne'],
-                    ).order_by('-created').first()
+                    closed=False
+
+                ).order_by('-created').first()
                 
             except Classe.DoesNotExist:
                 existing_classe = None
@@ -159,6 +161,7 @@ class Inscription(models.Model):
             # Call the original save method to save the Inscription with the appropriate Classe.
         else:
             super().save(*args, **kwargs)
+
     def url(self):
         return reverse('student_inscription_details', args=[self.pk])
 
@@ -313,7 +316,10 @@ class Paiement(models.Model):
     reference = models.CharField(max_length=150, blank=True, null=True)
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
+    confirmation_finance = models.BooleanField(default=False)
+    non_wave_direct_api = models.BooleanField(default=False)
     date_update = models.DateTimeField(auto_now=True)
+    effectue_par = models.CharField(null=True,blank=True, max_length=50)
     ############Pour Api
     confirmed = models.BooleanField(default=False)
     wave_launch_url = models.CharField(max_length=250, null=True, blank=True)

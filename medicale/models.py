@@ -35,6 +35,8 @@ class DossierMedical(models.Model):
     #fieldset date
     created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    code = models.CharField(max_length=50, null=True, blank=True)
 
 
     # TODO: Define fields here

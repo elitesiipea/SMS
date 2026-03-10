@@ -11,6 +11,7 @@
         <!-- Start col -->
         <div class="col-lg-12">
             <div class="card m-b-30">
+              
                 
                 <div class="card-body">
                     <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
@@ -60,6 +61,7 @@
                                         
                                             
                                     </div>
+
                                     </div>
                                 </td>
                             </tr>
@@ -113,8 +115,23 @@
                         <div class="container">
                             <input type="number"  required id="montant" name="montant" class="form-control" style="border:2px solid black" placeholder="Montant du paiement">
                             <br>
-                            <input type="text" required id="source" name="source" class="form-control" style="border:2px solid black" placeholder="Source du paiement : Orange Moov Wave ECOBANK, ....">
+                            <select required id="source" name="source" class="form-control" style="border:2px solid black">
+                                <option value="">Source du paiement</option>
+                                <option value="WAVE MONEY">WAVE MONEY</option>
+                                <option value="ORANGE MONEY">ORANGE MONEY</option>
+                                <option value="MOOV MONEY">MOOV MONEY</option>
+                                <option value="BOA">BOA</option>
+                                <option value="BRIDGE BANK">BRIDGE BANK</option>
+                                <option value="ECOBANK">ECOBANK</option>
+                                <option value="ORABANK">ORABANK</option>
+                                <option value="MAIRIE DE TREICHEVILLE">MAIRIE DE TREICHEVILLE</option>
+                                <option value="MAIRIE DE MARCORY">MAIRIE DE MARCORY</option>
+                                <option value="MAIRIE DE COCODY">MAIRIE DE COCODY</option>
+                                <option value="DISTRICT AUTONOME DE YAMOUSSOUKRO">DISTRICT AUTONOME DE YAMOUSSOUKRO</option>
+                                <option value="MAIRIE DE YAMOUSSOUKRO">MAIRIE DE YAMOUSSOUKRO</option>
+                            </select>
                             <br>
+                            
                             <input type="text" required id="reference" name="reference" class="form-control" style="border:2px solid black" placeholder="Référence du Paiement : Numero Paiment">
                             <br>
                         </div>
@@ -129,8 +146,6 @@
         </div>
     </div>
 </div>
-
-
 
 {% endblock page %}
     

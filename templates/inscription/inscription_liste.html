@@ -24,6 +24,7 @@
                                 <th>Payé</th>
                                 <th>Reste à Payer</th>
                                 <th>Status</th>
+                             
                                 <th>ACTIONS</th>
                             </tr>
                             </thead>
@@ -38,11 +39,17 @@
                                 <th>{{ scolarite.frais }}</th>
                                 <th>{{ scolarite.paye }}</th>
                                 <th>{{ scolarite.reste }}</th>
+                              
                                 <th>{% if scolarite.solded %}Soldée {% else %}Non Soldée{% endif %}</th>
                                 <td style="white-space: nowrap; width: 15%;">
                                     <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                     <div class="btn-group btn-group-sm" style="float: none;">
-                                        <button type="button" onclick="window.location.href='{{scolarite.url}}'" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-eye"></span></button>  
+                                        <a href="{{scolarite.url}}" target="__blank" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-eye"></span>  RECU </a>  
+                                        <a href="{% url 'inscription_data_detail' pk=scolarite.pk titre='freq' %}" target="__blank" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-book"></span> CERTIFICAT DE FREQUENTATION </a>  
+                                        <a href="{% url 'inscription_data_detail' pk=scolarite.pk titre='scol' %}" target="__blank" class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"><span class="ti-pencil"></span>CERTIFICAT DE SCOLARITE</a>  
+                                       
+
+                                        
                                     </div>
                                     </div>
                                 </td>

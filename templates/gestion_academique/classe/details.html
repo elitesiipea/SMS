@@ -2,8 +2,6 @@
 {% load static %}
 
 
-
-
 {% block page %}
 
 
@@ -160,7 +158,7 @@
 .table thead th {
     vertical-align: bottom;
     border-bottom: 2px solid #dee2e6;
-}   
+}
 .table-bordered td, .table-bordered th {
     border: 1px solid #dee2e6;
 }
@@ -271,8 +269,8 @@
     }
 </style>
 
-<!-- Start Contentbar -->    
-<div class="contentbar">                
+<!-- Start Contentbar -->
+<div class="contentbar">
     <div class="col-md-12 col-lg-12 col-12">
         <div class="card m-b-30">
             <br>
@@ -309,7 +307,7 @@
                     <li class="nav-item">
                         <a class="nav-link" id="pills-profile-tab-justified" data-toggle="pill" href="#pills-profile-justified" role="tab" aria-controls="pills-profile" aria-selected="false">Liste de classe</a>
                     </li>
-                   
+
                     <li class="nav-item">
                         <a class="nav-link " id="pills-evaluations-tab-justified" data-toggle="pill" href="#pills-evaluations-justified" role="tab" aria-controls="pills-evaluations" aria-selected="true">Evaluations</a>
                     </li>
@@ -318,7 +316,7 @@
                     </li>
 
 
-                    
+
                 </ul>
                 <div class="tab-content" id="pills-tab-justifiedContent">
                     <div class="tab-pane fade active show" id="pills-contact-justified" role="tabpanel" aria-labelledby="pills-contact-tab-justified">
@@ -336,23 +334,23 @@
                                </center>
                                 <br>
                             <div class="vc_general vc_tta vc_tta-tabs vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-spacing-1 vc_tta-tabs-position-top vc_tta-controls-align-left">
-                               
+
                                 <div class="vc_tta-panels-container">
                                     <div class="vc_tta-panels">
-                                        
-                                       
+
+
                                     {% if maquette.maquette_universitaire %}
-            
+
                                         <!--SMESTRE 1 -->
                                         <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
                                             data-vc-content=".vc_tta-panel-body">
                                             <div class="vc_tta-panel-heading">
-                                                <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">SEMESTRE 1</span></a></h4>         
+                                                <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">SEMESTRE 1</span></a></h4>
                                             </div>
                                             <div class="vc_tta-panel-body">
                                                 <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                                                     <div class="wpb_wrapper">
-                                                
+
                                                         <div class="tg-wrap">
                                                             <table class="tg" style="width: 100%;">
                                                                 <tr>
@@ -373,22 +371,22 @@
                                                                 </tr>
                                                                         {% for matiere in maquette.matiere_1 %}
                                                                             <tr>
-                                                                                
+
                                                                                 <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
                                                                                 <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
                                                                                 <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
                                                                                 <td class="tg-gpzw">{{matiere.coefficient}}</td>
                                                                                 <td class="tg-gpzw">{{matiere.unite.credit}}</td>
                                                                                 {% for programmation in classe.programmations %}
-                                                                                
+
                                                                                 {% if programmation.matiere.id == matiere.id %}
 
-                                                                             
+
                                                                                     <td class="tg-zkk0">{{programmation.enseignant}}</td>
                                                                                     <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
                                                                                     <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
                                                                                     <td class="tg-gpzw">{{programmation.progression}}</td>
-                                                                                  
+
                                                                                     <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
                                                                                         {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
                                                                                     </td>
@@ -404,11 +402,11 @@
                                                                                     <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
                                                                                         {% if programmation.closed %}OUI{% else %}NON{% endif %}
                                                                                     </td>
-                                                                                    
-                                                                        
-                                                                                    
+
+
+
                                                                                 {% endif %}
-                                                                                    
+
                                                                                 {% endfor %}
                                                                             </tr>
                                                                         {% endfor %}
@@ -422,19 +420,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-            
+
                                         </div>
                                         <br>
                                         <!--SMESTRE 2 -->
                                         <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
                                             data-vc-content=".vc_tta-panel-body">
                                             <div class="vc_tta-panel-heading">
-                                                <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">SEMESTRE 2</span></a></h4>         
+                                                <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">SEMESTRE 2</span></a></h4>
                                             </div>
                                             <div class="vc_tta-panel-body">
                                                 <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                                                     <div class="wpb_wrapper">
-                                                
+
                                                         <div class="tg-wrap">
                                                             <table class="tg" style="width: 100%;">
                                                                 <tr>
@@ -455,21 +453,21 @@
                                                                 </tr>
                                                                         {% for matiere in maquette.matiere_2 %}
                                                                             <tr>
-                                                                                
+
                                                                                 <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
                                                                                 <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
                                                                                 <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
                                                                                 <td class="tg-gpzw">{{matiere.coefficient}}</td>
                                                                                 <td class="tg-gpzw">{{matiere.unite.credit}}</td>
                                                                                 {% for programmation in classe.programmations %}
-   
+
                                                                                 {% if programmation.matiere.id == matiere.id %}
-                                                                                                                                                          
+
                                                                                     <td class="tg-zkk0">{{programmation.enseignant}}</td>
                                                                                     <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
                                                                                     <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
                                                                                     <td class="tg-gpzw">{{programmation.progression}}</td>
-                                                                                  
+
                                                                                     <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
                                                                                         {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
                                                                                     </td>
@@ -485,10 +483,10 @@
                                                                                     <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
                                                                                         {% if programmation.closed %}OUI{% else %}NON{% endif %}
                                                                                     </td>
-                                                                                    
-                                                                                    
+
+
                                                                                 {% endif %}
-                                                                                    
+
                                                                                 {% endfor %}
                                                                             </tr>
                                                                         {% endfor %}
@@ -502,12 +500,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-            
+
                                         </div>
                                     <!-- FIN SMESTRE 2 -->
-            
+
                                     {% else %}
-            
+
                                      <!--SMESTRE 1 -->
                                      <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
                                      data-vc-content=".vc_tta-panel-body">
@@ -518,16 +516,16 @@
                                             {% else %}
                                             SEMESTRE 1
                                          {% endif %}
-                                         </span></a></h4>         
+                                         </span></a></h4>
                                      </div>
                                      <div class="vc_tta-panel-body">
                                          <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                                              <div class="wpb_wrapper">
-                                         
+
                                                  <div class="tg-wrap">
                                                      <table class="tg" style="width: 100%;">
                                                          <tr>
-                                                           
+
                                                              <th class="tg-654s">MATIERE </th>
                                                              <th class="tg-654s">VOLUME HORAIRE</th>
                                                              <th class="tg-654s">COEFFICIENT</th>
@@ -540,23 +538,23 @@
                                                              <th class="tg-654s">NOTES</th>
                                                              <th class="tg-654s">CAHIER DE TEXTE</th>
                                                              <th class="tg-654s">TERMINE</th>
-                                                             
+
                                                          </tr>
                                                                  {% for matiere in maquette.matiere_1 %}
                                                                      <tr>
-                                                                         
-                                                                      
+
+
                                                                          <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
                                                                          <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
                                                                          <td class="tg-gpzw">{{matiere.coefficient}}</td>
                                                                          {% for programmation in classe.programmations %}
                                                                             {% if programmation.matiere.id == matiere.id %}
-                                                                                                                                                    
+
                                                                                 <td class="tg-zkk0">{{programmation.enseignant}}</td>
                                                                                 <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
                                                                                 <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
                                                                                 <td class="tg-gpzw">{{programmation.progression}}</td>
-                                                                            
+
                                                                                 <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
                                                                                     {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
                                                                                 </td>
@@ -572,12 +570,12 @@
                                                                                 <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
                                                                                     {% if programmation.closed %}OUI{% else %}NON{% endif %}
                                                                                 </td>
-                                                                                
-                                                                                
+
+
                                                                             {% endif %}
-                                                                                
+
                                                                             {% endfor %}
-                                                                         
+
                                                                      </tr>
                                                                  {% endfor %}
                                                          <tr>
@@ -590,13 +588,13 @@
                                              </div>
                                          </div>
                                      </div>
-            
+
                                  </div>
-                               
+
                               <br>
                                  <!--SMESTRE 2 -->
                                  <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184" data-vc-content=".vc_tta-panel-body">
-                                    
+
                                      <div class="vc_tta-panel-heading">
                                          <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
                                             {% if maquette.etablissement.is_college %}
@@ -604,16 +602,16 @@
                                             {% else %}
                                             SEMESTRE 2
                                          {% endif %}
-                                         </span></a></h4>         
+                                         </span></a></h4>
                                      </div>
                                      <div class="vc_tta-panel-body">
                                          <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                                              <div class="wpb_wrapper">
-                                         
+
                                                  <div class="tg-wrap">
                                                      <table class="tg" style="width: 100%;">
                                                          <tr>
-                                                            
+
                                                              <th class="tg-654s">MATIERE </th>
                                                              <th class="tg-654s">VOLUME HORAIRE</th>
                                                              <th class="tg-654s">COEFFICIENT</th>
@@ -626,7 +624,7 @@
                                                              <th class="tg-654s">NOTES</th>
                                                              <th class="tg-654s">CAHIER DE TEXTE</th>
                                                              <th class="tg-654s">TERMINE</th>
-                                                             
+
                                                          </tr>
                                                                  {% for matiere in maquette.matiere_2 %}
                                                                      <tr>
@@ -636,12 +634,12 @@
                                                                          <td class="tg-gpzw">{{matiere.unite.credit}}</td>
                                                                          {% for programmation in classe.programmations %}
                                                                 {% if programmation.matiere.id == matiere.id %}
-                                                                                                                                        
+
                                                                     <td class="tg-zkk0">{{programmation.enseignant}}</td>
                                                                     <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
                                                                     <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
                                                                     <td class="tg-gpzw">{{programmation.progression}}</td>
-                                                                
+
                                                                     <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
                                                                         {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
                                                                     </td>
@@ -657,10 +655,10 @@
                                                                     <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
                                                                         {% if programmation.closed %}OUI{% else %}NON{% endif %}
                                                                     </td>
-                                                                    
-                                                                    
+
+
                                                                 {% endif %}
-                                                                    
+
                                                                 {% endfor %}
                                                                      </tr>
                                                                  {% endfor %}
@@ -674,17 +672,17 @@
                                              </div>
                                          </div>
                                      </div>
-            
+
                                  </div>
                              <!-- FIN SMESTRE 2 -->
 
-                             
+
                              {% if maquette.etablissement.is_college %}
 
                              <br>
                              <!--SMESTRE 2 -->
                              <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184" data-vc-content=".vc_tta-panel-body">
-                                
+
                                  <div class="vc_tta-panel-heading">
                                      <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
                                         {% if maquette.etablissement.is_college %}
@@ -692,16 +690,16 @@
                                         {% else %}
                                         SEMESTRE 3
                                      {% endif %}
-                                     </span></a></h4>         
+                                     </span></a></h4>
                                  </div>
                                  <div class="vc_tta-panel-body">
                                      <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                                          <div class="wpb_wrapper">
-                                     
+
                                              <div class="tg-wrap">
                                                  <table class="tg" style="width: 100%;">
                                                      <tr>
-                                                        
+
                                                          <th class="tg-654s">MATIERE </th>
                                                          <th class="tg-654s">VOLUME HORAIRE</th>
                                                          <th class="tg-654s">COEFFICIENT</th>
@@ -714,7 +712,7 @@
                                                          <th class="tg-654s">NOTES</th>
                                                          <th class="tg-654s">CAHIER DE TEXTE</th>
                                                          <th class="tg-654s">TERMINE</th>
-                                                         
+
                                                      </tr>
                                                              {% for matiere in maquette.matiere_3 %}
                                                                  <tr>
@@ -724,12 +722,12 @@
                                                                      <td class="tg-gpzw">{{matiere.unite.credit}}</td>
                                                                      {% for programmation in classe.programmations %}
                                                             {% if programmation.matiere.id == matiere.id %}
-                                                                                                                                    
+
                                                                 <td class="tg-zkk0">{{programmation.enseignant}}</td>
                                                                 <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
                                                                 <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
                                                                 <td class="tg-gpzw">{{programmation.progression}}</td>
-                                                            
+
                                                                 <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
                                                                     {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
                                                                 </td>
@@ -745,10 +743,10 @@
                                                                 <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
                                                                     {% if programmation.closed %}OUI{% else %}NON{% endif %}
                                                                 </td>
-                                                                
-                                                                
+
+
                                                             {% endif %}
-                                                                
+
                                                             {% endfor %}
                                                                  </tr>
                                                              {% endfor %}
@@ -762,16 +760,16 @@
                                          </div>
                                      </div>
                                  </div>
-        
+
                              </div>
                          <!-- FIN SMESTRE 2 -->
-                                
+
                              {% endif %}
-                                
-                                        
+
+
                                        {% endif %}
-                                        
-            
+
+
                                     </div>
                                 </div>
                             </div>
@@ -779,7 +777,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="pills-programmed-justified" role="tabpanel" aria-labelledby="pills-programmed-tab-justified">
-                        
+
                         <div class="container-fluid">
                             <div class="col-md-12">
                                 <div class="invoice-footer-btn">
@@ -796,11 +794,11 @@
                                     <div class="vc_tta-panel-body">
                                         <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                                             <div class="wpb_wrapper">
-                                        
+
                                                 <div class="tg-wrap">
                                                     <table class="tg" style="width: 100%;">
                                                         <tr>
-                                                           
+
                                                             <th class="tg-654s">MATIERE </th>
                                                             <th class="tg-654s">SEMESTRE </th>
                                                             <th class="tg-654s">ENSEIGNANTS </th>
@@ -812,7 +810,7 @@
                                                             <th class="tg-654s">NOTES</th>
                                                             <th class="tg-654s">CAHIER DE TEXTE</th>
                                                             <th class="tg-654s">TERMINE</th>
-                                                            
+
                                                         </tr>
                                                                 {% for programmation in classe.programmations %}
                                                                     <tr>
@@ -822,7 +820,7 @@
                                                                         <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
                                                                         <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
                                                                         <td class="tg-gpzw">{{programmation.progression}}</td>
-                                                                      
+
 
                                                                         <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
                                                                             {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
@@ -839,24 +837,24 @@
                                                                         <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
                                                                             {% if programmation.closed %}OUI{% else %}NON{% endif %}
                                                                         </td>
-                                                                        
+
                                                                     </tr>
                                                                 {% endfor %}
-                                                        
+
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-           
+
                                 </div>
                         </div>
                     </div>
 
-                  
+
                     <div class="tab-pane fade" id="pills-home-justified" role="tabpanel" aria-labelledby="pills-home-tab-justified">
-                        
-                       
+
+
                        {% if emplois_du_temps %}
 
                        {% if user.can_update_time %}
@@ -865,11 +863,11 @@
                        </div>
                        <br>
                        {% endif %}
-                        
+
                        {% endif %}
-                        
-                            
-                        
+
+
+
                         <div class="container-fluid">
                             <br>
                             <div class="col-md-12">
@@ -921,35 +919,35 @@
                     </div>
 
                     <div class="tab-pane fade" id="pills-profile-justified" role="tabpanel" aria-labelledby="pills-profile-tab-justified">
-                        <div class="container-fluid">
-                                    <table id="datatable-buttons" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>Nom & prénoms</th>
-                                                <th>E-mail</th>
-                                                <th>Contact</th>
-                                                <th>Contact Parent</th>
-                                                <th>Inscrit le</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for etudiant in etudiants %}
-                                            <tr>
-                                                <td>{{ forloop.counter }}</td>
-                                                <td>{{ etudiant.etudiant }}</td>
-                                                <td>{{ etudiant.etudiant.utilisateur.email }}</td>
-                                                <td>+225{{ etudiant.etudiant.contact }}</td>
-                                                <td>+225{{ etudiant.etudiant.contactparent }}</td>
-                                                <td>{{ etudiant.created }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                               
+                          <h4 class="mb-3">Liste des étudiants - {{ classe }}</h4>
+                        <div class="table-responsive" >
+                            <table id="datatable-buttons" class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Nom & Prénoms</th>
+                                        <th>E-mail</th>
+                                        <th>Contact</th>
+                                        <th>Contact Parent</th>
+                                        <th>Date d'inscription</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for etudiant in etudiants %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td><strong>{{ etudiant.etudiant }}</strong></td>
+                                        <td>{{ etudiant.etudiant.utilisateur.email }}</td>
+                                        <td>+225 {{ etudiant.etudiant.contact }}</td>
+                                        <td>+225 {{ etudiant.etudiant.contactparent }}</td>
+                                        <td>{{ etudiant.created|date:"d/m/Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    
+
                     <div class="tab-pane fade" id="pills-evaluations-justified" role="tabpanel" aria-labelledby="pills-evaluations-tab-justified">
                         <div class="container-fluid">
                             <table id="datatable-buttons-2" class="table table-striped table-bordered">
@@ -1009,10 +1007,10 @@
                                         <td style="white-space: nowrap; width: 15%;">
                                             <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                             <div class="btn-group btn-group-sm" style="float: none;">
-                                               
+
                                                 <button type="button" onclick="window.location.href='{{evaluation.url}}'" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span></button>
                                             </div>
-                                            
+
                                             </div>
                                         </td>
                                     </tr>
@@ -1028,7 +1026,7 @@
                             <div class="card text-white bg-primary m-b-30">
                                 <div class="card-body">
                                     <h1 class="card-title text-white font-18">BULLETINS SEMESTRE 1 {{classe}}</h1>
-                                    
+
                                     <a  href="{% url 'bulletins_semestre_1_cbv' pk=classe.pk %}" target="_blank" class="btn btn-white text-primary">CONSULTER</a>
                                 </div>
                             </div>
@@ -1037,43 +1035,43 @@
                             <div class="card text-white bg-secondary m-b-30">
                                 <div class="card-body">
                                     <h1 class="card-title text-white font-18">BULLETINS SEMESTRE 2 {{classe}}</h1>
-                                    
+
                                     <a href="{% url 'bulletins_semestre_2_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
                                 </div>
                             </div>
                         </div>
 
-                        
+
                         {% if classe.annee_academique.etablissement.is_college %}
 
                         <div class="col-md-12 col-lg-12 col-xl-12">
                             <div class="card text-white bg-secondary m-b-30">
                                 <div class="card-body">
                                     <h1 class="card-title text-white font-18">BULLETINS SEMESTRE 3 {{classe}}</h1>
-                                    
+
                                     <a href="{% url 'bulletins_semestre_3_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
                                 </div>
                             </div>
                         </div>
-                            
+
                         {% endif %}
-                            
+
 
                         <div class="col-md-12 col-lg-12 col-xl-6">
                             <div class="card text-white bg-info m-b-30">
                                 <div class="card-body">
                                     <h1 class="card-title text-white font-18">PV SEMESTRE 1 {{classe}}</h1>
-                                    
+
                                     <a href="{% url 'pv_semestre_1_cbv' pk=classe.pk %}"   target="_blank"  class="btn btn-white text-primary">CONSULTER</a>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-12 col-lg-12 col-xl-6">
                             <div class="card text-white bg-dark m-b-30">
                                 <div class="card-body">
                                     <h1 class="card-title text-white font-18">PV SEMESTRE 2 {{classe}}</h1>
-                                    
+
                                     <a href="{% url 'pv_semestre_2_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
                                 </div>
                             </div>
@@ -1083,7 +1081,7 @@
                             <div class="card text-white bg-green m-b-30">
                                 <div class="card-body">
                                     <h1 class="card-title text-white font-18">PV ANNUEL  {{classe}}</h1>
-                                    
+
                                     <a href="{% url 'pv_annuel_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
                                 </div>
                             </div>
@@ -1107,6 +1105,5 @@
         </div>
     </div>
 </div>
-    
+
 {% endblock page %}
-    

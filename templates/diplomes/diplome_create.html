@@ -1,0 +1,183 @@
+{% extends 'administration/uses/ blank.html' %}
+
+{% block page %}
+<div class="container-fluid d-flex">
+<!-- CSS pour l'animation de typewriter -->
+<style>
+    /* Effet de "taper" les éléments de la liste */
+    .typewriter {
+        animation: typing 4s steps(50) 1s 1 normal both;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid #fff;
+    }
+
+    /* Animation de "taper" chaque caractère */
+    @keyframes typing {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    /* Effet de typewriter sur les éléments de la sous-liste */
+    .typewriter-list {
+        display: block;
+        opacity: 0;
+        animation: fadeInList 8s steps(50) 1s 1 normal both;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid #fff;
+    }
+
+    /* Animation de fade-in pour les éléments de la sous-liste */
+    @keyframes fadeInList {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Animation des éléments de la liste (un par un) */
+    .typewriter-list li {
+        opacity: 0;
+        animation: fadeInItem 1s ease forwards;
+    }
+
+    .typewriter-list li:nth-child(1) {
+        animation-delay: 1s;
+    }
+
+    .typewriter-list li:nth-child(2) {
+        animation-delay: 1.5s;
+    }
+
+    .typewriter-list li:nth-child(3) {
+        animation-delay: 2s;
+    }
+
+    .typewriter-list li:nth-child(4) {
+        animation-delay: 2.5s;
+    }
+
+    .typewriter-list li:nth-child(5) {
+        animation-delay: 3s;
+    }
+
+    .typewriter-list li:nth-child(6) {
+        animation-delay: 3.5s;
+    }
+
+    .typewriter-list li:nth-child(7) {
+        animation-delay: 4s;
+    }
+
+    .typewriter-list li:nth-child(8) {
+        animation-delay: 4.5s;
+    }
+
+    .typewriter-list li:nth-child(9) {
+        animation-delay: 5s;
+    }
+
+    .typewriter-list li:nth-child(10) {
+        animation-delay: 5.5s;
+    }
+
+    .typewriter-list li:nth-child(11) {
+        animation-delay: 6s;
+    }
+
+    .typewriter-list li:nth-child(12) {
+        animation-delay: 6.5s;
+    }
+
+    .typewriter-list li:nth-child(13) {
+        animation-delay: 7s;
+    }
+
+    /* Animation de fade-in pour chaque élément de la liste */
+    @keyframes fadeInItem {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+
+    <!-- Documentation à droite -->
+    <div class="col-md-6 p-4">
+        <div class="bg-dark text-white rounded shadow-sm p-4">
+            <h2 class="h4 text-success mb-4">Documentation</h2>
+            <div class="bg-black p-4 rounded">
+                <p class="text-success">Voici comment vous pouvez créer des diplômes en téléchargeant un fichier Excel :</p>
+                
+                <!-- La liste avec animation -->
+                <ul class="list-unstyled typewriter">
+                    <li><strong>Le fichier Excel doit avoir les colonnes suivantes :</strong></li>
+                    <br>
+                    <ul class="list-unstyled ms-4 typewriter-list">
+                        <li>- nom</li>
+                        <li>- prenom</li>
+                        <li>- date_de_naissance</li>
+                        <li>- lieu_de_naissance</li>
+                        <li>- sexe</li>
+                        <li>- contact1</li>
+                        <li>- contact2</li>
+                        <li>- diplome</li>
+                        <li>- niveau</li>
+                        <li>- annee_academique</li>
+                        <li>- date_soutenance <b style="color:red;background-color:black" >(Formatter au format Text)</b></li>
+                        <li>- session_soutenance</li>
+                        <li>- cycle</li>
+                    </ul>
+                    <br>
+                    <li>Chaque ligne représente un diplôme avec les informations correspondantes.</li>
+                    <br>
+                    <li><a target="__blank" href="https://docs.google.com/spreadsheets/d/1Vh9KYLGvFzKH4VsL1IG-ZrXLyAMpMee5fPxF0sx7wfU/edit?usp=sharing" target="_blank" class="text-info">Télécharger un modèle de fichier Excel ici.</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire à gauche -->
+    <div class="col-md-6 p-4">
+        <div class="bg-white rounded shadow-sm p-4">
+            <h2 class="h4 text-primary mb-4">Formulaire de création de Diplômes</h2>
+
+            <!-- Affichage des messages -->
+            <div class="mt-4">
+                {% if messages %}
+                    <div class="space-y-4">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} bg-{{ message.tags }}-100 text-{{ message.tags }}-800 rounded-md p-4">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4">
+                    {{ form.as_p }}
+                    {{ upload_form.as_p }}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

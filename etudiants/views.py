@@ -1,6 +1,8 @@
 from __future__ import print_function
 from django.shortcuts import render, redirect, reverse
 from django.utils.text import slugify
+
+from gestion_academique.views import _get_user_etablissement
 from transport.models import Trajet, Abonnement, Paiement as Pcar
 from authentication.models import User
 from .models import Diplome, Etudiant, SessionSoutenanceNew, AttestationNew, SessionDiplome, CertificatSession, Certificat
@@ -18,7 +20,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 import os
 from django.conf import settings
-from gestion_academique.models import Maquette, AnneeAcademique, Classe, StudentMessage
+from gestion_academique.models import Maquette, AnneeAcademique, Classe, StudentMessage, ClasseProgression
 from inscription.models import Inscription, Paiement
 from enseignant.models import ContratEnseignant
 from django.contrib.auth import update_session_auth_hash
@@ -38,14 +40,14 @@ import requests
 import json
 from django.http import HttpResponseNotFound
 import datetime
-
+from django.conf import settings 
 from .forms import StudentPhotoForm  # Import your StudentPhotoForm, SessionCertificatNewForm
 
 import pandas as pd
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import AttestationNew
-
+from gestion_academique.models import Diplome
 
 
 
@@ -124,57 +126,66 @@ def generate_unique_email(nom, premier_prenom):
         i += 1
     return email
 
-
 @login_required
 @staff_required
 def admission(request):
     if request.method == 'POST':
-        form = EtudiantForm(request.POST,request.FILES)
+        form = EtudiantForm(request.POST, request.FILES)
         if form.is_valid():
             nom = form.cleaned_data['nom']
             prenom = form.cleaned_data['prenom']
             premier_prenom = prenom.split()[0]
-            email = generate_unique_email(nom.lower(),premier_prenom.lower())
+            email = generate_unique_email(
+                nom.lower().replace("'", "").replace('"', "").replace(" ", ""),
+                premier_prenom.lower().replace("'", "").replace('"', "").replace(" ", "")
+            )
             password = "pbkdf2_sha256$260000$H157G58nYUDjbBTAZTSPbI$JGpbJlZ5pV9nB2lZGAc6jguEWKHJzagBEyG7D2rKZas="
-            user = User.objects.create(email=email, 
-                                            password=password, 
-                                            nom=nom, prenom=prenom, 
-                                            is_student=True,
-                                            etablissement_id=request.user.etablissement.id
-                                            )
-            if user:
-                gsuite_user = create_gsuite_account(user.email,user.nom, user.prenom.replace('-', ' ').split()[0])
-                messages.success(request,'Profile G-suite ajouté avec succes !')
-                # try:
-                #     gsuite_user = create_gsuite_account(user.email,user.nom, user.prenom.replace('-', ' ').split()[0])
-                #     messages.success(request,'Profile G-suite ajouté avec succes !')
+            user = User.objects.create(
+                email=email,
+                password=password,
+                nom=nom,
+                prenom=prenom,
+                is_student=True,
+                etablissement_id=request.user.etablissement.id
+            )
 
-                # except  Exception as e:
-                #     # Handle other errors or exceptions
-                #     messages.error(request, f'Profile G-suite non crée . Rasion : {e} !')
-                   
+            if user:
+                if not settings.DEBUG:
+                    try:
+                        gsuite_user = create_gsuite_account(
+                            user.email, 
+                            user.nom, 
+                            user.prenom.replace('-', ' ').split()[0]
+                        )
+                        messages.success(request, 'Profile G-suite ajouté avec succès !')
+                    except Exception as e:
+                        messages.error(request, f'Profile G-suite non créé. Raison : {e} !')
+                else:
+                    messages.warning(request, 'Mode DEBUG activé : Profil G-suite non créé.')
+
             else:
-                messages.error(request, 'Profile G-suite non ajouté!')
+                messages.error(request, 'Échec de la création du profil utilisateur !')
 
             etudiant = form.save(commit=False)
             etudiant.utilisateur = user
             etudiant.etablissement_id = request.user.etablissement.id
             etudiant.save()
+
             DossierMedical.objects.get_or_create(etudiant=etudiant)
-            messages.success(request, 'Dossier créé avec succès , !')
-            return redirect(reverse('inscription_create', kwargs={'slug': etudiant.code_paiement }))# Replace 'inscription page' with the URL name of the success page.
-             
+            messages.success(request, 'Dossier créé avec succès !')
+            return redirect(reverse('inscription_create', kwargs={'slug': etudiant.code_paiement}))  # Replace 'inscription_create' with the correct URL name.
             
     else:
         form = EtudiantForm()
+    
     context = {
-      
-        "titre" : "ADMISSION ETUDIANT",
+        "titre": "ADMISSION ETUDIANT",
         "info": "ADMISSION",
-        "info2" : "ADMISSION ETUDIANT",
+        "info2": "ADMISSION ETUDIANT",
         "datatable": False,
         'form': form
     }
+   
     return render(request, 'etudiants/admission/admission.html', context=context)
 
 
@@ -182,18 +193,41 @@ def admission(request):
 # Impression des cartes d'étudiants
 ###############
 
-
 @login_required
 @staff_required
 def liste_etudiants(request):
+    etablissement = _get_user_etablissement(request)
+
+    # Cas où le user n'a pas encore d'établissement rattaché
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur afin d’associer votre compte à un établissement."
+        )
+        context = {
+            "titre": "Liste des étudiants",
+            "info": "Liste",
+            "info2": "Liste des étudiants",
+            "etudiants": [],
+            "datatable": False,          # pas de datatable si pas de données
+            "no_etablissement": True,    # permet d’afficher un message spécifique dans le template
+        }
+        return render(request, "etudiants/listes/list.html", context=context)
+
+    # Cas normal : user a un établissement
+    etudiants = Etudiant.objects.filter(etablissement_id=etablissement.id)
+
     context = {
-        "titre" : "Liste des étudiants",
-        "info": "Lites",
-        "info2" : "Liste des étudiants",
-        "etudiants": Etudiant.objects.filter(etablissement_id=request.user.etablissement.id),
+        "titre": "Liste des étudiants",
+        "info": "Liste",
+        "info2": "Liste des étudiants",
+        "etudiants": etudiants,
         "datatable": True,
+        "no_etablissement": False,
     }
-    return render(request, 'etudiants/listes/list.html', context=context)
+    return render(request, "etudiants/listes/list.html", context=context)
+
 
 
 @login_required
@@ -272,48 +306,88 @@ def student_maquette(request):
     return render(request,'etudiants/dashboard/uses/maquette.html', context=context)
 
 ############### Cours
-
 @login_required
 @student_required
 def student_courses(request):
     selected_annee_id = request.GET.get('annee_id')
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id,  active=True).order_by('created')
-    if selected_annee_id:
-        try:
-            cursus = get_object_or_404(Inscription, etudiant_id=request.user.etudiant.id, annee_academique_id=selected_annee_id,confirmed=True)
-            cours = ContratEnseignant.objects.filter(annee_academique=cursus.annee_academique,filiere=cursus.filiere,niveau=cursus.niveau)
-            
-        except:
-            cursus = None 
-            cours = None
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=request.user.etablissement.id, active=True
+    ).order_by('created')
+    
+    cursus = None
+    cours = None
+    cours_2 = None
+    found_cursus = False
+    found_cours = False
+    found_cours_2 = False
 
+    if selected_annee_id:
+        cursus = Inscription.objects.filter(
+            etudiant_id=request.user.etudiant.id, 
+            annee_academique_id=selected_annee_id,
+            confirmed=True
+        ).first()
+        
         if cursus:
             found_cursus = True
-        else:
-            found_cursus = False
-        if cours:
-            found_cours = True
-        else:
-            found_cours = False
-
-    else:
-
-        cours = None
-        found_cours = None
-        found_cursus = None
-        cursus = None
+            cours = ContratEnseignant.objects.filter(
+                annee_academique=cursus.annee_academique,
+                filiere=cursus.filiere,
+                niveau=cursus.niveau
+            )
+            cours_2 = ClasseProgression.objects.filter(
+                classe__annee_academique=cursus.annee_academique,
+                classe__filiere=cursus.filiere,
+                classe__niveau=cursus.niveau
+            )
+            
+            found_cours = cours.exists()
+            found_cours_2 = cours_2.exists()
+            
+    else :
+        
+        cursus = Inscription.objects.filter(
+            etudiant_id=request.user.etudiant.id, 
+            annee_academique_id=AnneeAcademique.objects.filter(
+        etablissement_id=request.user.etablissement.id, active=True
+    ).order_by('-created').first(),
+            confirmed=True
+        ).first()
+        
+        if cursus:
+            found_cursus = True
+            cours = ContratEnseignant.objects.filter(
+                annee_academique=cursus.annee_academique,
+                filiere=cursus.filiere,
+                niveau=cursus.niveau
+            )
+            cours_2 = ClasseProgression.objects.filter(
+                classe__annee_academique=cursus.annee_academique,
+                classe__filiere=cursus.filiere,
+                classe__niveau=cursus.niveau
+            )
+            
+            found_cours = cours.exists()
+            found_cours_2 = cours_2.exists()
     
     context = {
-        'titre' : 'Maquettes Pédagogique',
-        'cours' : cours,
-        'annees_academiques' : annees_academiques,
-        'can_select_annee' : True,
-        'found_cursus' : found_cursus,
-        'found_cours' :found_cours,
+        'titre': 'Mes Cours',
+        'cours': cours,
+        'cours_2': cours_2,
+        'annees_academiques': annees_academiques,
+        'can_select_annee': True,
+        'found_cursus': found_cursus,
+        'found_cours': found_cours,
+        'found_cours_2': found_cours_2,
         'cursus': cursus,
-        's_messages' : StudentMessage.objects.filter(etablissement_id=request.user.etablissement.id, active=True).order_by('-created')
+        's_messages': StudentMessage.objects.filter(
+            etablissement_id=request.user.etablissement.id, 
+            active=True
+        ).order_by('-created'),
     }
-    return render(request,'etudiants/dashboard/uses/courses.html', context=context)
+    
+    return render(request, 'etudiants/dashboard/uses/courses.html', context=context)
+
 
 ############### Cours Details
 @login_required
@@ -326,6 +400,21 @@ def course_details(request,code,pk):
         's_messages' : StudentMessage.objects.filter(etablissement_id=request.user.etablissement.id, active=True).order_by('-created')
     }
     return render(request,'etudiants/dashboard/uses/courses_detail.html', context=context)
+
+############### Documents 
+
+
+############### Cours Details
+@login_required
+@student_required
+def course_details_2(request,pk):
+    cours = get_object_or_404(ClasseProgression, pk=pk)
+    context = {
+        'titre' : cours.matiere,
+        'cours' : cours,
+        's_messages' : StudentMessage.objects.filter(etablissement_id=request.user.etablissement.id, active=True).order_by('-created')
+    }
+    return render(request,'etudiants/dashboard/uses/courses_detail_2.html', context=context)
 
 ############### Documents 
 
@@ -480,21 +569,22 @@ def student_fees(request):
 @student_required
 def cartes(request):
     if request.method == 'POST':
-        # Assuming you have a form to handle the photo update
         form = StudentPhotoForm(request.POST, request.FILES, instance=request.user.etudiant)
         if form.is_valid():
+            if request.user.etudiant.photo_updated:
+                messages.error(request, 'Vous ne pouvez modifier votre photo qu\'une seule fois.')
+                return redirect('cartes')
             request.user.etudiant.photo_updated = True
             form.save()
             messages.success(request, 'Photo modifiée avec succès.')
-            
-            return redirect('cartes')  # Redirect to the same page to display the success message
+            return redirect('cartes')  # Rediriger vers la même page après la mise à jour
     else:
         form = StudentPhotoForm(instance=request.user.etudiant)
 
-    scolarites = Inscription.objects.filter(etudiant=request.user.etudiant).order_by('-created')
+    scolarite = Inscription.objects.filter(etudiant=request.user.etudiant).order_by('-created').first()
     context = {
         'titre': 'Ma Scolarité',
-        'scolarites': scolarites,
+        'scolarite': scolarite,
         's_messages': StudentMessage.objects.filter(etablissement_id=request.user.etablissement.id, active=True).order_by('-created'),
         'photo_form': form,
     }
@@ -751,9 +841,7 @@ def webhook_handler(request):
         timestamp, signature =  wave_signature.split(',', 1)
         expected_signature = hmac.new(bytes(SECRET, 'utf-8'),msg=bytes(f"{timestamp}.{request.body}", 'utf-8'),digestmod=hashlib.sha256).hexdigest()
         valide = hmac.compare_digest(signature, expected_signature)
-        print(expected_signature)
-        print(signature)
-        print(valide)
+       
         if valide:
             try:
                 webhook_data = json.loads(request_body)
@@ -797,7 +885,6 @@ def waveMakePaimentForCar(request, pk):
 
     response = requests.post(post_url, json=data,headers=headers)  # Post data to create payment session
 
-    print(response)
     
     if response.status_code == 200:
         response_data = response.json()
@@ -815,7 +902,7 @@ def waveMakePaimentForCar(request, pk):
 def wavesuccessAbonnement(request,pk):
     paiement = Pcar.objects.get(pk=pk)
     paiement.confirmed = True
-    print(paiement)
+
     paiement.save()
     messages.success(request, "Paiement enregistré avec succès !")
     return redirect('student_abonnements')
@@ -950,12 +1037,22 @@ def verify_attestation(request, code):
         'base' : base_url
         }
         return render(request, 'etudiants/attestation/verify.html', context=context)
+    
     except:
-        context = {
-        
-        'found' : False
-        }
-        return render(request, 'etudiants/attestation/verify.html', context=context)
+        try:
+            attestation = Diplome.objects.get(code=code)
+            context = {
+            'attestation' : attestation,
+            'found' : True,
+            'base' : base_url
+            }
+            return render(request, 'etudiants/attestation/verify.html', context=context)
+        except:
+            context = {
+            
+            'found' : False
+            }
+            return render(request, 'etudiants/attestation/verify.html', context=context)
     
 
 @login_required
@@ -1095,3 +1192,84 @@ def certificats_details(request, pk):
          'attestations' :  session.candidats
     }
     return render(request, 'etudiants/sessions/certificats_details.html', context=context)
+
+
+
+from django.core.mail import send_mail
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
+from django.contrib import messages
+
+@login_required
+@student_required
+def writing(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject') + " de " + request.user.email + " " + request.POST.get('contact')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        # List of recipient emails
+        recipients = ['reclamations@iipea.com','admin@iipea.com']  # Add your email addresses here
+
+        try:
+            # Send email
+            send_mail(
+                subject,
+                message,
+                email,
+                recipients,
+                fail_silently=False,
+            )
+            
+            # Add a success message that will be displayed on the page
+            messages.success(request, 'Votre message a été envoyé avec succès!')
+
+        except Exception as e:
+            # Add an error message if something goes wrong
+            messages.error(request, f"Erreur lors de l'envoi de l'email: {str(e)}")
+
+        # After processing the form, render the same page with success or error message
+        return render(request, 'etudiants/dashboard/uses/writting.html')
+
+    return render(request, 'etudiants/dashboard/uses/writting.html')
+
+
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from .models import Etudiant
+
+
+class EtudiantUpdateView(UpdateView):
+    model = Etudiant
+    fields = [
+        'nom', 'prenom', 'type_etudiant',  'etablissement_d_origine',
+        'date_de_naissance', 'lieu_de_naissance', 'matricule_mers', 'numero_table_bac',
+        'matricule_menet', 'nationalite',  'lieu_de_residence', 'sexe',
+        'serie_bac', 'contact', 'contactparent', 'photo', 'extrait', 'diplome',
+        'fiche_orientation', 'piece','sans_bac', 'active',
+        'extrait_depose', 'cmu', 'piece_depose', 'photo_depose', 'diplome_depose',
+        'fiche_orientation_depose', 'carte_etudiant', 
+    ]
+    template_name = 'etudiants/admission/edit.html'
+    
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Etudiant, pk=self.kwargs['pk'])
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "L'étudiant a été modifié avec succès.")
+        return response
+    
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', reverse_lazy('etudiant_list'))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titre'] = get_object_or_404(Etudiant, pk=self.kwargs['pk'])
+        context['info'] = 'Modifier un étudiant'
+        context['info2'] = 'Modifier un étudiant'
+        return context

@@ -57,7 +57,7 @@ class Etudiant(models.Model):
     utilisateur = models.OneToOneField("authentication.User", on_delete=models.CASCADE)
     nom = models.CharField(max_length=120)
     prenom = models.CharField(max_length=120)
-    type_etudiant = models.CharField(max_length=14, choices=status_etudiant,)
+    type_etudiant = models.CharField(max_length=50, choices=status_etudiant,)
     etablissement = models.ForeignKey('gestion_academique.Etablissement', related_name="etudiant_etablissement", on_delete=models.CASCADE)
     etablissement_d_origine = models.ForeignKey(EtablissementDorigine, related_name="etudiant_etablissement_origine", on_delete=models.CASCADE)
     date_de_naissance = models.DateField()
@@ -68,10 +68,10 @@ class Etudiant(models.Model):
     nationalite = CountryField(blank_label='(Selectionner le pays)')
     matricule = models.CharField(max_length=50, editable=True,null=True, blank=True)
     lieu_de_residence = models.CharField(max_length=50)
-    sexe = models.CharField(max_length=10, choices=sexes,)
-    serie_bac = models.CharField(max_length=10)
-    contact = models.CharField(max_length=10)
-    contactparent = models.CharField(max_length=10)
+    sexe = models.CharField(max_length=50, choices=sexes,)
+    serie_bac = models.CharField(max_length=50)
+    contact = models.CharField(max_length=50)
+    contactparent = models.CharField(max_length=50)
     photo = models.FileField(upload_to='etudiant/photo',null=True, blank=True)
     extrait = models.FileField(upload_to='etudiant/extrait',null=True, blank=True)
     diplome = models.FileField(upload_to='etudiant/diplome',null=True, blank=True)
@@ -89,7 +89,7 @@ class Etudiant(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     carte_etudiant = models.BooleanField(default=False)
     date_update = models.DateTimeField(auto_now=True)
-    code_paiement  = models.CharField(max_length=10,editable=False)
+    code_paiement  = models.CharField(max_length=50,editable=False)
     photo_updated = models.BooleanField(default=False)
 
     # TODO: Define fields here
@@ -103,6 +103,9 @@ class Etudiant(models.Model):
     def __str__(self):
         """Unicode representation of Etudiant."""
         return f'{self.utilisateur.nom} {self.utilisateur.prenom}'
+
+    def get_edit_url(self):
+        return reverse('etudiant_update', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         # Check if the matricule is already set, i.e., it's an existing object being updated

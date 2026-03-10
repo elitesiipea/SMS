@@ -61,7 +61,10 @@
                                     <td>{{ diplome.session_soutenance }}</td>
                                     <td>{{ diplome.get_cycle_display }}</td>
                                     <td>
-                                        <a target="__blank"  href="{%  url 'students' diplome.pk  %}" type="button"  class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span> Documents</a>                                    </td>
+                                        <a target="__blank"  href="{%  url 'students' diplome.pk  %}" type="button"  class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span> Documents</a>      
+                                        <a target="__blank"  href="{%  url 'diplome_update' diplome.pk  %}" type="button"  class="tabledit-save-button btn btn-sm btn-warning" style="float: none; margin: 5px;"><span class="ti-pencil"></span> Modifier</a>      
+                                        
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -30,3 +30,14 @@ class InscriptionForm(forms.ModelForm):
 
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control required'})
+            
+            
+# inscription/forms.py
+from django import forms
+from .models import Paiement
+
+class PaiementForm2(forms.ModelForm):
+    class Meta:
+        model = Paiement
+        fields = ['reference', 'montant', 'source', 'effectue_par',]
+       

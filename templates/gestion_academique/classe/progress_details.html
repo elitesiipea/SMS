@@ -1,0 +1,572 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+
+<style>
+    /* Styles de la page */
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+    .contentbar {
+        padding: 30px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    table thead tr {
+        background: linear-gradient(135deg, #ff7e5f, #feb47b);
+        color: #fff;
+        text-align: left;
+    }
+    table th, table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+    table tbody tr {
+        background-color: #3498db;
+        color: #fff;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: #2980b9;
+    }
+    .export-btn {
+        padding: 10px 15px;
+        font-size: 1em;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin: 20px 0;
+        transition: background-color 0.3s ease;
+    }
+    .export-btn:hover {
+        background-color: #218838;
+    }
+</style>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    table {
+        width: 100%;
+       
+    }
+    table thead tr {
+        background-color: #333;
+        color: #ffffff;
+        text-align: left;
+    }
+    table th, table td {
+        padding: 5px 5px;
+        border: 1px solid #dddddd;
+    }
+    table tbody tr {
+        background-color: #3a85d3;
+        color: #ffffff;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: #2c6dad;
+    }
+    .export-btn {
+        padding: 10px 15px;
+        font-size: 1em;
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+        cursor: pointer;
+        margin: 20px 0;
+    }
+    .export-btn:hover {
+        background-color: #218838;
+    }
+</style>
+<style>
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); }
+    .modal-content { position: relative; margin: auto; top: 20%; padding: 20px; width: 30%; background-color: #fff; border-radius: 5px; }
+</style>
+
+
+<div class="contentbar">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="modalContainer"></div>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 20px 0;
+                                font-size: 1em;
+                                min-width: 400px;
+                            }
+                            table thead tr {
+                                background-color: #333;
+                                color: #ffffff;
+                                text-align: left;
+                            }
+                            table th, table td {
+                                padding: 12px 15px;
+                                border: 1px solid #dddddd;
+                            }
+                            table tbody tr {
+                                background-color: #3a85d3;
+                                color: #ffffff;
+                            }
+                            table tbody tr:nth-child(even) {
+                                background-color: #2c6dad;
+                            }
+                            .export-btn {
+                                padding: 10px 15px;
+                                font-size: 1em;
+                                background-color: #28a745;
+                                color: #ffffff;
+                                border: none;
+                                cursor: pointer;
+                                margin: 20px 0;
+                            }
+                            .export-btn:hover {
+                                background-color: #218838;
+                            }
+                        </style>
+                        <br>
+                           
+                            <button style="float:right;margin-right:5px" class="btn btn-success" onclick="exportTableToExcel()" class="export-btn">Exporter en Excel</button>
+                        <br>
+                      
+                        <table id="tableData">
+                            <thead>
+                                <tr>
+                                    <th>MATIERE</th>
+                                  
+                                    <th>SEMESTRE</th>
+                                    <th>VOLUME HORAIRE TOTAL</th>
+                                    <th>ENSEIGNANT</th>
+                                    <th>SUPPORT DE COURS</th>
+                                    <th>SYLLABUS</th>
+                                    <th>NOTE DEPOSEES</th>
+                                    <th>DEMANDE DE PAIEMENT INITIE</th>
+                                    <th>PAIEMENT EFFECTUE</th>
+                                    <th>VOLUME HORAIRE REALISE</th>
+                                    <th>VOLUME HORAIRE RESTANT</th>
+                                    <th>DATE VEROUILLAGE</th>
+                                    <th>PROGRESSION</th>
+                                  
+                                    <th>ACTION</th>
+                                    <th>RESET</th>
+                                    
+                                    {% if user.overloader %}
+                                    <th>EDIT</th>
+                                    {% endif %}
+                                        
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for matiere in matieres_use %}
+                                <tr style="background-color: BLUE; color: white;">
+                                    <td>{{ matiere | upper }}</td>
+                                    <td>{{ matiere.unite.semestre | upper }}</td>
+                                    <td><center>{{ matiere.volume_total }}</center></td>
+                                    {% for progression in progress %}
+                                        {% if progression.matiere.id == matiere.id %}
+                                            <td>{{ progression.enseignant }}</td>
+                                           
+                                           {% if progression.support %}
+                                           <td style="background-color:green;color:white">
+                                                OUI
+                                           </td>
+                                           {% else %}
+                                           <td style="background-color:red;color:white">
+                                            NON 
+                                       </td>
+                                           {% endif %}
+                                           {% if progression.syllabys %}
+                                           <td style="background-color:green;color:white">
+                                                OUI
+                                           </td>
+                                           {% else %}
+                                           <td style="background-color:red;color:white">
+                                            NON 
+                                       </td>
+                                           {% endif %}
+                                           {% if progression.note_deposee %}
+                                           <td style="background-color:green;color:white">
+                                                OUI
+                                           </td>
+                                           {% else %}
+                                           <td style="background-color:red;color:white">
+                                            NON 
+                                       </td>
+                                           {% endif %}
+                                           
+                                           {% if progression.demande_de_paiement_initie %}
+                                           <td style="background-color:green;color:white">
+                                                OUI
+                                           </td>
+                                           {% else %}
+                                           <td style="background-color:red;color:white">
+                                            NON 
+                                       </td>
+                                           {% endif %}
+                                           {% if progression.paiement_effectue %}
+                                           <td style="background-color:green;color:white">
+                                                OUI
+                                           </td>
+                                           {% else %}
+                                           <td style="background-color:red;color:white">
+                                            NON 
+                                       </td>
+                                           {% endif %}
+                                            
+                                            <td><center>{{ progression.volume_realise }}</center></td>
+                                            <td><center>{{ progression.reste }}</center></td>
+                                            <td><center>{{ progression.lock_date }}</center></td>
+                                            
+                                            <td style="background-color: {{ progression.color }}">
+                                                <b>{{ progression.progress }}%</b>
+                                                
+                                              </td>
+                                              
+                                            <td>
+                                                
+                                                {% if not progression.is_close %}
+                                                
+                                                {% if not progression.is_locked %}
+
+                                                {% if classe in user.classe.all %}
+                                                <a href="{%  url 'pointage_details' pk=progression.pk %}" class="btn btn-success">POINTAGE</a>
+                                                    {% else %}
+                                                    ---
+                                                {% endif %}
+
+                                                {% else %}
+                                                <a href="{%  url 'pointage_details' pk=progression.pk %}" class="btn btn-success">POINTAGE</a>
+                                                    
+                                                {% endif %}
+                                                    
+                                                           
+                                                
+                                                {% else %}
+                                                Cours Terminé
+                                        {% endif %}
+                                                    
+                                        <td>
+                                           
+                                           {% if user.overloader %}
+                                           <div class="btn-group btn-group-sm" style="float: none;">
+                                            <a type="button"  target="__blank"  href="{% url 'reset_progress' pk=progression.pk %}" class="tabledit-save-button btn btn-sm btn-danger" style="float: none; margin: 5px;">
+                                                <span class="ti-trash"></span> REINITIALISER
+                                            </a>
+                                        </div>
+                                        {% else %}
+                                        <div class="btn-group btn-group-sm" style="float: none;">
+                                            <a type="button" href="#" class="tabledit-save-button btn btn-sm btn-danger" style="float: none; margin: 5px;">
+                                                <span class="ti-trash"></span> NO ACCESS
+                                            </a>
+                                        </div>
+                                            
+                                           {% endif %}
+                                            
+                                        </td>
+
+                                        
+                                        {% if user.overloader %}
+                                        <td>
+                                           
+                                           
+                                            <div class="btn-group btn-group-sm" style="float: none;">
+                                             <a  target="__blank"  type="button" href="{% url 'classe_progression_update' pk=progression.pk %}" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;">
+                                                 <span class="ti-pencil"></span> Mise à Jour
+                                             </a>
+                                         </div>
+                                      
+                                             
+                                         </td>
+                                            
+                                        {% endif %}
+                                            
+                                            </td>
+                                        {% endif %}
+                                       
+                                    {% endfor %}
+                                  
+                                </tr>
+                                {% endfor %}
+
+                                {% for matiere in matieres_not_uses %}
+                                <tr style="background-color: red; color: white;">
+                                    <td>{{ matiere | upper }}</td>
+                                    <td>{{ matiere.unite.semestre | upper }}</td>
+                                    <td><center>{{ matiere.volume_total }}</center></td>
+                                    <td>---</td>
+                                    <td>---</td>
+                                    <td>---</td>
+                                    <td>---</td>
+                                    <td><center>0</center></td>
+                                    <td><center>{{ matiere.volume_total }}</center></td>
+                                    <td style="background-color: {{ progression.color }};color:black"><center><b>{{ progression.progress }}0%</b></center></td>
+                                   
+                                    <td>
+                                        
+                                        {% if classe in user.classe.all %}
+                                        <button onclick="openDemarrageModal({{ matiere.id }}, '{{ matiere.name }}')" class="btn btn-info">DÉMARRAGE</button>
+                                        {% else %}
+                                        ---
+                                            
+                                        {% endif %}
+                                            
+                                       
+                                    </td>
+                                    <td>
+                                        
+                                        ---
+                                       
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+<!-- Démarrage Modal -->
+<div id="demarrageModal" class="modal">
+    <div class="modal-content">
+        <h2>Démarrage de la Matière: <span id="demarrageMatiereNom"></span></h2>
+        <form id="demarrageForm">
+            <input type="hidden" id="classeId" value="{{ classe.id }}">
+            <input type="hidden" id="matiereId">
+            
+            <div class="form-group">
+                <label for="enseignant">Nom de l'enseignant:</label>
+                <input type="text" id="enseignant" class="form-control" required>
+            </div>
+            
+            <button type="button" class="btn btn-primary" onclick="submitDemarrageForm()">Démarrer</button>
+        </form>
+    </div>
+</div>
+
+<!-- Pointage Modal -->
+<div id="pointageModal" class="modal">
+    <div class="modal-content">
+        <h2>Pointage de la Matière: <span id="pointageMatiereNom"></span></h2>
+        <form id="pointageForm">
+            <input type="hidden" id="classeProgressionId">
+            
+            <div class="form-group">
+                <label for="volumeRealise">Volume Réalisé:</label>
+                <input type="number" id="volumeRealise" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="observation">Observation:</label>
+                <textarea id="observation" class="form-control" rows="3" required></textarea>
+            </div>
+            
+            <button type="button" class="btn btn-primary" onclick="submitPointageForm()">Soumettre</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Function to open the Demarrage modal and set the matière name
+    function openDemarrageModal(matiereName, matiereId) {
+        document.getElementById("demarrageMatiereNom").textContent = matiereName;
+        document.getElementById("matiereId").value = matiereId;
+        document.getElementById("demarrageModal").style.display = "block";
+    }
+
+    // Function to open the Pointage modal and set the matière name
+    function openPointageModal(matiereName, progressionId) {
+        document.getElementById("pointageMatiereNom").textContent = matiereName;
+        document.getElementById("classeProgressionId").value = progressionId;
+        document.getElementById("pointageModal").style.display = "block";
+    }
+
+    // Close modals (you can add this to close the modals when clicked outside or on close button)
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("demarrageModal")) {
+            document.getElementById("demarrageModal").style.display = "none";
+        }
+        if (event.target == document.getElementById("pointageModal")) {
+            document.getElementById("pointageModal").style.display = "none";
+        }
+    }
+</script>
+
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        border-radius: 8px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+    }
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function openDemarrageModal(matiereId, matiereName) {
+        document.getElementById("matiereId").value = matiereId;
+        $('#demarrageModal').show();
+    }
+
+    function submitDemarrageForm() {
+        const data = {
+            classe_id: document.getElementById("classeId").value,
+            matiere_id: document.getElementById("matiereId").value,
+            enseignant: document.getElementById("enseignant").value,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        };
+
+        $.post("{% url 'create_classe_progression' %}", data, function(response) {
+            alert(response.message);
+            location.reload();
+        }).fail(function() {
+            alert("Une erreur est survenue");
+        });
+    }
+
+    function openPointageModal(classeProgressionId, matiereName) {
+        document.getElementById("classeProgressionId").value = classeProgressionId;
+        $('#pointageModal').show();
+    }
+
+    function submitPointageForm() {
+        const data = {
+            classe_progression_id: document.getElementById("classeProgressionId").value,
+            volume_realise: document.getElementById("volumeRealise").value,
+            observation: document.getElementById("observation").value,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        };
+
+        $.post("{% url 'create_pointage' %}", data, function(response) {
+            alert(response.message);
+            location.reload();
+        }).fail(function() {
+            alert("Une erreur est survenue ");
+        });
+    }
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+
+<script>
+    // Export Table to PDF
+function exportTableToPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', 'a4');
+
+    // Convert HTML to canvas with html2canvas
+    html2canvas(document.querySelector("#tableData"), {
+        scale: 2, // Higher scale for better quality
+        onclone: (clonedDoc) => {
+            clonedDoc.getElementById("tableData").style.backgroundColor = '#3498db';
+        }
+    }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+
+        // Add the canvas image to PDF
+        const imgWidth = 190;
+        const pageHeight = 297;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+
+        let position = 0;
+
+        doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            doc.addPage();
+            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        doc.save('Progression_{{ classe | upper }}.pdf');
+    });
+}
+
+// Export Table to Excel
+function exportTableToExcel() {
+    const table = document.getElementById("tableData");
+    const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+
+    // Apply styles to each cell for background color and font color
+    workbook.Sheets.Sheet1['!cols'] = [{ wpx: 200 }, { wpx: 100 }, { wpx: 150 }, { wpx: 200 }];
+    XLSX.writeFile(workbook, 'Progression_{{ classe | upper }}.xlsx');
+}
+
+</script>
+{% endblock %}
+
+
+
+

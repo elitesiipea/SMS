@@ -30,6 +30,8 @@
                                 <th>Montant</th>
                                 <th>Source</th>
                                 <th>Reference</th>
+                                <th>Effectué Par</th>
+                                <th>Paiement vérifié</th>
                                 
                                 <th>Date</th>
                                
@@ -55,7 +57,27 @@
                                 <th>{{ paiement.montant }}</th>
                                 <th>{{ paiement.source }}</th>
                                 <th>{{ paiement.reference }}</th>
-                              
+                                <th>
+                                    
+                                    {% if paiment.effectue_par %}
+
+                                    {{ paiement.effectue_par }}
+                                    
+                                    {% else %}
+
+                                    ---
+                                        
+                                    {% endif %}
+                                        
+                                </th>
+                                
+                                {% if  paiement.confirmation_finance %}
+                                <th style="background-color:red;color:white"><b><center>OUI</center></b></th>
+                                {% else %}
+                                <th style="background-color:red;color:white"><b><center>NON</center></b></th>
+                                    
+                                {% endif %}
+                                
                                 <th>{{ paiement.created }}</th>
                                 
                             </tr>

@@ -41,13 +41,13 @@ class Enseignant(models.Model):
     lieu_de_naissance = models.CharField(max_length=50)
     nationalite = CountryField(blank_label='(Selectionner le pays)')
     domicile = models.CharField(max_length=50)
-    statut_enseignant = models.CharField(max_length=11, choices=statuts,)
-    sexe = models.CharField(max_length=10, choices=sexes,)
-    situations = models.CharField(max_length=20, choices=situations,)
-    contact = models.CharField(max_length=10)
+    statut_enseignant = models.CharField(max_length=50, choices=statuts,)
+    sexe = models.CharField(max_length=50, choices=sexes,)
+    situations = models.CharField(max_length=50, choices=situations,)
+    contact = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
-    code  = models.CharField(max_length=10,editable=False)
+    code  = models.CharField(max_length=50,editable=False)
     # TODO: Define fields here
 
     class Meta:

@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import (admission,liste_etudiants,
                     etudiant_profile,
+                    writing,
                     student_home,
                     student_maquette,
                     student_courses,
@@ -45,6 +46,8 @@ from .views import (admission,liste_etudiants,
                     certificats_create,
                     certificats_details,
                     certificats_listes,
+                    course_details_2,
+                    EtudiantUpdateView
                     )
 
 urlpatterns = [
@@ -57,6 +60,7 @@ urlpatterns = [
     path('sessions_list/', sessions_list, name='sessions_list'),
     path('details_attestations/<pk>/print/', attestation_details, name='attestation_details'),
     path('verify/attestations/identify-<slug:code>/', verify_attestation, name='verify'),
+    path('etudiant_update/67d7a0ae-cb94-800b-a1fd-c673dd7271a2<int:pk>/67d7a0ae-cb94-800b-a1fd-c673dd7271a2', EtudiantUpdateView.as_view(), name='etudiant_update'),
 
     path('import-diplomes/', import_diplomes, name='import_diplomes'),
     path('liste_sessions_diplomes/', liste_sessions_diplomes, name='liste_sessions_diplomes'),
@@ -73,6 +77,9 @@ urlpatterns = [
 
     # Student Dashbord URL 
     path('home/',student_home, name="student_home"),
+    path('home/writing/',writing, name="writing"),
+    
+    
     path('student_maquette/',student_maquette, name="student_maquette"),
     path('student_times/',student_times, name="student_times"),
     path('student_card/',cartes, name="cartes"),
@@ -84,6 +91,7 @@ urlpatterns = [
     
     path('student_abonnements/',student_abonnements, name="student_abonnements"),
     path('student_courses/<int:pk>/<slug:code>',course_details, name="course_details"),
+     path('student_courses/<int:pk>/phenix497/',course_details_2, name="course_details_2"),
     path('student_fees/',student_fees, name="student_fees"),
     path('student_fees_payment/<int:pk>/<slug:code>',student_fees_payment, name="student_fees_payment"),
     path('student_book/', BookListView.as_view(), name="student_book"),

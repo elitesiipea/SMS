@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from gestion_academique.views import _get_user_etablissement
 from .models import DossierMedical, Consultation
 from .forms import ConsultationForm, DossierMedicalForm
 from etudiants.models import Etudiant
@@ -110,30 +112,63 @@ def consultation_details(request, pk, dossier, code):
     return render(request, 'medicale/consultation_details.html', context=context)
 
 
-
 @login_required
 @staff_required
 def consultation_list(request):
-    selected_annee_id = request.GET.get('annee_id')
+    # 1) Récupération de l'établissement de l'utilisateur
+    etablissement = _get_user_etablissement(request)
 
-    annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id).order_by('-created')
-    
-    consultations = Consultation.objects.filter(medecin__etablissement_id=request.user.etablissement.id)
+    if etablissement is None:
+        messages.error(
+            request,
+            "Votre compte n'est rattaché à aucun établissement. "
+            "Merci de contacter l’administrateur pour corriger cette situation.",
+        )
+        context = {
+            "consultations": [],
+            "titre": "Historique des consultations",
+            "info": "",
+            "info2": "Consultation",
+            "datatable": False,
+            "can_select_annee": False,
+            "annees_academiques": [],
+            "no_etablissement": True,
+        }
+        return render(request, "medicale/historique.html", context=context)
 
+    # 2) Gestion de l'année académique
+    selected_annee_id = request.GET.get("annee_id")
+
+    annees_academiques = AnneeAcademique.objects.filter(
+        etablissement_id=etablissement.id
+    ).order_by("-created")
+
+    annee_active = None
     if selected_annee_id:
+        # On vérifie que l’année demandée appartient bien à cet établissement
+        annee_active = annees_academiques.filter(id=selected_annee_id).first()
 
-        consultations = consultations.filter(annee_academique_id=selected_annee_id)
-    else:
-        consultations = consultations.filter(annee_academique_id=request.user.etablissement.annee_academiques.last())
+    if annee_active is None:
+        # Dernière année (la plus récente)
+        annee_active = annees_academiques.first()
 
-    
+    # 3) Récupération des consultations pour cet établissement + année active
+    consultations = Consultation.objects.filter(
+        medecin__etablissement_id=etablissement.id
+    )
+    if annee_active:
+        consultations = consultations.filter(annee_academique_id=annee_active.id)
+
+    # 4) Contexte envoyé au template
     context = {
-        'consultations' : consultations,
-        'titre': f"Historique des consultations {request.user.etablissement}",
-        'info': "",
-        'info2': " Consultation",
-         "datatable": True,
-          "can_select_annee": True,
+        "consultations": consultations,
+        "titre": f"Historique des consultations {etablissement}",
+        "info": "",
+        "info2": "Consultation",
+        "datatable": True,
+        "can_select_annee": True,
         "annees_academiques": annees_academiques,
+        "annee_active": annee_active,
+        "no_etablissement": False,
     }
-    return render(request, 'medicale/historique.html', context=context)
+    return render(request, "medicale/historique.html", context=context)
