@@ -1,0 +1,179 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">  
+   
+                <!-- End row -->
+                <div class="row justify-content-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="invoice">
+                                    <div class="invoice-head">
+                                        <div class="row">
+                                            <div class="col-12 col-md-7 col-lg-7">
+                                                <div class="invoice-logo">
+                                                    <h3>{{etudiant.etablissement}}</h3>
+                                                </div>
+                                                <h4>secretariat@iipea.com</h4>
+                                                <p>+225 07 08 08 87 87 / 07 00 24 36 88</p>
+                                                <p class="mb-0"></p>
+                                            </div>
+                                            <div class="col-12 col-md-5 col-lg-5">
+                                                <div class="invoice-name">
+                                                    <span class="badge badge-info-inverse font-14"><h3>{{etudiant.code_paiement}}</h3></span>
+                                                    <br>
+                                                    <br>
+                                                    <p class="mb-0">Inscrit depuis le : {{etudiant.created}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="invoice-billing">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-4 col-lg-4">
+                                                <div class="invoice-address">
+                                                    <h4 class="mb-3">Informations de base</h4>
+                                                    <h6 class="text-muted">Nom : {{etudiant.nom }}</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li>Prénom(s) : {{etudiant.prenom}}</li> 
+                                                        <li>Status : {{etudiant.type_etudiant}}</li>  
+                                                        <li>Etablissement d'origine : {{etudiant.etablissement_d_origine}}</li> 
+                                                        <li>Date Naissance : {{etudiant.date_de_naissance}}</li> 
+                                                        <li>Lieu Naissance : {{etudiant.lieu_de_naissance}}</li> 
+                                                        <li>Matricule Mers : {{etudiant.matricule_mers}}</li> 
+                                                        <li>Numéro de Table Bac : {{etudiant.numero_table_bac}}</li> 
+                                                       
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-md-4 col-lg-4">
+                                                <div class="invoice-address">
+                                                    <ul class="list-unstyled">
+                                                        <li>Nationalité : {{etudiant.nationalite.name }}</li> 
+                                                        <li>Matricule : {{etudiant.matricule}}</li> 
+                                                        <li>Lieu de Residence : {{etudiant.lieu_de_residence}}</li> 
+                                                        <li>Sexe : {{etudiant.sexe}}</li> 
+                                                        <li>Serie du Bac : {{etudiant.serie_bac}}</li> 
+                                                        <li>Contact : {{etudiant.contact}}</li> 
+                                                        <li>Contact Parent : {{etudiant.contactparent}}</li> 
+                                                        <br>
+                                                        <li>Code Unique de paiement : <b><p class="mb-3"><span class="badge badge-info-inverse font-14">{{etudiant.code_paiement}}</span></p></b> </li>    
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                <div class="invoice-address">
+                                                    <div class="card">
+                                                        <div class="card-body bg-info-rgba text-center">
+                                                           {% if etudiant.photo.url %}
+                                                           <img style="border-radius: 100%;" height="200px" src="{{etudiant.photo.url}}" alt="{{etudiant}}">
+                                                            {% else %}
+                                                            <p class="mb-3"><span class="badge badge-info-inverse font-14">Aucune Photo Ajoutéé</span></p>
+                                                           {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h4 class="mb-3">Filière :  <b>({{scolarite.filiere}})</b></h4>
+                                        <h4 class="mb-3">Niveau :  <b>({{scolarite.niveau}})</b></h4>
+                                        <h4 class="mb-3">Classe :  <b>({{scolarite.classe}})</b></h4>
+                                        <hr>
+                                        <h4 class="mb-3">Historique des Paiements Année Académique <b>({{scolarite.annee_academique}})</b></h4>
+                                    </div>  
+                                   
+                                    <div class="invoice-summary">
+                                       
+                                        <div class="table-responsive ">
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">ID</th>                       
+                                                        <th scope="col">Banque</th>
+                                                        <th scope="col">Réference</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Montant</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                   
+                                                   {% for paiement in paiements  %}
+                                                    <tr>
+                                                        <th scope="row">{{forloop.counter}}</th>
+                                                        <td>{{paiement.source}}</td>
+                                                        <td>{{paiement.reference}}</td>
+                                                        <td>{{paiement.created}}</td>
+                                                        <td>{{paiement.montant}}</td>
+                                                    </tr>
+                                                   {% endfor %}
+                                                    
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="invoice-summary-total">
+                                        <div class="row">
+                                            <div class="col-md-12 order-2 order-lg-1 col-lg-5 col-xl-6">
+                                                <div class="order-note">
+                                                    <p class="mb-3"><span class="badge badge-info-inverse font-14"></span></p>
+                                                    <h6></h6>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 order-1 order-lg-2 col-lg-7 col-xl-6">
+                                                <div class="order-total table-responsive ">
+                                                    <table class="table table-borderless text-right">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Montant de la scolarité:</td>
+                                                                <td>{{scolarite.frais}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Montant Payé:</td>
+                                                                <td>{{scolarite.paye}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="f-w-7 font-18"><h5>Resye à Payer :</h5></td>
+                                                                <td class="f-w-7 font-18"><h5>{{scolarite.reste}}</h5></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="invoice-footer">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                                <p class="mb-0">L'Institut International Polytechnique des Elites d'Abidjan vous remercie </p><p id="currentDate"></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="invoice-footer-btn">
+                                                    <a href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+    

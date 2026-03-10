@@ -1,0 +1,19 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="container mt-5">
+    <h2>Editer le produit : {{ produit.nom }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{% url 'produit_view' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+
+{% endblock page %}

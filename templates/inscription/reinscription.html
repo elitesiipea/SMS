@@ -1,0 +1,286 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->    
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- End col -->
+        
+        {% if etudiant %}
+
+        {% else %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <form method="post" class="form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="code_paiement">Code d'identification de l'étudiant :</label>
+                            <div class="input-group">
+                                <input style="border: 2px solid black" type="text" id="code_paiement" name="code_paiement" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Chercher le dossier</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+            
+        {% endif %}
+            
+
+        {% if etudiant %}
+
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="invoice">
+                        
+                        <div class="invoice-billing">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                    <div class="invoice-address">
+                                        <h4 class="mb-3">Informations de base</h4>
+                                        <h6 class="text-muted">Nom : {{etudiant.nom }}</h6>
+                                        <ul class="list-unstyled">
+                                            <li>Prénom(s) : {{etudiant.prenom}}</li> 
+                                            <li>Status : {{etudiant.type_etudiant}}</li>  
+                                            <li>Etablissement d'origine : {{etudiant.etablissement_d_origine}}</li> 
+                                            <li>Date Naissance : {{etudiant.date_de_naissance}}</li> 
+                                            <li>Lieu Naissance : {{etudiant.lieu_de_naissance}}</li> 
+                                            <li>Matricule Mers : {{etudiant.matricule_mers}}</li> 
+                                            <li>Numéro de Table Bac : {{etudiant.numero_table_bac}}</li> 
+                                           
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                    <div class="invoice-address">
+                                        <ul class="list-unstyled">
+                                            <li>Nationalité : {{etudiant.nationalite.name }}</li> 
+                                            <li>Matricule : {{etudiant.matricule}}</li> 
+                                            <li>Lieu de Residence : {{etudiant.lieu_de_residence}}</li> 
+                                            <li>Sexe : {{etudiant.sexe}}</li> 
+                                            <li>Serie du Bac : {{etudiant.serie_bac}}</li> 
+                                            <li>Contact : {{etudiant.contact}}</li> 
+                                            <li>Contact Parent : {{etudiant.contactparent}}</li> 
+                                            <br>
+                                            <li>Code Unique de paiement : <b><p class="mb-3"><span class="badge badge-info-inverse font-14">{{etudiant.code_paiement}}</span></p></b> </li>    
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4">
+                                    <div class="invoice-address">
+                                        <div class="card">
+                                            <div class="card-body bg-info-rgba text-center">
+                                               {% if etudiant.photo.url %}
+                                               <img style="border-radius: 100%;" height="200px" src="{{etudiant.photo.url}}" alt="{{etudiant}}">
+                                                {% else %}
+                                                <p class="mb-3"><span class="badge badge-info-inverse font-14">Aucune Photo Ajoutéé</span></p>
+                                               {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>                                 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+
+        
+        <div class="col-lg-12">
+            <form method="post">
+                {% csrf_token %}
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                           
+                                <section>
+                                    <h4>SELECTION DE LA FILIERE ET DU NIVEAU -- REINSCRIPTION</h4>
+                                    <br>
+                                   
+                                    <div class="row">
+                                    {% for field in form %}
+                                        {% if field.label == "Filiere" %}
+                                            <div class="form-group col-6">
+                                                Selectionnez la filière de l'étudiant
+                                                {{ field }}
+                                            </div>
+                                        {% endif %}
+                                        {% if field.label == "Niveau" %}
+                                            <div class="form-group col-6">
+                                                Selectionnez le niveau de l'étudiant
+                                                {{ field }}
+                                            </div>
+                                        {% endif %}
+                                      
+                                        
+                                        {% if field.label == "Parcour" %}
+                                        <div class="form-group col-6">
+                                            Selectionnez le parcour de l'étudiant (Universitaire, Pro Jour , Pro Soir , En Ligne)
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "Frais" %}
+                                        <div class="form-group col-6">
+                                            Veuillez saisir le montant global de la scolarité
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                        
+                                        <hr>
+
+                                        {% if field.label == "code_parrain" %}
+                                        <div class="form-group col-6">
+                                            Veuillez saisir le code parrain si disponible
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if field.label == "piece" %}
+                                        <div class="form-group col-6">
+                                            Veuillez cocher si la piéce a été deposée
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "extrait" %}
+                                        <div class="form-group col-6">
+                                            Veuillez cocher si l'extrait a été deposée
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "bac" %}
+                                        <div class="form-group col-6">
+                                           
+                                            Veuillez cocher si les copies légalisées du bac ont été deposées
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "fiche_orientation" %}
+                                        <div class="form-group col-6">
+                                            Veuillez cocher si la fiche d'orientation a été déposée
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "photo" %}
+                                        <div class="form-group col-6">
+                                            Veuillez cocher si les 4 Photos d'identité ont été déposées
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        <hr>
+                                        {% if field.label == "polo" %}
+                                        <div class="form-group col-6">
+                                            Veuillez cocher si l'étudiant a recu son  polo
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "macaron" %}
+                                            <div class="form-group col-6">
+                                                Veuillez cocher si l'étudiant a recu son  macaron
+                                                {{ field }}
+                                            
+                                            </div>
+                                            {% endif %}
+                                            {% if field.label == "cravate" %}
+                                            <div class="form-group col-6">
+                                                Veuillez cocher si l'étudiant a recu sa cravate
+                                                {{ field }}
+                                            
+                                            </div>
+                                            {% endif %}
+                                            {% if field.label == "tissu" %}
+                                            <div class="form-group col-6">
+                                                Veuillez cocher si l'étudiant a recu son tissu
+                                                {{ field }}
+                                            
+                                            </div>
+                                            {% endif %}
+                                            {% if field.label == "rame" %}
+                                            <div class="form-group col-6">
+                                                Veuillez cocher si l'étudiant a déposé les rames
+                                                {{ field }}
+                                            
+                                            </div>
+                                            {% endif %}
+                                            {% if field.label == "marqueur" %}
+                                            <div class="form-group col-6">
+                                                Veuillez cocher si l'étudiant a déposé les marqueurs
+                                                {{ field }}
+                                            
+                                            </div>
+                                            {% endif %}
+
+                                            <hr>
+                                            <h4>CANDIDATURE AU BTS </h4>
+                                            <hr>
+                                            {% if field.label == "Passe le bts" %}
+                                            <div class="form-group col-6">
+                                                Veuillez cocher si l'étudiant passe l'examen du BTS Cette Année
+                                                {{ field }}
+                                            
+                                            </div>
+                                         </div>
+                                         {% endif %}
+
+                                    {% endfor %}
+                                    </div>
+                                </section>
+                        </div>  
+                    </div>                             
+                </div>
+
+            </div>
+        </div>  
+
+       
+                 <!-- End col -->
+                 <div class="col-lg-12">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+                            <div class="row justify-content-end">
+                                <div class="col-4">
+                                   
+                                        <section>
+                                            <button type="submit" class="btn btn-success btn-md btn-block font-18">Enregistrer la Pré-inscription</button>
+                                        </section>
+                                </div>  
+                            </div>                             
+                        </div>
+        
+                    </div>
+                </form>  
+                </div>  
+        {% endif %}
+            
+    </div> 
+    <!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+        
+{% endblock page %}
+    

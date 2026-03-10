@@ -1,0 +1,159 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                    {% if user.is_super_admin %}
+                    <button type="button" style="float:right" class="tabledit-save-button btn btn-sm btn-primary open-popup" data-toggle="modal" data-target="#validationModal"><span class="ti-plus"></span>  NOUVELLE MAQUETTE PEDAGOGIQUE</button>
+                    
+                    <br>
+                    {% endif %}
+                    
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Filieres</th>
+                                <th>Niveaux</th>
+                                <th>Année Académique</th>
+                                <th>Parcour</th>
+                                <th>Volume Annuel</th>
+                                <th>Cout Estimatif</th>
+                                <th>Ajouté le </th>
+                                <th>Actions</th>
+                               
+                            </tr>
+                            </thead>
+                            
+                            <tbody>
+                           
+                            
+                            {% for maquette in maquettes  %}
+
+                            <tr>
+                                <td>{{maquette.id}}</td>
+                                <td>{{maquette.filiere}}</td>
+                                <td>{{maquette.niveau}}</td>
+                                <td><b>{{maquette.annee_academique}}</b></td>
+                                <td>{{maquette.filiere.parcour}}</td>
+                                <td>{{maquette.volume_global}}</td>
+                                <td>{{maquette.cout}}</td>
+                                <td>{{maquette.created}}</td>
+                                <td style="white-space: nowrap; width: 15%;">
+                                    <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
+                                    <div class="btn-group btn-group-sm" style="float: none;">
+
+                                        
+                                    <a type="button" target="__blank" href='{{ maquette.url }}' class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span>  CONSULTER</a>
+                                      
+                                      
+                                      {% if user.can_manage_diplome %}
+                                      <a type="button" target="__blank" href="{% url 'maquette_matiere_update' maquette.pk %}" class="tabledit-save-button btn btn-sm btn-warning" style="float: none; margin: 5px;"><span class="ti-pencil"></span>  Modifier</a>
+
+                                     <a type="button" target="__blank" href="{{ maquette.url_to_edit_object }}" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-pencil"></span>  Admin</a>
+                                     
+                                      {% endif %}
+                                        
+                                        </div>
+                                   
+                                    </div>
+                                </td>
+                            </tr>
+                                
+                            {% endfor %}
+                                
+                          
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+
+
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="validationModalLabel">Nouvelle Maquette Pédagogique</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- ... and so on for other fields ... -->
+                <form method="post" id="MaquetteForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="{{ form.annee_academique.id_for_label }}">Année académique :</label>
+                            {{ form.annee_academique }}
+                        </div>
+                        <div class="col-md-12">
+                            <label for="{{ form.filiere.id_for_label }}">Filière :</label>
+                            {{ form.filiere }}
+                        </div>
+                        <div class="col-md-12">
+                            <label for="{{ form.niveau.id_for_label }}">Niveau :</label>
+                            {{ form.niveau }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label for="{{ form.maquette_universitaire.id_for_label }}">Cycle Universitaire :</label>
+                            {{ form.maquette_universitaire }}
+                        </div>
+                        
+                        <div class="col-3">
+                            <label for="{{ form.maquette_professionnel_jour.id_for_label }}">Cycle Professionnel :</label>
+                            {{ form.maquette_professionnel_jour }}
+                        </div>
+                        <div class="col-3">
+                            <label for="{{ form.maquette_professionnel_soir.id_for_label }}">Cycle Continue :</label>
+                            {{ form.maquette_professionnel_soir }}
+                        </div>
+                        <div class="col-3">
+                            <label for="{{ form.maquette_cours_en_ligne.id_for_label }}">Cycle en Ligne :</label>
+                            {{ form.maquette_cours_en_ligne }}
+                        </div>
+                        
+                    </div>
+                    <br>    
+                    <button type="submit" class="btn btn-primary" id="confirmValidation" style="float: right;" >Enregistrer</button>
+                </form>
+      
+    </form>
+
+    <script>
+      
+    </script>
+            
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <button type="button"  style="float: left;" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    
+{% endblock page %}
+    

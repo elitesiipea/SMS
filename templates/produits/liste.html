@@ -1,0 +1,95 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block page %}
+        <!-- Strat Contentbar -->
+        <div class="contentbar">
+            <div class="row">
+                <div class="col-4">
+                    <h5>Liste des Produits</h5>
+                </div>
+                <div class="col-8 d-flex justify-content-end align-items-end">
+                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#operationModal">
+                        Nouvelle Opération
+                    </button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#produitModal">
+                        Ajouter un Produit
+                    </button>
+                </div>
+            </div>
+            <br>
+         <!-- Formulaire pour créer un nouveau produit -->
+
+
+<!-- Modal pour le formulaire de création de produit -->
+<div class="modal fade" id="produitModal" tabindex="-1" role="dialog" aria-labelledby="produitModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="produitModalLabel">Nouveau Produit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'produit_list' %}">
+                    {% csrf_token %}
+                    {{ form_produit.as_p }}
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste des produits -->
+<table id="datatable-buttons" 
+class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Quantité</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for produit in produits %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ produit.nom }}</td>
+            <td>{{ produit.description }}</td>
+            <td>{{ produit.quantite }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="operationModal" tabindex="-1" role="dialog" aria-labelledby="operationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="operationModalLabel">Nouvelle Opération</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'operation' %}">
+                    {% csrf_token %}
+                    {{ form_operation.as_p }}
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+        <!-- End Contentbar -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock page %}
+    

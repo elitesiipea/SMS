@@ -1,0 +1,106 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="edu-team-details-area section-gap-equal" style="margin-top: -150px;">
+    <div class="container">
+        <div class="row row--40">
+           
+            <div class="col-lg-12" >
+                <div class="team-details-content">
+                    <div class="main-info">
+                        <span class="subtitle">Etudiant</span>
+                        <h3 class="title">{{user}}</h3>
+                        <span class="designation">{{user.email}}</span>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-6">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                      <center>
+                        <br>
+                        <button class="btn btn-lg btn-success" type="submit">Enregistrer les modifications</button>
+                      </center>
+                    </form>
+
+
+                    <div class="contact-info">
+                        <div class="row">
+                            <div class="col-6">
+                                <ul>
+                                    <li><span>Nom :</span>{{ user.etudiant.nom }}</li>
+                                    <li><span>Prénom :</span>{{ user.etudiant.prenom }}</li>
+                                    <li><span>Type d'étudiant :</span>{{ user.etudiant.get_type_etudiant_display }}</li>
+                                    <li><span>Établissement :</span>{{ user.etudiant.etablissement }}</li>
+                                    <li><span>Établissement d'origine :</span>{{ user.etudiant.etablissement_d_origine }}</li>
+                                    <li><span>Date de naissance :</span>{{ user.etudiant.date_de_naissance }}</li>
+                                    <li><span>Lieu de naissance :</span>{{ user.etudiant.lieu_de_naissance }}</li>
+                                    <li><span>Matricule MERS :</span>{{ user.etudiant.matricule_mers }}</li>
+                                    <li><span>Numéro table BAC :</span>{{ user.etudiant.numero_table_bac }}</li>
+                                    <li><span>Matricule MENET :</span>{{ user.etudiant.matricule_menet }}</li>
+                                    <li><span>Nationalité :</span>{{ user.etudiant.nationalite.name }}</li>
+                                   
+                                   
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <ul>
+                                    <li><span>Matricule :</span>{{ user.etudiant.matricule }}</li>
+                                    <li><span>Lieu de résidence :</span>{{ user.etudiant.lieu_de_residence }}</li>
+                                    <li><span>Sexe :</span>{{ user.etudiant.sexe }}</li>
+                                    <li><span>Série BAC :</span>{{ user.etudiant.serie_bac }}</li>
+                                    <li><span>Contact :</span>{{ user.etudiant.contact }}</li>
+                                    <li><span>Contact Parent :</span>{{ user.etudiant.contactparent }}</li>
+                                    <li><span>CNI / PASSEPORT / ATTESTATION D'IDENTITE :</span>
+                                        {% if user.etudiant.piece_depose %}
+                                        <span style="background-color: rgb(161, 223, 161);"> DEPOSE </span>
+                                        {% else %}
+                                        <span style="background-color: rgb(240, 174, 153);"> NON DEPOSE </span>
+                                        {% endif %}
+                                        </li>
+                                    <li><span>Extrait :</span>
+                                        {% if user.etudiant.extrait_depose %}
+                                        <span style="background-color: rgb(161, 223, 161);"> DEPOSE </span>
+                                        {% else %}
+                                        <span style="background-color: rgb(240, 174, 153);"> NON DEPOSE </span>
+                                        {% endif %}
+                                        </li>
+                                    <li><span>Diplôme :</span>
+                                        {% if user.etudiant.diplome_depose %}
+                                        <span style="background-color: rgb(161, 223, 161);"> DEPOSE </span>
+                                        {% else %}
+                                        <span style="background-color: rgb(240, 174, 153);"> NON DEPOSE </span>
+                                        {% endif %}
+                                        </li>
+                                    <li><span>Fiche d'orientation 
+                                        {% if user.etudiant.fiche_orientation_depose %}
+                                        <span style="background-color: rgb(161, 223, 161);"> DEPOSE</span>
+                                        {% else %}
+                                        <span style="background-color: rgb(240, 174, 153);"> NON DEPOSEE </span>
+                                        {% endif %}
+                                        </li>
+                                    <li><span>Inscris depuis le :</span>{{ user.etudiant.created }}</li>
+                                    <li><span>Date de mise à jour :</span>{{ user.etudiant.date_update }}</li>
+                                    <li><span>ELITES-ID :</span>{{ user.etudiant.code_paiement }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+    
+{% endblock content %}
+    

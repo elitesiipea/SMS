@@ -1,0 +1,135 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+                <!-- End row -->
+                <div class="row justify-content-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="invoice">
+                                    <div class="    ">
+                                        <div class="row">
+                                          <div class="col-2">
+                                            <img src="{{user.etablissement.logo.url}}" height="50px">
+                                            
+                                          </div>    
+                                        </div>
+                                      </div>
+                                      <table>
+                                        <br>
+                                        <div style="border: 3px solid #145089;background-color:#145089; " class="">
+                                          <center>  <h3 style="color:white">CONTRAT DE TRAVAUX DIRIGES Année Académique ({{contrat.annee_academique}})</h3></center>
+                                          </div>
+                                        <tbody>
+                                          <tr>
+                                            <td>
+                                              <div>
+                                                <br>
+                                                <div class="row">
+                                                    <br>
+                                                    <br>
+                                                  <h4 style="font-weight:bold;color:#145089"><u>CONTRAT N° :  {{contrat.enseignant.code}}/{{contrat.id}}</u></h4>
+                                                  <br>
+                                                  <p>
+                                                    <br>
+                                                    L’INSTITUT INTERNATIONAL POLYTECHNIQUE DES ELITES D’ABIDJAN (IIPEA), sis à Abidjan Cocody, Riviera 2, non loin du collège André Malraux, Téléphone :(+225) 07 08 08 87 87 /05 44 02 60 60,<br> E-mail : secretariat@iipea.com, site web : www.iipea.com, représenté par Monsieur KONE ISMAEL agissant en sa qualité de fondateur et président du conseil d’Administration « L’employeur » D’une part ;<br>
+                                                    Et<br>
+                                                    M/ Mme / Mlle : <strong>{{contrat.enseignant}}</strong><br>
+                                                    N° CNI ou passeport : <strong>{{contrat.enseignant.numero_cni}}</strong><br>
+                                                    Date et lieu de naissance : <strong>{{contrat.enseignant.date_de_naissance}} à {{contrat.enseignant.lieu_de_naissance}}</strong><br>
+                                                    Nationalité : <strong>{{contrat.enseignant.nationalite.name}}</strong><br>
+                                                    Situation matrimoniale : <strong>{{contrat.enseignant.situations}}</strong><br>
+                                                    Domicile : <strong>{{contrat.enseignant.domicile}}</strong><br>
+                                                    Cellulaire : <strong>{{contrat.enseignant.contact}}</strong><br>
+                                                    Intervenant en :  <b>{{contrat.classe.filiere | upper}} {{contrat.classe.niveau | upper}} ({{contrat.classe.nom | upper }})</b>
+                                                   
+                                                    <br>
+                                                    <p>Comme enseignant en <strong>{{contrat.matiere.nom | upper }}</strong><p><br>
+                                                    « L’employé »<br>
+                                                    D’autre part,<br>
+                                                    IL A ETE CONVENU ET ARRETE CE QUI SUIT :<br>
+                                                    <br>
+                                                    Article 1 : Le présent contrat a pour objet la formation en ligne des étudiants de l’IIPEA,<br>
+                                                    C’est-à-dire la dispensation des cours ; évaluation des dits étudiants et leur suivi,<br>
+                                                    Article 2 : La formation se fera en visioconférence à IIPEA, mais également à tout autre lieu selon la nécessité de la formation,<br>
+                                                    Article 3 : La rémunération de l’intervenant est en principe mensuelle selon la possibilité de l’employeur,<br>
+                                                    Article 4 : La rémunération n’est due qu’après enseignement effectif du module ainsi qu’évaluations, et dépôt des notes et moyennes,<br>
+                                                    Article 5 : L’enseignant doit remplir à chaque cours :<br>
+                                                    -la fiche d’émargement des enseignants en y précisant l’heure du début et fin de cours ;<br>
+                                                    -seules les heures effectuées dans les séances de visioconférence seront prises en compte dans le décompte des heures à payer,<br>
+                                                    Article 6 : Toute vente de fascicule est strictement interdite,<br>
+                                                    Article 7 : L’enseignant se doit de déposer auprès du service informatique la version numérique de son cours 48h avant le début du cours,<br>
+                                                    Articles 8 : Dans ce présent contrat, l’enseignant autorise IIPEA à exploiter son image dans le cadre des visioconférences.<br>
+                                                    Article 9: L’enseignant doit :<br>
+                                                    <br>
+                                                    <br>
+                                                
+                                                    -s’abstenir d’effectuer des heures d’enseignement au-delà du volume horaire décidé par l’IIPEA sans l’autorisation expresse du Directeur des Etudes ;<br>
+                                                    -participer à toutes les réunions auxquelles l’IIPEA le convoque pour consultations,<br>
+                                                    Article 10 : Le présent contrat à durée déterminée à terme précis rentre en vigueur dès sa signature par les parties. Il est régi par le règlement intérieur du corps enseignant,<br>
+                                                    <br>
+                                                    <br>
+                                                    Article 11 : Le présent contrat prend fin à l’arrivée du terme convenu c’est-à-dire à la fin des modules exécutés par l’enseignant toutefois, la partie qui désire mettre fin au contrat avant le terme doit respecter un délai du préavis d’un mois à compter de la date de notification à l’autre partie sauf en cas de faute lourde,<br>
+                                                    Article 12 : Toute rétention de note entraine ipso facto le non paiement des honoraires des cours dispensés et la résolution du contrat sans préavis,<br>
+                                                    Article 13 : En cas de litige le règlement amiable sera privilégié avant toute autre voie de recours<br>
+                                                    Article 14 : Le volume horaire total du module à dispenser est de <strong>{{td.volume_horaire}}</strong> heures pour un taux horaire de <strong>{{contrat.taux_horaire}} Fcfa</strong><br>
+                                                    Fait à Abidjan le <strong>{{td.created}}</strong> <br>
+                                                    En 2 exemplaires dont un a été remis à l’enseignant vacataire.<br>
+                                                    <br>
+                                                  </p>  
+                                                  <div class="row">
+                                                    L'enseignant  
+                                                    &nbsp  &nbsp  &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp  &nbsp  &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+                                                    <p style="margin-left:800px"> Le fondateur</p>
+                                                    <br>
+                                                    <br>
+                                                    (Précédée de la date Et  <br>de la mention manuscrite « Lu et approuvé »&nbsp;
+                                                  </div>
+                                                  <p style="float:right"></p>
+                                                  <br>
+                                                </div>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                       
+                                      </table>
+                                      <div class="footer">
+                                        <br>
+                                       <center><b> Email : secretariat@iipea.com --- Site web: www.iipea.com --- Contacts: +225 07 08 08 87 87 / 05 44 02 60 60</b> </center>
+                                        <br>
+                                        <br>
+                                      </div>
+                                   
+                                    <div class="invoice-footer">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                               
+                                            </div>
+                                            <div class="col-md-6 d-print-none">
+                                                <div class="invoice-footer-btn">
+                                                    <a href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+    

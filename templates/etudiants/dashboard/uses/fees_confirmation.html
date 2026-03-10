@@ -1,0 +1,116 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+{% load humanize %}
+<section class="shop-page-area section-gap-equal">
+    <div class="container">
+        <form method="POST" id="paymentForm" action="{% url 'payment_processing_view' %}">
+            <div class="col-lg-12">
+                <p>Règlement frais de scolarité {{scolarite.filiere}} {{scolarite.niveau}} {{scolarite.annee_academique}}</p>
+                <div class="course-sidebar-3">
+                    <div class="edu-course-widget widget-course-summery">
+                        <div class="inner">
+                            <div class="content">
+                                <h4 class="widget-title">{{user}}</h4>
+                                <p>Code Paiement N° {{user.etudiant.code_paiement}}</p>
+                               
+                                <ul class="course-item">
+                                    <li>
+                                        <span class="label"><i class="icon-60"></i>Montant à  Payé : </span>
+                                        <span class="value">{{paiement.montant | intcomma }} FCFA</span>
+                                    </li>
+
+                                    <li>
+                                        <span class="label"><i class="icon-70"></i>Mode de Paiement :</span>
+                                        <span class="value">{{paiement.source | upper  }}</span>
+                                    </li>
+
+                                    <li>
+                                        <span class="label"><i class="icon-60"></i>Frais : </span>
+                                        <span class="value">1%</span>
+                                    </li>
+
+                                    <li>
+                                        <span class="label"><i class="icon-60"></i>Cout total de la transaction  : </span>
+                                        <span class="value">{{ montant_total }} FCFA</span>
+                                    </li>
+                                    <li>
+                                        <span class="label"><i class="icon-68"></i>Numéro utilisé pour le paiment </span>
+                                        <span class="value price">{{paiement.reference}}</span>
+                                        
+                                    </li>
+                                  
+                                </ul>
+                                <div class="col">
+                                    <div class="course-sidebar-3">
+                                       <div class="phone_validation">
+                                        <div class="read-more-btn">
+                                            <div class="container">
+                                                <button onclick="window.location.href='{% url 'waveMakePaiment' pk=paiement.pk %}'"  type="button"  class="edu-btn">Continuer <i class="icon-4"></i></button>
+                                            </div>
+                                            <br>
+                                            
+                                            <a onclick="window.location.href='{% url 'cancelPayment' pk=paiement.pk%}'" type="button" name="finalVildationButton" class="btn btn-lg btn-danger">Annuler</a>
+                                        </div>
+                                        <!--PHONE ZONE-->
+                                       </div>
+                                    </div>
+                                </div>
+                                <!--MOYEN PAIEMENT -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div> 
+        </form>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const operatorLinks = document.querySelectorAll(".operator");
+
+        operatorLinks.forEach(link => {
+            link.addEventListener("click", function (event) {
+                const inputAmount = document.getElementById("current-log-email");
+                const errorMessage = document.getElementById("error-message");
+                const amount = parseFloat(inputAmount.value);
+                
+                if (!amount || amount < 500) {
+                    event.preventDefault();
+                    errorMessage.textContent = "Veuillez saisir un montant supérieur ou égal à 500 Frs";
+                } else {
+                    errorMessage.textContent = "";
+
+                    const phoneValidation = document.querySelector(".phone_validation");
+                    phoneValidation.style.display = "block";
+
+                    const selectedOperator = link.querySelector("img").alt;
+                    
+                    var network = document.getElementById("network")
+                    network.textContent = "";
+                    network.appendChild(document.createTextNode(` ${selectedOperator}`));
+
+                    phoneInput.addEventListener("input", function () {
+                        const phoneErrorMessage = document.getElementById("phone-error-message");
+                        const phoneNumber = phoneInput.value;
+                        
+                        if (!/^\d{10}$/.test(phoneNumber)) {
+                            phoneErrorMessage.textContent = "Veuillez saisir un numéro valide de 10 chiffres";
+                        } else {
+                            phoneErrorMessage.textContent = "";
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+    
+{% endblock content %}
+    

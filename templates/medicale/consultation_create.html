@@ -1,0 +1,141 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+ 
+<div class="contentbar">
+    <div class="row">
+            <div class="col-lg-12">
+                <div class="card m-b-30">
+                    <div class="card-body">
+                    
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <h4>CONSULTATION DU JOUR </h4>
+                                    <br>
+                                   
+                                    <div class="row"> 
+                                           <div class="col-3">
+                                                <h5>1- Motif de la consultation </h5>
+                                                {{ form.motif_de_la_consultation.label_tag }} {{ form.motif_de_la_consultation }}
+                                            </div>
+                                           
+                                           <div class="col-3">
+                                            <h5>2- Historique de la maladie </h5>
+                                          Histoire de la Maladie {{ form.histoire_de_la_mamdie }}
+                                           </div>
+                                           <div class="col-6">
+                                            <h5>3- Constantes</h5>
+                                   <div class="row">
+                                        <div class="col-6">
+                                                {{ form.TA.label_tag }} {{ form.TA }}
+                                                {{ form.pouls.label_tag }} {{ form.pouls }}
+                                                {{ form.Temperature.label_tag }} {{ form.Temperature }}
+                                        </div>
+                                        <div class="col-6">
+                                                {{ form.FR.label_tag }} {{ form.FR }}
+                                                {{ form.Sao2.label_tag }} {{ form.Sao2 }}
+                                                {{ form.Glasgow.label_tag }} {{ form.Glasgow }}
+                                        </div>
+                                        <div class="col-12">
+                                            {{ form.poids.label_tag }} {{ form.poids }}
+                                           
+                                    </div>
+                                   </div>
+                                           </div>
+                                    </div>
+                                   <hr>
+                                   
+                            
+                                   <hr>
+                                   <div class="row">
+                                    <h5>4- Examen Physique </h5>
+                                    <div class="col-12">
+                                       
+                                            {{ form.examen_physique.label_tag }} {{ form.examen_physique }}
+                                         
+                                        </fieldset>
+                                    </div>
+                                   
+                                </div>
+                                <br>
+                                <hr>
+                                    <h4>CONCLUSION</h4>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h5>{{ form.hypotheses_diagnostic.label_tag }} </h5>
+                                            {{ form.hypotheses_diagnostic }}
+                                        </div>
+                                            <div class="col-6">
+                                               <h5> {{ form.examens_paracliniques.label_tag }} </h5>
+                                                {{ form.examens_paracliniques }}
+                                            </div>
+                                            
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h5>{{ form.diagnostic_retenu.label_tag }} </h5>
+                                            {{ form.diagnostic_retenu }}
+                                        </div>
+                                        <div class="col-4">
+                                               <h5> {{ form.traitement.label_tag }} </h5>
+                                               {{ form.traitement }}
+                                        </div>
+                                        <div class="col-4">
+                                            <h5> {{ form.evolution.label_tag }} </h5>
+                                            {{ form.evolution }}
+                                     </div>
+                                            
+                                    </div>
+                                    <hr>
+                                    <h4>PROCHAIN RENDEZ VOUS</h4>
+                                   <div class="row">
+                                    <div class="col">
+                                        {{ form.rendez_vous.label_tag }} {{ form.rendez_vous }}
+                                    </div>
+                                </div>
+                                    <hr>
+
+                                    <h4>ARRET MALADIE</h4>
+                                   <div class="row">
+                                        <div class="col-3">
+                                            {{ form.arret_de_travail.label_tag }} {{ form.arret_de_travail }}
+                                        </div>
+                                        <div class="col-3">
+                                            {{ form.debut_arret_travail.label_tag }} {{ form.debut_arret_travail }}
+                                        </div>
+                                        <div class="col-3">
+                                            {{ form.fin_arret_travail.label_tag }} {{ form.fin_arret_travail }}
+                                        </div>
+                                   </div>
+                                   <div class="col-lg-12">
+                                    <div class="card m-b-30">
+                                        <div class="card-body">
+                                            <div class="row justify-content-end">
+                                                <div class="col-4">
+                                                   <br>
+                                                        <section>
+                                                            <button type="submit" class="btn btn-success btn-md btn-block font-18">Enregistrer la consultation</button>
+                                                        </section>
+                                                </div>  
+                                            </div>                             
+                                        </div>
+                        
+                                    </div>
+                                </div>  
+                                </form> 
+                            </div>  
+                        </div>                             
+                    </div>
+    
+                </div>
+            </div> 
+    </div>
+</div> 
+
+        
+{% endblock page %}
+    

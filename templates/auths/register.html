@@ -1,0 +1,51 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->    
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="post">
+                {% csrf_token %}
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                           
+                            <section>
+                                {% csrf_token %}
+                                <div class="row">
+                                    {% for field in form %}
+                                        <div class="col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            <hr>
+                                        </div>
+                                       
+                                    {% endfor %}
+                                </div>
+                            </section>
+                            <div class="col-12">
+                                   
+                                <section style="float:right">
+                                    <button style="float:right" type="submit" class="btn btn-success btn-md btn-block font-18">Enregistrer</button>
+                                </section>
+                        </div> 
+                        </div>  
+                    </div>                             
+                </div>
+
+            </div>
+        </div>  
+    </div> 
+    <!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+        
+{% endblock page %}
+    

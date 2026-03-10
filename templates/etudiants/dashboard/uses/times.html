@@ -1,0 +1,326 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    /* Pour agrandir la taille des éléments */
+    #annee_id option {
+        font-size: 16px; /* Modifier la taille de police selon vos préférences */
+    }
+    
+    /* Pour mettre les éléments en gras */
+    #annee_id option {
+        font-weight: bold;
+    }
+</style>
+
+<style>
+    .bg-light-gray {
+    background-color: #f7f7f7;
+}
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}   
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+
+.bg-sky.box-shadow {
+    box-shadow: 0px 5px 0px 0px #00a2a7
+}
+
+.bg-orange.box-shadow {
+    box-shadow: 0px 5px 0px 0px #af4305
+}
+
+.bg-green.box-shadow {
+    box-shadow: 0px 5px 0px 0px #4ca520
+}
+
+.bg-yellow.box-shadow {
+    box-shadow: 0px 5px 0px 0px #dcbf02
+}
+
+.bg-pink.box-shadow {
+    box-shadow: 0px 5px 0px 0px #e82d8b
+}
+
+.bg-purple.box-shadow {
+    box-shadow: 0px 5px 0px 0px #8343e8
+}
+
+.bg-lightred.box-shadow {
+    box-shadow: 0px 5px 0px 0px #d84213
+}
+
+
+.bg-sky {
+    background-color: #02c2c7
+}
+
+.bg-orange {
+    background-color: #e95601
+}
+
+.bg-green {
+    background-color: #5bbd2a
+}
+
+.bg-yellow {
+    background-color: #f0d001
+}
+
+.bg-pink {
+    background-color: #ff48a4
+}
+
+.bg-purple {
+    background-color: #9d60ff
+}
+
+.bg-lightred {
+    background-color: #ff5722
+}
+
+.padding-15px-lr {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.padding-5px-tb {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.margin-10px-bottom {
+    margin-bottom: 10px;
+}
+.border-radius-5 {
+    border-radius: 5px;
+}
+
+.margin-10px-top {
+    margin-top: 10px;
+}
+.font-size14 {
+    font-size: 14px;
+}
+
+.text-light-gray {
+    color: #d6d5d5;
+}
+.font-size13 {
+    font-size: 13px;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
+</style>
+
+<style>
+    .dark-hr {
+        background-color: #333; /* Couleur foncée */
+        height: 2px; /* Hauteur de la ligne */
+    }
+</style>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="">
+            <div class="">
+                <div class="">
+                    <form action="#" method="GET">
+                        <div class="row">
+                            <div class="col-6">
+                                <h6 class="showing-text">Sélectionnez l'année Académique</h6>
+                            </div>
+                            <div class="col-6">
+                                <select name="edu-select" id="annee_id" class="form-control">
+                                    <option value="">Année Académique</option>
+                                    {% for annee in annees_academiques %}
+                                        <option value="{{ annee.id }}">{{ annee.debut }} - {{ annee.fin }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+           
+        </div>
+        <div>
+            
+            {% if found_cursus == False  %}
+            <br>
+            <br>
+            <div class="row g-5 row--45">
+                <div class="col-lg-6">
+                    <div class="edu-faq-gallery">
+                        <div class="faq-thumbnail thumbnail-1 sal-animate" data-sal-delay="50" data-sal="slide-right" data-sal-duration="800">
+                            <img src="{% static 'etudiant/assets/images/others/faq-5.webp' %}" alt="Faq Images">
+                        </div>
+                        <ul class="shape-group">
+                            <li class="shape-1 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <img data-depth="1.5" src="{% static 'etudiant/assets/images/faq/shape-35.png' %}" alt="Shape Images" style="transform: translate3d(-23.5px, -1.5px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
+                            </li>
+                            <li class="shape-2 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <img data-depth="-2" src="{% static 'etudiant/assets/images/faq/shape-36.png' %}" alt="Shape Images" style="transform: translate3d(24.5px, 1.6px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
+                            </li>
+                            <li class="shape-3">
+                                <img src="{% static 'etudiant/assets/images/faq/shape-34.png' %}" alt="Shape Images">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 sal-animate" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800">
+                    <div class="edu-faq-content">
+                        <div class="section-title section-left">
+                            <span class="pre-title">Oups</span>
+                            <h2 class="title">Aucun Emplois du Temps  <span class="color-secondary">disponible </h2>
+                            <span class="shape-line"><i class="icon-19"></i></span>
+                        </div>
+                        <div class="faq-accordion" id="faq-accordion">
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <h5 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                                            Pourquoi ai-je aucun Emplois du Temps pour cette année ? 
+                                        </button>
+                                    </h5>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faq-accordion">
+                                        <div class="accordion-body">
+                                            <p>Aucun Emplois du Temps n'est disponible pour vous pour le compte de cette Année Académique car vous n'étiez pas inscris cette année là. <br>
+                                                En cas d'erreur merci de contater les administrateurs
+                                                </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <ul class="shape-group">
+                            <li class="shape-1 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <img data-depth="1.5" src="{% static 'etudiant/assets/images/about/shape-02.png' %}" alt="Shape Images" style="transform: translate3d(-41.9px, -2.7px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
+                            </li>
+                            <li class="shape-2 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <span data-depth="-2.2" style="transform: translate3d(22.2px, 1.4px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            
+            {% if classe is not none %}
+
+         
+
+                    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+                        <h4 class="title">Emplois du temps  {{ classe }}</h4>
+                        <span class="shape-line"><i class="icon-19"></i></span>
+                    </div>
+
+                    
+                
+    
+                    <div class="container-fluid">
+                        
+                        <div class="timetable-img text-center">
+                           
+                        </div>
+                        <div class="table-responsive">
+                            <!-- <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr class="bg-light-gray">
+                                        <th class="text-uppercase">LUNDI</th>
+                                        <th class="text-uppercase">MARDI</th>
+                                        <th class="text-uppercase">MERCREDI</th>
+                                        <th class="text-uppercase">JEUDI</th>
+                                        <th class="text-uppercase">VENDREDI</th>
+                                        <th class="text-uppercase">SAMEDI</th>
+                                        <th class="text-uppercase">DIMANCHE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {% for jour in jours_semaine %}
+                                            <td>
+                                                {% for programme in programmes %}
+                                                    {% if programme.jour == jour %}
+                                                        <div>
+                                                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">{{ programme.matiere.matiere.nom }}</span>
+                                                            <div class="margin-10px-top font-size14">{{ programme.debut|time:"H:i" }}-{{ programme.fin|time:"H:i" }}</div>
+                                                            <div class="font-size13 text-light-gray">{{ programme.matiere.enseignant }}</div>
+                                                            <div class="font-size13 text-light-gray" style="color:black">{{ programme.salle }}</div>
+                                                        </div>
+                                                        <hr class="dark-hr">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table> -->
+
+
+                            <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Matière</th>
+                                    <th scope="col">Salle</th>
+                                    <th scope="col">Début</th>
+                                    <th scope="col">Fin</th>
+                                    <th scope="col">Enseignant</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  
+                                    
+                                    {% for programme in programmes  %}
+                                    <tr>
+                                        <th scope="row">{{ programme.date|date:"l j F Y" }}</th>
+                                        <td>{{ programme.matiere | upper  }}</td>
+                                        <td>{{ programme.salle | upper  }}</td>
+                                        <td>{{ programme.debut }}</td>
+                                        <td>{{ programme.fin }}</td>
+                                        <td>
+                                            {% if programme.enseignant %}
+                                            {{programme.enseignant | upper }}
+                                            {% else %}
+                                            ---
+                                            {% endif %}
+                                        </td>
+                                      </tr>
+                                    {% endfor %}
+                                        
+                                 
+                                </tbody>
+                              </table>
+                              
+                        </div>
+                    </div>
+                    
+              
+            {% endif %}  
+        </div>
+    </div>
+</div>
+{% endblock content %}
+    

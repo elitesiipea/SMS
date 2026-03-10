@@ -1,0 +1,70 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <div class="container-fluid">
+            <h2>Éditer la Commande N°{{ commande.id }} - Fournisseur: {{ commande.fournisseur.nom }}</h2>
+
+            <!-- Form for editing the command -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Fournisseur Selection -->
+                <div class="form-group">
+                    <label for="fournisseur">Fournisseur</label>
+                    {{ form.fournisseur }} <!-- Use form-control for better styling -->
+                </div>
+
+                <!-- Bon de Commande File Upload -->
+                <div class="form-group">
+                    <label for="bon_de_commande">Bon de Commande</label>
+                    {{ form.bon_de_commande }}
+                </div>
+
+                <!-- Commande Reçu Checkbox -->
+                <div class="form-group">
+                    <label for="commande_recu">Commande Reçue</label>
+                    {{ form.commande_recu }}
+                </div>
+
+                <!-- Produits Commande Inline Formset -->
+                <h4>Produits de la Commande</h4>
+                <div class="formset">
+                    <div class="row">
+                        {% for form in formset %}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="produit">Produit</label>
+                                {{ form.produit }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="quantite">Quantité</label>
+                                {{ form.quantite }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form.DELETE }} Supprimer
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Mettre à jour la Commande</button>
+                    <a href="{% url 'commande_list' %}" class="btn btn-secondary">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock page %}

@@ -1,0 +1,1112 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+
+{% block page %}
+
+
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg .tg-teh8 {
+        background-color: #f3eec1;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-6zfp {
+        font-weight: bold;
+        background-color: #8db4e3;
+        color: #000000;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-6dzw {
+        background-color: #d2dae2;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-654s {
+        font-weight: bold;
+        background-color: #8800c9;
+        color: #ffffff;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-qsz9 {
+        background-color: #f3eec1;
+        color: #000000;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-l660 {
+        background-color: #d2dae2;
+        color: #000000;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-dj9i {
+        background-color: #8800c9;
+        color: #ffffff;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-fzvx {
+        background-color: #31b267;
+        color: #ffffff;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-zkk0 {
+        background-color: #f3eec1;
+        color: #000000;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-gpzw {
+        font-weight: bold;
+        background-color: #8db4e3;
+        color: #000000;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-i31f {
+        background-color: #8db4e3;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-7ye7 {
+        background-color: #31b267;
+        color: #ffffff;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-z4m1 {
+        font-weight: bold;
+        background-color: #31b267;
+        color: #ffffff;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    @media screen and (max-width: 767px) {
+        .tg {
+            width: auto !important;
+        }
+
+        .tg col {
+            width: auto !important;
+        }
+
+        .tg-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+</style>
+
+<style>
+    .bg-light-gray {
+    background-color: #f7f7f7;
+}
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}   
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+
+.bg-sky.box-shadow {
+    box-shadow: 0px 5px 0px 0px #00a2a7
+}
+
+.bg-orange.box-shadow {
+    box-shadow: 0px 5px 0px 0px #af4305
+}
+
+.bg-green.box-shadow {
+    box-shadow: 0px 5px 0px 0px #4ca520
+}
+
+.bg-yellow.box-shadow {
+    box-shadow: 0px 5px 0px 0px #dcbf02
+}
+
+.bg-pink.box-shadow {
+    box-shadow: 0px 5px 0px 0px #e82d8b
+}
+
+.bg-purple.box-shadow {
+    box-shadow: 0px 5px 0px 0px #8343e8
+}
+
+.bg-lightred.box-shadow {
+    box-shadow: 0px 5px 0px 0px #d84213
+}
+
+
+.bg-sky {
+    background-color: #02c2c7
+}
+
+.bg-orange {
+    background-color: #e95601
+}
+
+.bg-green {
+    background-color: #5bbd2a
+}
+
+.bg-yellow {
+    background-color: #f0d001
+}
+
+.bg-pink {
+    background-color: #ff48a4
+}
+
+.bg-purple {
+    background-color: #9d60ff
+}
+
+.bg-lightred {
+    background-color: #ff5722
+}
+
+.padding-15px-lr {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.padding-5px-tb {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.margin-10px-bottom {
+    margin-bottom: 10px;
+}
+.border-radius-5 {
+    border-radius: 5px;
+}
+
+.margin-10px-top {
+    margin-top: 10px;
+}
+.font-size14 {
+    font-size: 14px;
+}
+
+.text-light-gray {
+    color: #d6d5d5;
+}
+.font-size13 {
+    font-size: 13px;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
+</style>
+
+<style>
+    .dark-hr {
+        background-color: #333; /* Couleur foncée */
+        height: 2px; /* Hauteur de la ligne */
+    }
+</style>
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <div class="col-md-12 col-lg-12 col-12">
+        <div class="card m-b-30">
+            <br>
+            <div class="container-fluid" style="float:right">
+                <a class="btn btn-lg btn-info "  href="{% url 'appel' pk=classe.pk  %}">LISTE D'APPEL</a>
+            </div>
+
+            <div class="container-fluid" style="float:right">
+                <a class="btn btn-lg btn-info "  href="{% url 'classes_certificats' pk=classe.pk  %}">CERTIFICATS</a>
+            </div>
+
+            <div class="container-fluid" style="float:right">
+                <a class="btn btn-lg btn-info "  href="{% url 'classes_recu' pk=classe.pk  %}">RECUS</a>
+            </div>
+            <br>
+            <div class="container-fluid" style="float:right">
+                <a class="btn btn-lg btn-primary "  href="{% url 'classes_televerser_notes' pk=classe.pk  %}">FICHE TELEVCERSEMENT NOTES</a>
+            </div>
+            <br>
+            <div class="card-body">
+                <ul class="nav nav-pills nav-justified mb-3" id="pills-tab-justified" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-contact-tab-justified" data-toggle="pill" href="#pills-contact-justified" role="tab" aria-controls="pills-contact" aria-selected="true">Maquette Pédagogique</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-programmed-tab-justified" data-toggle="pill" href="#pills-programmed-justified" role="tab" aria-controls="pills-programmed" aria-selected="false">Contrats & Enseignants</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-home-tab-justified" data-toggle="pill" href="#pills-home-justified" role="tab" aria-controls="pills-home" aria-selected="false">Emplois du temps</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-profile-tab-justified" data-toggle="pill" href="#pills-profile-justified" role="tab" aria-controls="pills-profile" aria-selected="false">Liste de classe</a>
+                    </li>
+                   
+                    <li class="nav-item">
+                        <a class="nav-link " id="pills-evaluations-tab-justified" data-toggle="pill" href="#pills-evaluations-justified" role="tab" aria-controls="pills-evaluations" aria-selected="true">Evaluations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " id="pills-resultats-tab-justified" data-toggle="pill" href="#pills-resultats-justified" role="tab" aria-controls="pills-resultats" aria-selected="true">Résultats</a>
+                    </li>
+
+
+                    
+                </ul>
+                <div class="tab-content" id="pills-tab-justifiedContent">
+                    <div class="tab-pane fade active show" id="pills-contact-justified" role="tabpanel" aria-labelledby="pills-contact-tab-justified">
+                        <div class="col-md-12">
+                            <div class="invoice-footer-btn">
+                                <a style="float:right" href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                            </div>
+                        </div>
+                        <br>
+                        <!--debut Maquette-->
+                        <div class="vc_tta-container" data-vc-action="collapse">
+                            <br>
+                               <center>
+                                <h3>MAQUETTE PEDAGOGIQUE {{classe.filiere}} {{classe.niveau}}</h3>
+                               </center>
+                                <br>
+                            <div class="vc_general vc_tta vc_tta-tabs vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-spacing-1 vc_tta-tabs-position-top vc_tta-controls-align-left">
+                               
+                                <div class="vc_tta-panels-container">
+                                    <div class="vc_tta-panels">
+                                        
+                                       
+                                    {% if maquette.maquette_universitaire %}
+            
+                                        <!--SMESTRE 1 -->
+                                        <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
+                                            data-vc-content=".vc_tta-panel-body">
+                                            <div class="vc_tta-panel-heading">
+                                                <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">SEMESTRE 1</span></a></h4>         
+                                            </div>
+                                            <div class="vc_tta-panel-body">
+                                                <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                                    <div class="wpb_wrapper">
+                                                
+                                                        <div class="tg-wrap">
+                                                            <table class="tg" style="width: 100%;">
+                                                                <tr>
+                                                                    <th class="tg-654s">UNITE ENSEIGNEMENT</th>
+                                                                    <th class="tg-654s">MATIERE (ECUE) </th>
+                                                                    <th class="tg-654s">VOLUME HORAIRE</th>
+                                                                    <th class="tg-654s">CREDIT</th>
+                                                                    <th class="tg-654s">CREDIT UE</th>
+                                                                    <th class="tg-654s">ENSEIGNANTS </th>
+                                                                    <th class="tg-654s">CONTACT ENSEIGNATS </th>
+                                                                    <th class="tg-654s">VOLUME HORAIRE</th>
+                                                                    <th class="tg-654s">VOLUME EFFECTUE</th>
+                                                                    <th class="tg-654s">SYLLABUS</th>
+                                                                    <th class="tg-654s">SUPPORT DE COURS</th>
+                                                                    <th class="tg-654s">NOTES</th>
+                                                                    <th class="tg-654s">CAHIER DE TEXTE</th>
+                                                                    <th class="tg-654s">TERMINE</th>
+                                                                </tr>
+                                                                        {% for matiere in maquette.matiere_1 %}
+                                                                            <tr>
+                                                                                
+                                                                                <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
+                                                                                <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                                <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
+                                                                                <td class="tg-gpzw">{{matiere.coefficient}}</td>
+                                                                                <td class="tg-gpzw">{{matiere.unite.credit}}</td>
+                                                                                {% for programmation in classe.programmations %}
+                                                                                
+                                                                                {% if programmation.matiere.id == matiere.id %}
+
+                                                                             
+                                                                                    <td class="tg-zkk0">{{programmation.enseignant}}</td>
+                                                                                    <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
+                                                                                    <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
+                                                                                    <td class="tg-gpzw">{{programmation.progression}}</td>
+                                                                                  
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.support_depose %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.support_depose %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.notes %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.notes %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.cahier_de_texte %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.cahier_de_texte %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.closed %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    
+                                                                        
+                                                                                    
+                                                                                {% endif %}
+                                                                                    
+                                                                                {% endfor %}
+                                                                            </tr>
+                                                                        {% endfor %}
+                                                                <tr>
+                                                                    <td class="tg-7ye7" colspan=""><span style="font-weight:700">TOTAL
+                                                                            SEMESTRE</span></td>
+                                                                    <td class="tg-z4m1" colspan="4">30 / 30</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+                                        </div>
+                                        <br>
+                                        <!--SMESTRE 2 -->
+                                        <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
+                                            data-vc-content=".vc_tta-panel-body">
+                                            <div class="vc_tta-panel-heading">
+                                                <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">SEMESTRE 2</span></a></h4>         
+                                            </div>
+                                            <div class="vc_tta-panel-body">
+                                                <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                                    <div class="wpb_wrapper">
+                                                
+                                                        <div class="tg-wrap">
+                                                            <table class="tg" style="width: 100%;">
+                                                                <tr>
+                                                                    <th class="tg-654s">UNITE ENSEIGNEMENT</th>
+                                                                    <th class="tg-654s">MATIERE (ECUE) </th>
+                                                                    <th class="tg-654s">VOLUME HORAIRE</th>
+                                                                    <th class="tg-654s">CREDIT</th>
+                                                                    <th class="tg-654s">CREDIT UE</th>
+                                                                    <th class="tg-654s">ENSEIGNANTS </th>
+                                                                    <th class="tg-654s">CONTACT ENSEIGNATS </th>
+                                                                    <th class="tg-654s">VOLUME HORAIRE</th>
+                                                                    <th class="tg-654s">VOLUME EFFECTUE</th>
+                                                                    <th class="tg-654s">SYLLABUS</th>
+                                                                    <th class="tg-654s">SUPPORT DE COURS</th>
+                                                                    <th class="tg-654s">NOTES</th>
+                                                                    <th class="tg-654s">CAHIER DE TEXTE</th>
+                                                                    <th class="tg-654s">TERMINE</th>
+                                                                </tr>
+                                                                        {% for matiere in maquette.matiere_2 %}
+                                                                            <tr>
+                                                                                
+                                                                                <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
+                                                                                <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                                <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
+                                                                                <td class="tg-gpzw">{{matiere.coefficient}}</td>
+                                                                                <td class="tg-gpzw">{{matiere.unite.credit}}</td>
+                                                                                {% for programmation in classe.programmations %}
+   
+                                                                                {% if programmation.matiere.id == matiere.id %}
+                                                                                                                                                          
+                                                                                    <td class="tg-zkk0">{{programmation.enseignant}}</td>
+                                                                                    <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
+                                                                                    <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
+                                                                                    <td class="tg-gpzw">{{programmation.progression}}</td>
+                                                                                  
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.support_depose %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.support_depose %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.notes %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.notes %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.cahier_de_texte %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.cahier_de_texte %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
+                                                                                        {% if programmation.closed %}OUI{% else %}NON{% endif %}
+                                                                                    </td>
+                                                                                    
+                                                                                    
+                                                                                {% endif %}
+                                                                                    
+                                                                                {% endfor %}
+                                                                            </tr>
+                                                                        {% endfor %}
+                                                                <tr>
+                                                                    <td class="tg-7ye7" colspan=""><span style="font-weight:700">TOTAL
+                                                                            SEMESTRE</span></td>
+                                                                    <td class="tg-z4m1" colspan="4">30 / 30</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+                                        </div>
+                                    <!-- FIN SMESTRE 2 -->
+            
+                                    {% else %}
+            
+                                     <!--SMESTRE 1 -->
+                                     <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
+                                     data-vc-content=".vc_tta-panel-body">
+                                     <div class="vc_tta-panel-heading">
+                                         <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
+                                            {% if maquette.etablissement.is_college %}
+                                            TRIMESTRE 1
+                                            {% else %}
+                                            SEMESTRE 1
+                                         {% endif %}
+                                         </span></a></h4>         
+                                     </div>
+                                     <div class="vc_tta-panel-body">
+                                         <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                             <div class="wpb_wrapper">
+                                         
+                                                 <div class="tg-wrap">
+                                                     <table class="tg" style="width: 100%;">
+                                                         <tr>
+                                                           
+                                                             <th class="tg-654s">MATIERE </th>
+                                                             <th class="tg-654s">VOLUME HORAIRE</th>
+                                                             <th class="tg-654s">COEFFICIENT</th>
+                                                             <th class="tg-654s">ENSEIGNANTS </th>
+                                                             <th class="tg-654s">CONTACT ENSEIGNATS </th>
+                                                             <th class="tg-654s">VOLUME HORAIRE</th>
+                                                             <th class="tg-654s">VOLUME EFFECTUE</th>
+                                                             <th class="tg-654s">SYLLABUS</th>
+                                                             <th class="tg-654s">SUPPORT DE COURS</th>
+                                                             <th class="tg-654s">NOTES</th>
+                                                             <th class="tg-654s">CAHIER DE TEXTE</th>
+                                                             <th class="tg-654s">TERMINE</th>
+                                                             
+                                                         </tr>
+                                                                 {% for matiere in maquette.matiere_1 %}
+                                                                     <tr>
+                                                                         
+                                                                      
+                                                                         <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                         <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
+                                                                         <td class="tg-gpzw">{{matiere.coefficient}}</td>
+                                                                         {% for programmation in classe.programmations %}
+                                                                            {% if programmation.matiere.id == matiere.id %}
+                                                                                                                                                    
+                                                                                <td class="tg-zkk0">{{programmation.enseignant}}</td>
+                                                                                <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
+                                                                                <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
+                                                                                <td class="tg-gpzw">{{programmation.progression}}</td>
+                                                                            
+                                                                                <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
+                                                                                    {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
+                                                                                </td>
+                                                                                <td class="tg-gpzw" style="background-color: {% if programmation.support_depose %}green{% else %}red{% endif %}">
+                                                                                    {% if programmation.support_depose %}OUI{% else %}NON{% endif %}
+                                                                                </td>
+                                                                                <td class="tg-gpzw" style="background-color: {% if programmation.notes %}green{% else %}red{% endif %}">
+                                                                                    {% if programmation.notes %}OUI{% else %}NON{% endif %}
+                                                                                </td>
+                                                                                <td class="tg-gpzw" style="background-color: {% if programmation.cahier_de_texte %}green{% else %}red{% endif %}">
+                                                                                    {% if programmation.cahier_de_texte %}OUI{% else %}NON{% endif %}
+                                                                                </td>
+                                                                                <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
+                                                                                    {% if programmation.closed %}OUI{% else %}NON{% endif %}
+                                                                                </td>
+                                                                                
+                                                                                
+                                                                            {% endif %}
+                                                                                
+                                                                            {% endfor %}
+                                                                         
+                                                                     </tr>
+                                                                 {% endfor %}
+                                                         <tr>
+                                                             <td class="tg-7ye7" colspan=""><span style="font-weight:700">TOTAL
+                                                                     SEMESTRE</span></td>
+                                                             <td class="tg-z4m1" colspan="4">{{maquette.credit_1}}</td>
+                                                         </tr>
+                                                     </table>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+            
+                                 </div>
+                               
+                              <br>
+                                 <!--SMESTRE 2 -->
+                                 <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184" data-vc-content=".vc_tta-panel-body">
+                                    
+                                     <div class="vc_tta-panel-heading">
+                                         <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
+                                            {% if maquette.etablissement.is_college %}
+                                            TRIMESTRE 2
+                                            {% else %}
+                                            SEMESTRE 2
+                                         {% endif %}
+                                         </span></a></h4>         
+                                     </div>
+                                     <div class="vc_tta-panel-body">
+                                         <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                             <div class="wpb_wrapper">
+                                         
+                                                 <div class="tg-wrap">
+                                                     <table class="tg" style="width: 100%;">
+                                                         <tr>
+                                                            
+                                                             <th class="tg-654s">MATIERE </th>
+                                                             <th class="tg-654s">VOLUME HORAIRE</th>
+                                                             <th class="tg-654s">COEFFICIENT</th>
+                                                             <th class="tg-654s">ENSEIGNANTS </th>
+                                                             <th class="tg-654s">CONTACT ENSEIGNATS </th>
+                                                             <th class="tg-654s">VOLUME HORAIRE</th>
+                                                             <th class="tg-654s">VOLUME EFFECTUE</th>
+                                                             <th class="tg-654s">SYLLABUS</th>
+                                                             <th class="tg-654s">SUPPORT DE COURS</th>
+                                                             <th class="tg-654s">NOTES</th>
+                                                             <th class="tg-654s">CAHIER DE TEXTE</th>
+                                                             <th class="tg-654s">TERMINE</th>
+                                                             
+                                                         </tr>
+                                                                 {% for matiere in maquette.matiere_2 %}
+                                                                     <tr>
+                                                                         <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                         <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
+                                                                         <td class="tg-gpzw">{{matiere.coefficient}}</td>
+                                                                         <td class="tg-gpzw">{{matiere.unite.credit}}</td>
+                                                                         {% for programmation in classe.programmations %}
+                                                                {% if programmation.matiere.id == matiere.id %}
+                                                                                                                                        
+                                                                    <td class="tg-zkk0">{{programmation.enseignant}}</td>
+                                                                    <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
+                                                                    <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
+                                                                    <td class="tg-gpzw">{{programmation.progression}}</td>
+                                                                
+                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
+                                                                        {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
+                                                                    </td>
+                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.support_depose %}green{% else %}red{% endif %}">
+                                                                        {% if programmation.support_depose %}OUI{% else %}NON{% endif %}
+                                                                    </td>
+                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.notes %}green{% else %}red{% endif %}">
+                                                                        {% if programmation.notes %}OUI{% else %}NON{% endif %}
+                                                                    </td>
+                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.cahier_de_texte %}green{% else %}red{% endif %}">
+                                                                        {% if programmation.cahier_de_texte %}OUI{% else %}NON{% endif %}
+                                                                    </td>
+                                                                    <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
+                                                                        {% if programmation.closed %}OUI{% else %}NON{% endif %}
+                                                                    </td>
+                                                                    
+                                                                    
+                                                                {% endif %}
+                                                                    
+                                                                {% endfor %}
+                                                                     </tr>
+                                                                 {% endfor %}
+                                                         <tr>
+                                                             <td class="tg-7ye7" colspan=""><span style="font-weight:700">TOTAL
+                                                                     SEMESTRE</span></td>
+                                                             <td class="tg-z4m1" colspan="4">{{maquette.credit_1}}</td>
+                                                         </tr>
+                                                     </table>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+            
+                                 </div>
+                             <!-- FIN SMESTRE 2 -->
+
+                             
+                             {% if maquette.etablissement.is_college %}
+
+                             <br>
+                             <!--SMESTRE 2 -->
+                             <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184" data-vc-content=".vc_tta-panel-body">
+                                
+                                 <div class="vc_tta-panel-heading">
+                                     <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
+                                        {% if maquette.etablissement.is_college %}
+                                        TRIMESTRE 3
+                                        {% else %}
+                                        SEMESTRE 3
+                                     {% endif %}
+                                     </span></a></h4>         
+                                 </div>
+                                 <div class="vc_tta-panel-body">
+                                     <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                         <div class="wpb_wrapper">
+                                     
+                                             <div class="tg-wrap">
+                                                 <table class="tg" style="width: 100%;">
+                                                     <tr>
+                                                        
+                                                         <th class="tg-654s">MATIERE </th>
+                                                         <th class="tg-654s">VOLUME HORAIRE</th>
+                                                         <th class="tg-654s">COEFFICIENT</th>
+                                                         <th class="tg-654s">ENSEIGNANTS </th>
+                                                         <th class="tg-654s">CONTACT ENSEIGNATS </th>
+                                                         <th class="tg-654s">VOLUME HORAIRE</th>
+                                                         <th class="tg-654s">VOLUME EFFECTUE</th>
+                                                         <th class="tg-654s">SYLLABUS</th>
+                                                         <th class="tg-654s">SUPPORT DE COURS</th>
+                                                         <th class="tg-654s">NOTES</th>
+                                                         <th class="tg-654s">CAHIER DE TEXTE</th>
+                                                         <th class="tg-654s">TERMINE</th>
+                                                         
+                                                     </tr>
+                                                             {% for matiere in maquette.matiere_3 %}
+                                                                 <tr>
+                                                                     <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                     <td class="tg-zkk0">{{matiere.volume_horaire}}</td>
+                                                                     <td class="tg-gpzw">{{matiere.coefficient}}</td>
+                                                                     <td class="tg-gpzw">{{matiere.unite.credit}}</td>
+                                                                     {% for programmation in classe.programmations %}
+                                                            {% if programmation.matiere.id == matiere.id %}
+                                                                                                                                    
+                                                                <td class="tg-zkk0">{{programmation.enseignant}}</td>
+                                                                <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
+                                                                <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
+                                                                <td class="tg-gpzw">{{programmation.progression}}</td>
+                                                            
+                                                                <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
+                                                                    {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
+                                                                </td>
+                                                                <td class="tg-gpzw" style="background-color: {% if programmation.support_depose %}green{% else %}red{% endif %}">
+                                                                    {% if programmation.support_depose %}OUI{% else %}NON{% endif %}
+                                                                </td>
+                                                                <td class="tg-gpzw" style="background-color: {% if programmation.notes %}green{% else %}red{% endif %}">
+                                                                    {% if programmation.notes %}OUI{% else %}NON{% endif %}
+                                                                </td>
+                                                                <td class="tg-gpzw" style="background-color: {% if programmation.cahier_de_texte %}green{% else %}red{% endif %}">
+                                                                    {% if programmation.cahier_de_texte %}OUI{% else %}NON{% endif %}
+                                                                </td>
+                                                                <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
+                                                                    {% if programmation.closed %}OUI{% else %}NON{% endif %}
+                                                                </td>
+                                                                
+                                                                
+                                                            {% endif %}
+                                                                
+                                                            {% endfor %}
+                                                                 </tr>
+                                                             {% endfor %}
+                                                     <tr>
+                                                         <td class="tg-7ye7" colspan=""><span style="font-weight:700">TOTAL
+                                                                 SEMESTRE</span></td>
+                                                         <td class="tg-z4m1" colspan="4">{{maquette.credit_3}}</td>
+                                                     </tr>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+        
+                             </div>
+                         <!-- FIN SMESTRE 2 -->
+                                
+                             {% endif %}
+                                
+                                        
+                                       {% endif %}
+                                        
+            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-programmed-justified" role="tabpanel" aria-labelledby="pills-programmed-tab-justified">
+                        
+                        <div class="container-fluid">
+                            <div class="col-md-12">
+                                <div class="invoice-footer-btn">
+                                    <a style="float:right" href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                               <center>
+                                <h3>Contrats & Enseignants</h3>
+                               </center>
+                                <br>
+                                <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184" data-vc-content=".vc_tta-panel-body">
+                                    <div class="vc_tta-panel-body">
+                                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                            <div class="wpb_wrapper">
+                                        
+                                                <div class="tg-wrap">
+                                                    <table class="tg" style="width: 100%;">
+                                                        <tr>
+                                                           
+                                                            <th class="tg-654s">MATIERE </th>
+                                                            <th class="tg-654s">SEMESTRE </th>
+                                                            <th class="tg-654s">ENSEIGNANTS </th>
+                                                            <th class="tg-654s">CONTACT ENSEIGNATS </th>
+                                                            <th class="tg-654s">VOLUME HORAIRE</th>
+                                                            <th class="tg-654s">VOLUME EFFECTUE</th>
+                                                            <th class="tg-654s">SYLLABUS</th>
+                                                            <th class="tg-654s">SUPPORT DE COURS</th>
+                                                            <th class="tg-654s">NOTES</th>
+                                                            <th class="tg-654s">CAHIER DE TEXTE</th>
+                                                            <th class="tg-654s">TERMINE</th>
+                                                            
+                                                        </tr>
+                                                                {% for programmation in classe.programmations %}
+                                                                    <tr>
+                                                                        <td class="tg-zkk0"><span style="font-weight:bold">{{programmation.matiere | upper  }}</span></td>
+                                                                        <td class="tg-zkk0">{{programmation.matiere.unite.semestre}}</td>
+                                                                        <td class="tg-zkk0">{{programmation.enseignant}}</td>
+                                                                        <td class="tg-zkk0">+225{{programmation.enseignant.contact}}</td>
+                                                                        <td class="tg-gpzw">{{programmation.volume_horaire}}</td>
+                                                                        <td class="tg-gpzw">{{programmation.progression}}</td>
+                                                                      
+
+                                                                        <td class="tg-gpzw" style="background-color: {% if programmation.syllabus_depose %}green{% else %}red{% endif %}">
+                                                                            {% if programmation.syllabus_depose %}OUI{% else %}NON{% endif %}
+                                                                        </td>
+                                                                        <td class="tg-gpzw" style="background-color: {% if programmation.support_depose %}green{% else %}red{% endif %}">
+                                                                            {% if programmation.support_depose %}OUI{% else %}NON{% endif %}
+                                                                        </td>
+                                                                        <td class="tg-gpzw" style="background-color: {% if programmation.notes %}green{% else %}red{% endif %}">
+                                                                            {% if programmation.notes %}OUI{% else %}NON{% endif %}
+                                                                        </td>
+                                                                        <td class="tg-gpzw" style="background-color: {% if programmation.cahier_de_texte %}green{% else %}red{% endif %}">
+                                                                            {% if programmation.cahier_de_texte %}OUI{% else %}NON{% endif %}
+                                                                        </td>
+                                                                        <td class="tg-gpzw" style="background-color: {% if programmation.closed %}green{% else %}red{% endif %}">
+                                                                            {% if programmation.closed %}OUI{% else %}NON{% endif %}
+                                                                        </td>
+                                                                        
+                                                                    </tr>
+                                                                {% endfor %}
+                                                        
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+           
+                                </div>
+                        </div>
+                    </div>
+
+                  
+                    <div class="tab-pane fade" id="pills-home-justified" role="tabpanel" aria-labelledby="pills-home-tab-justified">
+                        
+                       
+                       {% if emplois_du_temps %}
+
+                       {% if user.can_update_time %}
+                       <div class="btn-group btn-group-sm" style="float: right;">
+                           <button type="button" onclick="window.location.href='{% url 'emploisdutemps_detail' emploisdutemps_id=emplois_du_temps.pk edit=1 %}'" class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"><span class="ti-pencil"></span> MODIFIER  </button>
+                       </div>
+                       <br>
+                       {% endif %}
+                        
+                       {% endif %}
+                        
+                            
+                        
+                        <div class="container-fluid">
+                            <br>
+                            <div class="col-md-12">
+                                <div class="invoice-footer-btn">
+                                    <a style="float:right" href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                               <center>
+                                <h3>EMPLOIS DU TEMPS {{classe.filiere}} {{classe.niveau}}</h3>
+                               </center>
+                                <br>
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center">
+                                    <thead>
+                                        <tr class="bg-light-gray">
+                                            <th class="text-uppercase">LUNDI</th>
+                                            <th class="text-uppercase">MARDI</th>
+                                            <th class="text-uppercase">MERCREDI</th>
+                                            <th class="text-uppercase">JEUDI</th>
+                                            <th class="text-uppercase">VENDREDI</th>
+                                            <th class="text-uppercase">SAMEDI</th>
+                                            <th class="text-uppercase">DIMANCHE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for jour in jours_semaine %}
+                                                <td>
+                                                    {% for programme in programmes %}
+                                                        {% if programme.jour == jour %}
+                                                            <div>
+                                                                <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">{{ programme.matiere }}</span>
+                                                                <div class="margin-10px-top font-size14">{{ programme.debut }}-{{ programme.fin }}</div>
+                                                                <div class="font-size13 text-light-gray">{{ programme.enseignant }}</div>
+                                                                <div class="font-size13 text-light-gray" style="color:black">{{ programme.salle }}</div>
+                                                            </div>
+                                                            <hr class="dark-hr">
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-profile-justified" role="tabpanel" aria-labelledby="pills-profile-tab-justified">
+                        <div class="container-fluid">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Nom & prénoms</th>
+                                                <th>E-mail</th>
+                                                <th>Contact</th>
+                                                <th>Contact Parent</th>
+                                                <th>Inscrit le</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for etudiant in etudiants %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ etudiant.etudiant }}</td>
+                                                <td>{{ etudiant.etudiant.utilisateur.email }}</td>
+                                                <td>+225{{ etudiant.etudiant.contact }}</td>
+                                                <td>+225{{ etudiant.etudiant.contactparent }}</td>
+                                                <td>{{ etudiant.created }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                               
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="pills-evaluations-justified" role="tabpanel" aria-labelledby="pills-evaluations-tab-justified">
+                        <div class="container-fluid">
+                            <table id="datatable-buttons-2" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>MATIERE</th>
+                                        <th>ENSEIGNANT</th>
+                                        <th>SEMESTRE</th>
+                                        <th>NOTE 1</th>
+                                        <th>NOTE 2</th>
+                                        <th>NOTE 3</th>
+                                        <th>NOTE PARTIEL</th>
+                                        <th>PARTIEL UNIQUEMENT</th>
+                                        <th>Inscris le</th>
+                                        <th>Actions</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for evaluation in evaluations %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{evaluation.matiere.matiere.nom}}</td>
+                                        <td>{{evaluation.matiere.enseignant}}</td>
+                                        <td>{{evaluation.matiere.matiere.unite.semestre}}</td>
+                                        {% if  evaluation.use_note_1 %}
+                                            <td>OUI</td>
+                                        {% else %}
+                                        <td>NON</td>
+                                        {% endif %}
+
+                                        {% if  evaluation.use_note_1 %}
+                                            <td>OUI</td>
+                                        {% else %}
+                                        <td>NON</td>
+                                        {% endif %}
+
+                                        {% if  evaluation.use_note_2 %}
+                                            <td>OUI</td>
+                                        {% else %}
+                                        <td>NON</td>
+                                        {% endif %}
+
+                                        {% if  evaluation.use_note_3 %}
+                                            <td>OUI</td>
+                                        {% else %}
+                                        <td>NON</td>
+                                        {% endif %}
+
+                                        {% if  evaluation.partiel_uniquement %}
+                                            <td>OUI</td>
+                                        {% else %}
+                                        <td>NON</td>
+                                        {% endif %}
+                                        <td>{{evaluation.created}}</td>
+                                        <td style="white-space: nowrap; width: 15%;">
+                                            <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
+                                            <div class="btn-group btn-group-sm" style="float: none;">
+                                               
+                                                <button type="button" onclick="window.location.href='{{evaluation.url}}'" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span></button>
+                                            </div>
+                                            
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-resultats-justified" role="tabpanel" aria-labelledby="pills-resultats-tab-justified">
+                       <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6">
+                            <div class="card text-white bg-primary m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">BULLETINS SEMESTRE 1 {{classe}}</h1>
+                                    
+                                    <a  href="{% url 'bulletins_semestre_1_cbv' pk=classe.pk %}" target="_blank" class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6">
+                            <div class="card text-white bg-secondary m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">BULLETINS SEMESTRE 2 {{classe}}</h1>
+                                    
+                                    <a href="{% url 'bulletins_semestre_2_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        {% if classe.annee_academique.etablissement.is_college %}
+
+                        <div class="col-md-12 col-lg-12 col-xl-12">
+                            <div class="card text-white bg-secondary m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">BULLETINS SEMESTRE 3 {{classe}}</h1>
+                                    
+                                    <a href="{% url 'bulletins_semestre_3_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        {% endif %}
+                            
+
+                        <div class="col-md-12 col-lg-12 col-xl-6">
+                            <div class="card text-white bg-info m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">PV SEMESTRE 1 {{classe}}</h1>
+                                    
+                                    <a href="{% url 'pv_semestre_1_cbv' pk=classe.pk %}"   target="_blank"  class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 col-lg-12 col-xl-6">
+                            <div class="card text-white bg-dark m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">PV SEMESTRE 2 {{classe}}</h1>
+                                    
+                                    <a href="{% url 'pv_semestre_2_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-lg-12 col-xl-12">
+                            <div class="card text-white bg-green m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">PV ANNUEL  {{classe}}</h1>
+                                    
+                                    <a href="{% url 'pv_annuel_cbv' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-lg-12 col-xl-12">
+                            <div class="card text-white bg-green m-b-30">
+                                <div class="card-body">
+                                    <h1 class="card-title text-white font-18">STATISTIQUES</h1>
+                                    <a href="{% url 'classes_details_results' pk=classe.pk %}"  target="_blank" class="btn btn-white text-primary">CONSULTER</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock page %}
+    

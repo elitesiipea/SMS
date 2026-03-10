@@ -1,0 +1,290 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        
+        {% if titre %}
+            {{titre}}
+        {% else %}
+        SMS
+        {% endif %}
+            
+    </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="{% if student_print %}{% else %}width=device-width{% endif %}">
+    
+    
+    {% if student_print %}
+    <style>
+        body {
+        margin: 0;
+        padding: 0;
+       
+        justify-content: center;
+        align-items: center;
+       
+        background-color: #f0f0f0; /* Couleur de fond (facultatif) */
+      }
+    </style>
+    {% endif %}
+        
+    
+        
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'etudiant/assets/images/favicon.png' %}">
+    <!-- CSS
+	============================================ -->
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/remixicon.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/magnifypopup.min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/odometer.min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/lightbox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/animation.min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/jqueru-ui-min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/vendor/tipped.min.css' %}">
+
+    <!-- Site Stylesheet -->
+    <link rel="stylesheet" href="{% static 'etudiant/assets/css/app.css' %}">
+    <style>
+        @media print {
+            #to_print {
+                width: 210mm; /* A4 width */
+                height: 297mm; /* A4 height */
+                padding: 20px;
+            }
+        }
+    </style>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HWPKFYEWD0"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+          dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-HWPKFYEWD0');
+  </script>
+</head>
+
+<body class="sticky-header centrer">
+    <!--[if lte IE 9]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  	<![endif]-->
+    <div id="main-wrapper" class="main-wrapper">
+        <!--=====================================-->
+        <!--=       Features Area Start      =-->
+        <!--=====================================-->
+        <!-- Start Categories Area  -->
+        
+        {% if shared %}
+
+        <div class="features-area-2" >
+            <div class="container" >
+                <div class="features-grid-wrap">
+                    <div class="features-box features-style-2 edublink-svg-animate">
+                        <div class="icon">
+                            <img class="svgInject" src="{{resume.etudiant.etablissement.logo.url}}" alt="animated icon">
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                  <center>
+                    <h2 style="color: white;">
+                        {{resume.etudiant.etablissement | upper }}
+                    </h2>
+                  </center>
+                </div>
+            </div>
+           
+        </div>
+        <br>
+    
+        {% else %}
+
+     
+        <br>
+       
+       {% if not home %}
+       
+       {% if hide %}
+
+       {% else %}
+       <a style="float:right; margin-right:50px" href="{% url 'student_home' %}" class="edu-btn btn-medium">Retour</a>
+        
+       {% endif %}
+        
+       {% endif %}
+        <div class="container">
+            
+            
+            {% if s_messages %}
+            <marquee style="color:white; background-color:#165288">
+                {% for message in s_messages  %}
+                
+                 | <b style="color:#d3990a;">{{message.titre | upper }}</b> :   {{message.message}} | 
+               
+                {% endfor %}
+                </marquee>
+            {% endif %}
+                
+           
+            
+
+        </div>
+            
+        {% endif %}
+            
+        
+        <!-- End Categories Area  -->
+        <!--=====================================-->
+        <!--=       Categories Area Start      =-->
+        <!--=====================================-->
+        <!-- Start Categories Area  -->
+        <div class="edu-categorie-area categorie-area-2 edu-section-gap">
+            {% if messages %}
+            <br>
+            {% for message in messages %}
+                <div class="container alert {% if message.tags %}{{ message.tags }}{% endif %}" id="myAlert" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %} 
+        {% endif %}
+           {% block content %}
+          
+           {% endblock content %}
+        </div>
+            <!-- Start Footer Area  -->
+        <footer class="edu-footer footer-lighten bg-image footer-style-1">
+            </div>
+            <div class="copyright-area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer Area  -->
+
+
+    </div>
+
+    <div class="rn-progress-parent">
+        <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+
+
+    <!-- JS
+	============================================ -->
+    <!-- Modernizer JS -->
+    <script src="{% static 'etudiant/assets/js/vendor/modernizr.min.js' %}"></script>
+    <!-- Jquery Js -->
+    <script src="{% static 'etudiant/assets/js/vendor/jquery.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/bootstrap.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/sal.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/backtotop.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/magnifypopup.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/odometer.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/isotop.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/imageloaded.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/lightbox.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/paralax.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/paralax-scroll.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/svg-inject.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/vivus.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/tipped.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/smooth-scroll.min.js' %}"></script>
+    <script src="{% static 'etudiant/assets/js/vendor/isInViewport.jquery.min.js' %}"></script>
+
+    <!-- Site Scripts -->
+    <script src="{% static 'etudiant/assets/js/app.js' %}"></script>
+    
+    
+    {% if student_print %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" 
+            integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" 
+            crossorigin="anonymous" 
+            referrerpolicy="no-referrer">
+    </script>
+
+<script>
+    async function printDiv() {
+        window.jsPDF = window.jspdf.jsPDF;
+        const divToPrint = document.getElementById('to_print');
+        const loader = document.getElementById('loader');
+
+        // Show the loader
+        loader.style.display = 'block';
+
+        // Wait for 1 second to allow images to load (adjust the delay as needed)
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        html2canvas(divToPrint, { useCORS: true }).then((canvas) => {
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
+            pdf.save('{{titre}}.pdf');
+
+            // Hide the loader when the process is complete
+            loader.style.display = 'none';
+        });
+    }
+</script>
+        
+
+{% if form %}
+
+<script>
+    // Function to hide the alert
+    function hideAlert() {
+        var alertElement = document.getElementById('myAlerted');
+        if (alertElement) {
+            alertElement.style.display = 'none';
+        }
+    }
+
+    // Set a timeout to call the hideAlert function after 5 seconds (5000 milliseconds)
+    setTimeout(hideAlert, 5000);
+</script>
+    
+{% endif %}
+    
+    {% endif %}
+        
+
+    
+    {% if can_select_annee %}
+    <script>
+        document.getElementById('annee_id').addEventListener('change', function() {
+            // Get the selected value
+            const selectedAnnee = this.value;
+            // Update the URL with the selected value
+            const currentURL = new URL(window.location.href);
+            currentURL.searchParams.set('annee_id', selectedAnnee);
+            // Redirect to the new URL with the selected value
+            window.location.href = currentURL.href;
+        });
+    </script>
+    {% endif %}
+    
+        
+</body>
+
+</html>

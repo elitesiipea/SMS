@@ -1,0 +1,382 @@
+{% load static %}
+
+    <!-- Start js -->        
+    <script src="{% static 'administration/assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'administration/assets/js/popper.min.js' %}"></script>
+    <script src="{% static 'administration/assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'administration/assets/js/modernizr.min.js' %}"></script>
+    <script src="{% static 'administration/assets/js/detect.js' %}"></script>
+    <script src="{% static 'administration/assets/js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'administration/assets/js/vertical-menu.js' %}"></script>
+    <!-- Switchery js -->
+    <script src="{% static 'administration/assets/plugins/switchery/switchery.min.js' %}"></script>
+   
+   {% if chart %}
+     <!-- Apex js -->
+     <script src="{% static 'administration/assets/plugins/apexcharts/apexcharts.min.js' %}"></script>
+     <script src="{% static 'administration/assets/plugins/apexcharts/irregular-data-series.js' %}"></script>  
+     <script type="text/javascript">
+        /*
+----------------------------------------------
+    : Custom - Dashboard CRM js :
+----------------------------------------------
+*/
+"use strict";
+$(document).ready(function() {    
+    /* -----  Apex Area Chart ----- */
+    var options = {
+        chart: {
+            height: 238,
+            type: 'area',
+            toolbar: {
+                show: false
+            },
+            zoom: {
+              type: 'x',
+              enabled: false,
+              autoScaleYaxis: true
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'straight',
+        },
+        colors: ['#0080ff'],
+        series: [{
+            name: 'Percentage',
+            data: [{% for annee in annees_academiques  %}{{annee.etudiants}},{% endfor %}]
+        }],
+        legend: {
+            show: false,
+        },
+        xaxis: {
+            type: 'datetime',
+            categories: {{ '[' }}{% for annee in annees_academiques %}"{{ annee.fin }}"{% if not forloop.last %},{% endif %}{% endfor %}{{ ']'}},
+            axisBorder: {
+                show: true, 
+                color: 'rgba(0,0,0,0.05)'
+            },
+            axisTicks: {
+                show: true, 
+                color: 'rgba(0,0,0,0.05)'
+            }
+        },
+        grid: {
+            row: {
+                colors: ['transparent', 'transparent'], opacity: .2
+            },
+            borderColor: 'rgba(0,0,0,0.05)'
+        },
+        tooltip: {
+            x: {
+                format: 'dd/MM/yy HH:mm'
+            },
+        }
+    }
+    var chart = new ApexCharts(
+        document.querySelector("#apex-area-chart"),
+        options
+    );
+    chart.render();
+    
+    /* -- Course Slider -- */
+    $('.course-slider').slick({
+        arrows: true,
+        dots: false,
+        infinite: true,
+        adaptiveHeight: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        prevArrow: '<i class="feather icon-arrow-left"></i>',
+        nextArrow: '<i class="feather icon-arrow-right"></i>'
+    });
+
+    /* -- Parents Slider -- */
+    $('.parents-slider').slick({
+        arrows: true,
+        dots: false,
+        infinite: true,
+        adaptiveHeight: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        prevArrow: '<i class="feather icon-arrow-left"></i>',
+        nextArrow: '<i class="feather icon-arrow-right"></i>'
+    });
+});
+     </script>
+   {% endif %}
+      
+    <!-- Slick js -->
+    <script src="{% static 'administration/assets/plugins/slick/slick.min.js' %}"></script>
+    <!-- Core js -->
+    <script src="{% static 'administration/assets/js/core.js' %}"></script>
+    <!-- Custom Dashboard js -->   
+
+    <script src="{% static 'administration/assets/plugins/datepicker/datepicker.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datepicker/i18n/datepicker.en.js' %}"></script>
+    <script src="{% static 'administration/assets/js/custom/custom-form-datepicker.js' %}"></script>
+ 
+
+    
+    {% if datatable %}
+
+    <script src="{% static 'administration/assets/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/jszip.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/pdfmake.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/vfs_fonts.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/buttons.print.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/buttons.colVis.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'administration/assets/plugins/datatables/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'administration/assets/js/custom/custom-table-datatable.js' %}"></script>
+        
+    {% endif %}
+
+
+    <script>
+        // Function to hide the alert
+        function hideAlert() {
+            var alertElement = document.getElementById('myAlert');
+            if (alertElement) {
+                alertElement.style.display = 'none';
+            }
+        }
+    
+        // Set a timeout to call the hideAlert function after 5 seconds (5000 milliseconds)
+        setTimeout(hideAlert, 5000);
+    </script>
+
+
+    
+    {% if can_select_annee %}
+    <script>
+        document.getElementById('annee_id').addEventListener('change', function() {
+            // Get the selected value
+            const selectedAnnee = this.value;
+            // Update the URL with the selected value
+            const currentURL = new URL(window.location.href);
+            currentURL.searchParams.set('annee_id', selectedAnnee);
+            // Redirect to the new URL with the selected value
+            window.location.href = currentURL.href;
+        });
+    </script>
+    {% endif %}
+        
+    
+    {% if search_matiere_classe %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contratForm');
+            const matiereField = form.querySelector('#id_matiere');
+            const classeField = form.querySelector('#id_classe');
+    
+            // Fonction pour charger les matières et les classes
+            function loadMatiereClasse() {
+                const annee_academique = form.querySelector('#id_annee_academique').value;
+                const filiere = form.querySelector('#id_filiere').value;
+                const niveau = form.querySelector('#id_niveau').value;
+    
+                // Vérifier si les champs requis ont une valeur
+                if (annee_academique && filiere && niveau) {
+                    // Requête AJAX pour récupérer les matières et les classes
+                    fetch(`{% url 'get_matiere_classe' %}?annee_academique=${annee_academique}&filiere=${filiere}&niveau=${niveau}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Vérifier si les champs "matiere" et "classe" sont vides avant de les remplir
+                            if (!matiereField.value) {
+                                matiereField.innerHTML = '';
+                                data.matiere.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.textContent = item.nom_matiere;
+                                    option.value = item.id;
+                                    matiereField.appendChild(option);
+                                });
+                            }
+    
+                            if (!classeField.value) {
+                                classeField.innerHTML = '';
+                                data.classe.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.textContent = item.nom_classe;
+                                    option.value = item.id;
+                                    classeField.appendChild(option);
+                                });
+                            }
+                        })
+                        .catch(error => console.error('Erreur:', error));
+                }
+            }
+    
+            // Lorsque les champs annee_academique, filiere ou niveau changent
+            form.addEventListener('change', function(event) {
+                if (event.target.matches('#id_annee_academique, #id_filiere, #id_niveau')) {
+                    loadMatiereClasse();
+                }
+            });
+    
+            // Charger les matières et les classes pour la première fois
+            loadMatiereClasse();
+        });
+    </script>
+    
+        
+    {% endif %}
+
+    {% url 'delete_programme' programme_id=0 as delete_programme_url %}
+    <script>
+    function confirmDelete(programmeId) {
+        if (confirm('Souhaiter vous vraiment supprimer ce programme ?')) {
+            var url = "{% url 'delete_programme' programme_id=12345678 %}".replace("12345678", programmeId);
+            window.location.href = url;
+        }
+    }
+    </script>
+
+
+
+{% if contrat_validated %}
+
+<script>
+    $(document).ready(function() {
+        $('.open-popup').click(function() {
+            var enseignantCode = $(this).data('enseignant-code');
+            var contratPk = $(this).data('contrat-pk');
+            
+            // Populate modal with information using AJAX
+        $.ajax({
+            type: 'GET',
+            url: '{% url "get_contrat_info" %}',  // Replace with your URL to fetch contract info
+            data: {
+                'contrat_pk': contratPk,
+            },
+            success: function(response) {
+                $('#enseignant').text(response.enseignant);
+                $('#matiere').text(response.matiere);
+                $('#filiere').text(response.filiere);
+                $('#niveau').text(response.niveau);
+                $('#classe').text(response.classe);
+                $('#montant').text(response.montant);
+                $('#code').text(response.code);
+                $('#contrat_id').val(response.contrat_id);
+                // ... and so on for other fields
+                
+                // Open the modal
+                $('#validationModal').modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+            $('#validationModal').modal('show');
+        });
+    });
+    </script>
+    
+    
+{% endif %}
+
+
+
+
+
+{% if remise_kits %}
+
+<script>
+    $(document).ready(function() {
+        $('.open-popup').click(function() {
+            
+            var scolaritePk = $(this).data('scolarite-pk');
+            
+            // Populate modal with information using AJAX
+        $.ajax({
+            type: 'GET',
+            url: '{% url "get_scolarite_info" %}',  // Replace with your URL to fetch contract info
+            data: {
+                'scolarite_pk': scolaritePk,
+            },
+            success: function(response) {
+                $('#code').text(response.code);
+                $('#filiere').text(response.filiere);
+                $('#niveau').text(response.niveau);
+                $('#classe').text(response.classe);
+                $('#frais').text(response.frais);
+                $('#paye').text(response.paye);
+                $('#etudiant').text(response.etudiant);
+                $('#scolarite_id').val(response.scolarite_id);
+                $('#photo').attr('src', response.photo);
+                // ... and so on for other fields
+                
+                // Open the modal
+                $('#validationModal').modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+            $('#validationModal').modal('show');
+        });
+    });
+    </script>
+    
+    
+{% endif %}
+
+
+{% if update_medicale %}
+
+
+{% if dossier %}
+
+<script>
+    $(document).ready(function () {
+        $('#validationModal form').on('submit', function (event) {
+            event.preventDefault();  // Empêche le formulaire de soumettre de manière classique
+            
+            var form = $(this);
+            $.ajax({
+                url: '{% url 'dossier_update' pk=dossier.pk %}',
+                method: form.attr('method'),
+                data: form.serialize(),
+                success: function (data) {
+                    $('#validationModal').modal('hide');  // Ferme le modal après la soumission
+                    // Affiche la notification pop-up
+                    alert("Info enregistrée avec succès!");
+                    var currentUrl = window.location.href;
+                    window.location.href = currentUrl;
+                },
+                error: function (data) {
+                    alert(data.errors);
+                }
+            });
+        });
+    });
+</script>
+    
+{% endif %}
+    
+    
+{% endif %}
+    
+
+{% if read_only %}
+<script>
+    // Désactiver les éléments avec la classe "form-control select"
+    document.addEventListener("DOMContentLoaded", function() {
+        const elements = document.querySelectorAll(".form-control.select");
+        elements.forEach(element => {
+            element.setAttribute("readonly", true);
+        });
+    });
+</script>
+{% endif %}
+    
+
+</body>
+
+</html>

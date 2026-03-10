@@ -1,0 +1,113 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <div class="container-fluid"> <!-- Utilisation de container-fluid pour pleine largeur -->
+            <!-- Card pour afficher la liste des fournisseurs -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Bouton Ajouter Fournisseur -->
+                    <button style="float:right" type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addFournisseurModal">
+                        Ajouter un fournisseur
+                    </button>
+
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+
+                    <!-- Table des fournisseurs -->
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Produits</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fournisseur in fournisseurs %}
+                                <tr>
+                                    <td>{{ fournisseur.nom }}</td>
+                                    <td>{{ fournisseur.email }}</td>
+                                    <td>{{ fournisseur.contact }}</td>
+                                    <td>
+                                        {% for produit in fournisseur.produits.all %}
+                                            {{ produit.nom }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <!-- Bouton Editer -->
+                                        <a type="button" class="btn btn-warning btn-sm" href="{% url 'edit_fournisseur' fournisseur.pk  %}">
+                                            Éditer
+                                        </a>
+                                        
+                                        <!-- Bouton Supprimer -->
+                                        <a href="{% url 'delete_fournisseur' fournisseur.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Ajouter Fournisseur -->
+            <div class="modal fade" id="addFournisseurModal" tabindex="-1" aria-labelledby="addFournisseurModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form method="POST" action="{% url 'add_fournisseur' %}">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajouter un fournisseur</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form.as_p }} <!-- Affiche le formulaire pour ajouter un fournisseur -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Ajouter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modals Editer Fournisseur (pour chaque fournisseur) -->
+            {% for fournisseur in fournisseurs %}
+            <div class="modal fade" id="editFournisseurModal-{{ fournisseur.id }}" tabindex="-1" aria-labelledby="editFournisseurModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form method="POST" action="{% url 'edit_fournisseur' fournisseur.id %}">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Éditer le fournisseur : {{ fournisseur.nom }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form.as_p }} <!-- Utilisez ici le formulaire d'édition avec les valeurs par défaut -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock page %}

@@ -1,0 +1,106 @@
+{% load humanize %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{session}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+    crossorigin="anonymous">
+    <link href="https://fonts.cdnfonts.com/css/berlin-sans-fb" rel="stylesheet">
+        
+</head>
+
+<style>
+    .gras{
+        font-weight:bold !important ;
+        font-size:20px
+    }
+
+    .gras-2{
+        font-weight:bold !important ;
+        font-size:25px
+    }
+</style>
+
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+
+  <body>
+   
+    <ul>
+        {% for attestation in attestations %}
+                <div class="" style="margin-top:230px">
+                    
+                    <p class="gras text-center"  style="font-weight:bold;font-size:18px">
+                        <br>
+                        <b style="font-size:22px;font-weight:bold;">
+                           N° {{attestation.code | upper }} 
+                        </b>
+                     </p>
+                    <div class="">
+                
+                <center>
+                  <h3>
+                    
+                    {% if attestation.cycle == "UNIVERSITAIRE" %}Le Président {% elif attestation.cycle == "PROFESSIONNEL" %}Le Directeur Général {% endif %} de l’Institut International Polytechnique des Elites d’Abidjan (IIPEA), <br> certifie que le Diplôme de : <br>
+                      
+                  </h3>
+                
+                    <h3>
+                       <b>{{attestation.diplome | upper }}</b>
+                    </h3>
+                   
+                    
+                        <h5>
+                            est délivré au titre de l'année académique <b style="" class="gras">{{attestation.annee_academique}}</b> à :
+                        </h5> 
+                        <h3 style="margin-top:10px">
+                        M. Mme. Mlle <b style=""  class="">{{attestation.nom }} {{attestation.prenom }}</b> , Né(e) le <b style="" class="gras">{{attestation.date_de_naissance |date:'d/m/Y' }}</b> à <b style="" class="gras">{{attestation.lieu_de_naissance }}</b><br>
+                        </h3>
+                      
+                        <h5>
+                            Conformément au procès verbal en date du <b style="" class="gras">{{attestation.programme}}</b> établit par le jury de délibération.
+                        </h5>
+                   
+                </center>
+
+              
+                <div class="row" style="text-align:right;margin-top:15px">
+                    <div class="col-12" style="margin-left:-150px;">
+                       
+                        <p style="font-weight: bold;font-size: 19px">
+                            Fait à Abidjan le .........................<br>
+                            <br>
+                            {% if attestation.cycle == "UNIVERSITAIRE" %}
+                            <b>Le Président&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b><br>
+                            {% elif attestation.cycle == "PROFESSIONNEL" %}
+                            <b>Le Directeur Général&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b><br></p>
+                            {% endif %}
+                        </p>
+                        <br>
+                        <br>
+                        <br>
+                       
+                       
+                      
+                        <p style="font-weight: bold;font-size: 19px">
+                            <b>Dr KONE Ismaël  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                        </p>
+                      
+                    </div>
+                </div>
+           <p style="page-break-before: always;"></p>
+            </div>
+        {% endfor %}
+    </ul>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>

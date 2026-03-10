@@ -1,0 +1,701 @@
+
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% load humanize %}
+
+
+{% block page %}
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg .tg-teh8 {
+        background-color: #f3eec1;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-6zfp {
+        font-weight: bold;
+        background-color: #8db4e3;
+        color: #000000;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-6dzw {
+        background-color: #d2dae2;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-654s {
+        font-weight: bold;
+        background-color: #8800c9;
+        color: #ffffff;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-qsz9 {
+        background-color: #f3eec1;
+        color: #000000;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-l660 {
+        background-color: #d2dae2;
+        color: #000000;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-dj9i {
+        background-color: #8800c9;
+        color: #ffffff;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-fzvx {
+        background-color: #31b267;
+        color: #ffffff;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-zkk0 {
+        background-color: #f3eec1;
+        color: #000000;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-gpzw {
+        font-weight: bold;
+        background-color: #8db4e3;
+        color: #000000;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-i31f {
+        background-color: #8db4e3;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-7ye7 {
+        background-color: #31b267;
+        color: #ffffff;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-z4m1 {
+        font-weight: bold;
+        background-color: #31b267;
+        color: #ffffff;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    @media screen and (max-width: 767px) {
+        .tg {
+            width: auto !important;
+        }
+
+        .tg col {
+            width: auto !important;
+        }
+
+        .tg-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+</style>
+
+<style>
+    .bg-light-gray {
+    background-color: #f7f7f7;
+}
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}   
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+
+.bg-sky.box-shadow {
+    box-shadow: 0px 5px 0px 0px #00a2a7
+}
+
+.bg-orange.box-shadow {
+    box-shadow: 0px 5px 0px 0px #af4305
+}
+
+.bg-green.box-shadow {
+    box-shadow: 0px 5px 0px 0px #4ca520
+}
+
+.bg-yellow.box-shadow {
+    box-shadow: 0px 5px 0px 0px #dcbf02
+}
+
+.bg-pink.box-shadow {
+    box-shadow: 0px 5px 0px 0px #e82d8b
+}
+
+.bg-purple.box-shadow {
+    box-shadow: 0px 5px 0px 0px #8343e8
+}
+
+.bg-lightred.box-shadow {
+    box-shadow: 0px 5px 0px 0px #d84213
+}
+
+
+.bg-sky {
+    background-color: #02c2c7
+}
+
+.bg-orange {
+    background-color: #e95601
+}
+
+.bg-green {
+    background-color: #5bbd2a
+}
+
+.bg-yellow {
+    background-color: #f0d001
+}
+
+.bg-pink {
+    background-color: #ff48a4
+}
+
+.bg-purple {
+    background-color: #9d60ff
+}
+
+.bg-lightred {
+    background-color: #ff5722
+}
+
+.padding-15px-lr {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.padding-5px-tb {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.margin-10px-bottom {
+    margin-bottom: 10px;
+}
+.border-radius-5 {
+    border-radius: 5px;
+}
+
+.margin-10px-top {
+    margin-top: 10px;
+}
+.font-size14 {
+    font-size: 14px;
+}
+
+.text-light-gray {
+    color: #d6d5d5;
+}
+.font-size13 {
+    font-size: 13px;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
+</style>
+
+<style>
+    .dark-hr {
+        background-color: #333; /* Couleur foncée */
+        height: 2px; /* Hauteur de la ligne */
+    }
+</style>
+<!-- Start Contentbar -->    
+<div class="contentbar">   
+                 
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+       <div class="col-12">
+        <button type="button" style="float:right;margin-left:20px" class="tabledit-save-button btn btn-sm btn-info open-popup" data-toggle="modal" data-target="#validationModal"><span class="ti-plus"></span>  NOUVELLE MATIERE</button>
+        <button type="button" style="float:right" class="tabledit-save-button btn btn-sm btn-primary open-popup" data-toggle="modal" data-target="#validationModalUnite"><span class="ti-plus"></span>  NOUVELLE UNITE D'ENSEIGNEMENT</button>
+        
+        {% if user.overloader %}
+                 
+        <button type="button" onclick="window.location.href='{% url 'maquette_matiere_update' maquette.pk %}'" class="tabledit-save-button btn btn-sm btn-warning" style="float: none; margin: 5px;"><span class="ti-pencil"></span>  Modifier</button>
+
+        {% endif %}
+           </div> 
+       
+        <div class="col-lg-12">
+            <br>  
+            <div class="tab-content" id="pills-tab-justifiedContent">
+                <div class="tab-pane fade active show" id="pills-contact-justified" role="tabpanel" aria-labelledby="pills-contact-tab-justified">
+                    <div class="col-md-12">
+                        <div class="invoice-footer-btn">
+                            <a style="float:right" href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                        </div>
+                    </div>
+                    <br>
+                    <!--debut Maquette-->
+                    <div class="vc_tta-container" data-vc-action="collapse">
+                        <br>
+                           <center>
+                            <h3>MAQUETTE PEDAGOGIQUE {{maquette.filiere}} {{maquette.niveau}}</h3>
+                           </center>
+                            <br>
+                        <div class="vc_general vc_tta vc_tta-tabs vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-spacing-1 vc_tta-tabs-position-top vc_tta-controls-align-left">
+                           
+                            <div class="vc_tta-panels-container">
+                                <div class="vc_tta-panels">
+                                    
+                                   
+        
+                                    <!--SMESTRE 1 -->
+                                    <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
+                                        data-vc-content=".vc_tta-panel-body">
+                                        <div class="vc_tta-panel-heading">
+                                            <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
+                                                
+                                                
+                                                {% if maquette.etablissement.is_college %}
+                                                    TRIMESTRE 1
+                                                {% else %}
+                                                SEMESTRE 1
+                                                {% endif %}
+                                                    
+                                            </span></a></h4>         
+                                        </div>
+                                        <br>
+                                        <div class="vc_tta-panel-body">
+                                            <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                                <div class="wpb_wrapper">
+                                            
+                                                    <div class="tg-wrap">
+                                                        <table class="tg" style="width: 100%;">
+                                                            <tr>
+                                                                <th class="tg-654s">UNITE ENSEIGNEMENT</th>
+                                                                <th class="tg-654s">MATIERE (ECUE) </th>
+                                                                <th class="tg-654s">VOLUME HORAIRE CM</th>
+                                                                <th class="tg-654s">TAUX HORAIRE CM</th>
+                                                                <th class="tg-654s">COUT CM</th>
+                                                                
+                                                                {% if maquette.maquette_universitaire %}
+                                                                <th class="tg-654s">VOLUME HORAIRE TD </th>
+                                                                <th class="tg-654s">TAUX HORAIRE</th>
+                                                                <th class="tg-654s">COUT TD</th>
+                                                                {% endif %}
+                                                                    
+                                                                <th class="tg-654s">CREDIT</th>
+                                                                <th class="tg-654s">CREDIT UE</th>
+                                                                <th class="tg-654s">ENSEIGNANT</th>
+                                                               
+                                                            </tr>
+                                                                    {% for matiere in maquette.matiere_1 %}
+                                                                        <tr>
+                                                                            
+                                                                            <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
+                                                                            <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                            <td class="tg-zkk0" style="text-align:center">{{matiere.volume_horaire}}</td>
+                                                                            <td class="tg-zkk0" style="text-align:center">{{matiere.taux_horaire}}</td>
+                                                                            <td class="tg-zkk0" style="text-align:center">{{matiere.cout | intcomma }}</td>
+                                                                            {% if maquette.maquette_universitaire %}
+                                                                            <td class="tg-zkk0" style="text-align:center">{{matiere.volume_horaire_td}}</td>
+                                                                            <td class="tg-zkk0" style="text-align:center">{{matiere.taux_horaire_td}}</td>
+                                                                            <td class="tg-zkk0" style="text-align:center">{{matiere.cout_td | intcomma }}</td>
+                                                                            {% endif %}
+                                                                            <td class="tg-gpzw" style="text-align:center">{{matiere.coefficient}}</td>
+                                                                            <td class="tg-gpzw" style="text-align:center">{{matiere.unite.credit}}</td>
+                                                                            <td class="tg-gpzw" style="text-align:center">
+                                                                                {% if matiere.enseignant %}
+
+                                                                                {{matiere.enseignant}}
+        
+                                                                                {% else %}
+                                                                                ---
+                                                                                    
+                                                                                {% endif %}
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                            <tr>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">TOTAL</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">{{ maquette.volumeS1 }}</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.coutS1 | intcomma }}</span></td>
+                                                                {% if maquette.maquette_universitaire %}
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">{{ maquette.volumeS1_td }}</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.coutS1_td | intcomma }}</span></td>
+                                                                {% endif %}
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.credit_1 }} / {{ maquette.credit_1 }}</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.credit_1 }}</span></td>
+                                                                <td class="tg-7ye7" colspan=""><span style="font-weight:700">---</span></td>
+                                                               
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                    </div>
+                                       <!--FIN SEMESTRE 1 -->
+                                    <br>
+
+                                     <!--SMESTRE 2 -->
+                                     <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
+                                     data-vc-content=".vc_tta-panel-body">
+                                     <div class="vc_tta-panel-heading">
+                                         <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
+                                             
+                                             
+                                             {% if maquette.etablissement.is_college %}
+                                                 TRIMESTRE 2
+                                             {% else %}
+                                             SEMESTRE 2
+                                             {% endif %}
+                                                 
+                                         </span></a></h4>         
+                                     </div>
+                                     <br>
+                                     <div class="vc_tta-panel-body">
+                                         <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                             <div class="wpb_wrapper">
+                                         
+                                                <div class="tg-wrap">
+                                                    <table class="tg" style="width: 100%;">
+                                                        <tr>
+                                                            <th class="tg-654s">UNITE ENSEIGNEMENT</th>
+                                                            <th class="tg-654s">MATIERE (ECUE) </th>
+                                                            <th class="tg-654s">VOLUME HORAIRE</th>
+                                                            <th class="tg-654s">TAUX HORAIRE</th>
+                                                            <th class="tg-654s">COUT</th>
+                                                            
+                                                            {% if maquette.maquette_universitaire %}
+                                                            <th class="tg-654s">TAUX HORAIRE TD </th>
+                                                            <th class="tg-654s">COUT TD</th>
+                                                            <th class="tg-654s">COUT TD</th>
+                                                            {% endif %}
+                                                                
+                                                            <th class="tg-654s">CREDIT</th>
+                                                            <th class="tg-654s">CREDIT UE</th>
+                                                            <th class="tg-654s">ENSEIGNANT</th>
+                                                           
+                                                        </tr>
+                                                                {% for matiere in maquette.matiere_2 %}
+                                                                    <tr>
+                                                                        
+                                                                        <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
+                                                                        <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                        <td class="tg-zkk0" style="text-align:center">{{matiere.volume_horaire}}</td>
+                                                                        <td class="tg-zkk0" style="text-align:center">{{matiere.taux_horaire}}</td>
+                                                                        <td class="tg-zkk0" style="text-align:center">{{matiere.cout | intcomma }}</td>
+                                                                        {% if maquette.maquette_universitaire %}
+                                                                        <td class="tg-zkk0" style="text-align:center">{{matiere.volume_horaire_td}}</td>
+                                                                        <td class="tg-zkk0" style="text-align:center">{{matiere.taux_horaire_td}}</td>
+                                                                        <td class="tg-zkk0" style="text-align:center">{{matiere.cout_td | intcomma }}</td>
+                                                                        {% endif %}
+                                                                        <td class="tg-gpzw" style="text-align:center">{{matiere.coefficient}}</td>
+                                                                        <td class="tg-gpzw" style="text-align:center">{{matiere.unite.credit}}</td>
+                                                                        <td class="tg-gpzw" style="text-align:center">
+                                                                            {% if matiere.enseignant %}
+
+                                                                            {{matiere.enseignant}}
+    
+                                                                            {% else %}
+                                                                            ---
+                                                                                
+                                                                            {% endif %}
+                                                                        </td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                        <tr>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">TOTAL</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">{{ maquette.volumeS2 }}</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.coutS2 | intcomma }}</span></td>
+                                                            {% if maquette.maquette_universitaire %}
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">{{ maquette.volumeS2_td }}</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.coutS2_td | intcomma }}</span></td>
+                                                            {% endif %}
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.credit_2 }} / {{ maquette.credit_2 }}</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.credit_2 }}</span></td>
+                                                            <td class="tg-7ye7" colspan=""><span style="font-weight:700">---</span></td>
+                                                           
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                             </div>
+                                         </div>
+                                     </div>
+     
+                                 </div>
+                                    <!--FIN SEMESTRE 2 -->
+                                 <br>
+
+                                
+                                 
+                                 {% if maquette.etablissement.is_college %}
+
+                                   <!--SMESTRE 3 -->
+                                   <div class="vc_tta-panel vc_active" id="1538448303275-ab753a9d-e184"
+                                   data-vc-content=".vc_tta-panel-body">
+                                   <div class="vc_tta-panel-heading">
+                                       <h4 class="vc_tta-panel-title"><a href="#1538448303275-ab753a9d-e184" data-vc-accordiondata-vc-container=".vc_tta-container"><span class="vc_tta-title-text">
+                                           
+                                           
+                                           {% if maquette.etablissement.is_college %}
+                                               TRIMESTRE 3
+                                           {% else %}
+                                           SEMESTRE 3
+                                           {% endif %}
+                                               
+                                       </span></a></h4>         
+                                   </div>
+                                   <br>
+                                   <div class="vc_tta-panel-body">
+                                       <div class="wpb_raw_code wpb_content_element wpb_raw_html">
+                                           <div class="wpb_wrapper">
+                                       
+                                            <div class="tg-wrap">
+                                                <table class="tg" style="width: 100%;">
+                                                    <tr>
+                                                        <th class="tg-654s">UNITE ENSEIGNEMENT</th>
+                                                        <th class="tg-654s">MATIERE (ECUE) </th>
+                                                        <th class="tg-654s">VOLUME HORAIRE</th>
+                                                        <th class="tg-654s">TAUX HORAIRE</th>
+                                                        <th class="tg-654s">COUT</th>
+                                                        <th class="tg-654s">CREDIT</th>
+                                                        <th class="tg-654s">CREDIT UE</th>
+                                                        <th class="tg-654s">ENSEIGNANT</th>
+                                                       
+                                                    </tr>
+                                                            {% for matiere in maquette.matiere_3 %}
+                                                                <tr>
+                                                                    
+                                                                    <td class="tg-l660"><span style="font-weight:700">  {{matiere.unite.nom | upper  }}</span></td>
+                                                                    <td class="tg-zkk0"><span style="font-weight:bold">{{matiere.nom | upper  }}</span></td>
+                                                                    <td class="tg-zkk0" style="text-align:center">{{matiere.volume_horaire}}</td>
+                                                                    <td class="tg-zkk0" style="text-align:center">{{matiere.taux_horaire}}</td>
+                                                                    <td class="tg-zkk0" style="text-align:center">{{matiere.cout | intcomma }}</td>
+                                                                    <td class="tg-gpzw" style="text-align:center">{{matiere.coefficient}}</td>
+                                                                    <td class="tg-gpzw" style="text-align:center">{{matiere.unite.credit}}</td>
+                                                                    <td class="tg-gpzw" style="text-align:center">
+                                                                        
+                                                                        {% if matiere.enseignant %}
+
+                                                                        {{matiere.enseignant}}
+
+                                                                        {% else %}
+                                                                        ---
+                                                                            
+                                                                        {% endif %}
+                                                                            
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                    <tr>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">TOTAL</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">{{ maquette.volumeS3 }}</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700;text-align:center">---</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.coutS3 | intcomma }}</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.credit_3 }} / {{ maquette.credit_3 }}</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700">{{ maquette.credit_3 }}</span></td>
+                                                        <td class="tg-7ye7" colspan=""><span style="font-weight:700">---</span></td>
+                                                       
+                                                    </tr>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+ 
+                                           </div>
+                                       </div>
+                                   </div>
+   
+                               </div>
+                                  <!--FIN SEMESTRE 3 -->
+                               <br>
+                                    
+                                 {% endif %}
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+
+
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="validationModalLabel">Nouvelle Matière</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- ... and so on for other fields ... -->
+                <form method="post" id="UniteForm">
+                    {% csrf_token %}
+                   
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for field in matiere_form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }} :</label>
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" id="confirmValidation" style="float: right;" >Enregistrer</button>
+                </form>
+      
+    </form>
+
+    <script>
+      
+    </script>
+            
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <button type="button"  style="float: left;" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="validationModalUnite" tabindex="-1" role="dialog" aria-labelledby="validationModalUniteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="validationModalUniteLabel">Nouvelle Unité Pégadogique</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- ... and so on for other fields ... -->
+                <form method="post" id="UniteForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="{{ unite_form.nom.id_for_label }}">Nom :</label>
+                            {{ unite_form.nom }}
+                        </div>
+                        <div class="col-md-12">
+                            <label for="{{ unite_form.semestre.id_for_label }}">Semestre :</label>
+                            {{ unite_form.semestre }}
+                        </div>
+                        <div class="col-md-12">
+                            <label for="{{ unite_form.categorie.id_for_label }}">Catégorie :</label>
+                            {{ unite_form.categorie }}
+                        </div>
+                        <!-- Ajoutez d'autres champs de formulaire ici -->
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" id="confirmValidation" style="float: right;" >Enregistrer</button>
+                </form>
+      
+    </form>
+
+    <script>
+      
+    </script>
+            
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <button type="button"  style="float: left;" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+    
+{% endblock page %}
+    

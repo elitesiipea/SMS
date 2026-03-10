@@ -1,0 +1,322 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->    
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- End col -->
+        
+        {% if dossier %}
+
+        {% else %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <form method="get" class="form">
+                      
+                        <div class="form-group">
+                            <label for="code_paiement">Code d'identification de l'étudiant :</label>
+                            <div class="input-group">
+                                <input style="border: 2px solid black" type="text" id="code_paiement" name="code_paiement" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Chercher le dossier</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+            
+        {% endif %}
+            
+
+        {% if dossier %}
+
+        <div class="col-lg-12">
+            
+            <div class="card m-b-30">
+                       
+                <div class="card-body">
+                   
+                    <div class="invoice">
+                        <button type="button" style="float: right;"  onclick="window.location.href='{% url 'consultation_create' pk=dossier.pk code=dossier.etudiant.code_paiement  consultation_id=None %}'" class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"><span class="ti-eye"></span> NOUVELLE CONSULTATION</button>
+                 <br>
+                        <div class="invoice-billing">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                    <div class="invoice-address">
+                                        <h4 class="mb-3">I-IDENTITE</h4>
+                                        <h6 class="text-muted">Nom : {{dossier.etudiant.nom }}</h6>
+                                        <ul class="list-unstyled">
+                                            <li>Prénom(s) : {{dossier.etudiant.prenom}}</li> 
+                                            <li>Status : {{dossier.etudiant.type_etudiant}}</li>  
+                                            <li>Etablissement d'origine : {{dossier.etudiant.etablissement_d_origine}}</li> 
+                                            <li>Date Naissance : {{dossier.etudiant.date_de_naissance}}</li> 
+                                            <li>Lieu Naissance : {{dossier.etudiant.lieu_de_naissance}}</li> 
+                                            <li>Matricule Mers : {{dossier.etudiant.matricule_mers}}</li> 
+                                            <li>Numéro de Table Bac : {{dossier.etudiant.numero_table_bac}}</li> 
+                                           
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                    <div class="invoice-address">
+                                        <ul class="list-unstyled">
+                                            <li>Nationalité : {{dossier.etudiant.nationalite.name }}</li> 
+                                            <li>Matricule : {{dossier.etudiant.matricule}}</li> 
+                                            <li>Lieu de Residence : {{dossier.etudiant.lieu_de_residence}}</li> 
+                                            <li>Sexe : {{dossier.etudiant.sexe}}</li> 
+                                            <li>Serie du Bac : {{dossier.etudiant.serie_bac}}</li> 
+                                            <li>Contact : {{dossier.etudiant.contact}}</li> 
+                                            <li>Contact Parent : {{dossier.etudiant.contactparent}}</li> 
+                                            <br>
+                                            <li>Code Unique de paiement : <b><p class="mb-3"><span class="badge badge-info-inverse font-14">{{dossier.etudiant.code_paiement}}</span></p></b> </li>    
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4">
+                                    <div class="invoice-address">
+                                        <div class="card">
+                                            <div class="card-body bg-info-rgba text-center">
+                                               {% if dossier.etudiant.photo.url %}
+                                               <img style="border-radius: 100%;" height="200px" src="{{dossier.etudiant.photo.url}}" alt="{{etudiant}}">
+                                                {% else %}
+                                                <p class="mb-3"><span class="badge badge-info-inverse font-14">Aucune Photo Ajoutéé</span></p>
+                                               {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>                                 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+
+        
+        <div class="col-lg-12">
+           
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <button type="button" style="float:right" class="tabledit-save-button btn btn-sm btn-primary open-popup" data-toggle="modal" data-target="#validationModal" data-enseignant-code="{{ contrat.enseignant.code }}" data-contrat-pk="{{ contrat.pk }}"><span class="ti-pencil"></span>  METTRE A JOUR LES INFORMTIONS</button>
+                        
+                    <div class="row justify-content-center">
+                       <div class="col-12">
+                           
+                                <section id="to_refresh">
+                                    <h4>II- ANTECEDENTS</h4>
+
+                                    <div class="col-lg-12">
+                                        <div class="card m-b-30">
+                                            <div class="card-body">
+                                                <div class="invoice">
+                                                    <h4>1. Personnels</h4>
+                                                    <div class="invoice-billing">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="invoice-address">
+                                                                    <ul class="list-unstyled">
+                                                                        <li>HTA: {% if dossier.hta %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Diabète: {% if dossier.diabete %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Asthme: {% if dossier.asthme %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Drépanocytose: {% if dossier.drepanocytose %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Ulcère: {% if dossier.ulcere %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Épilepsie: {% if dossier.epilepsie %}OUI{% else %}Non{% endif %}</li> 
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="invoice-address">
+                                                                    <ul class="list-unstyled">
+                                                                        <li>Tabac: {% if dossier.tabac %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Alcool: {% if dossier.alcool %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Stupéfiants: {% if dossier.stupefiant %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Date de création: {{ dossier.created }}</li>
+                                                                        <li>Dernière mise à jour: {{ dossier.date_update }}</li>
+                                                                       </ul>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                       
+                                                    </div>    
+                                                    
+                                                    <h4>2. Familiaux</h4>
+                                                    <div class="invoice-billing">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="invoice-address">
+                                                                   
+                                                                    <h4>a. Père</h4>
+                                                                    <ul class="list-unstyled">
+                                                                        <li>Père HTA: {% if dossier.pere_hta %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Père Diabète: {% if dossier.pere_diabete %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Père Asthme: {% if dossier.pere_asthme %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Père Drépanocytose: {% if dossier.pere_drepanocytose %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Père Ulcère: {% if dossier.pere_ulcere %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Père Épilepsie: {% if dossier.pere_epilepsie %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Père Autres antécédents: {{ dossier.pere_autre_antecedents }}</li>
+                                                                       
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="invoice-address">
+                                                                    <h4>b. Mère</h4>
+                                                                    <ul class="list-unstyled">
+                                                                        <li>Mère HTA: {% if dossier.mere_hta %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Mère Diabète: {% if dossier.mere_diabete %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Mère Asthme: {% if dossier.mere_asthme %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Mère Drépanocytose: {% if dossier.mere_drepanocytose %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Mère Ulcère: {% if dossier.mere_ulcere %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Mère Épilepsie: {% if dossier.mere_epilepsie %}OUI{% else %}Non{% endif %}</li>
+                                                                        <li>Mère Autres antécédents: {{ dossier.mere_autre_antecedents }}</li>
+                                                                       </ul>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                </section>
+                        </div>  
+                    </div>                             
+                </div>
+
+            </div>
+        </div>  
+
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                           
+                                <section>
+                                    <h4>III- Historique des consultations</h4>
+
+                                    <div class="col-lg-12">
+                                        <div class="card m-b-30">
+                
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                                                <div class="table-responsive">
+                                                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                                                        <thead>
+                                                        <tr>
+                            
+                                                            
+                                                            <th>ID</th>
+                                                            <th>MEDECIN</th>
+                                                            <th>ANNEE ACADEMIQUE</th>
+                                                            <th>DATE</th>
+                                                            <th>MOTIF</th>
+                                                            <th>PROCHAIN RENDEZ-VOUS</th>
+                                                            <th>ACTIONS</th>
+                                                          
+                                                        
+                                                        </tr>
+                                                        </thead>
+                                                        
+                                                        <tbody>
+                                                       
+                                                        {% for consultation in dossier.consultations  %}
+                                                            <th>{{forloop.counter}}</th>
+                                                            <th>{{consultation.medecin | upper }}</th>
+                                                            <th>{{consultation.annee_academique | upper }}</th>
+                                                            <th>{{consultation.created  }}</th>
+                                                            <th>{{consultation.motif_de_la_consultation  }}</th>
+                                                            <th>{{consultation.rendez_vous  }}</th>
+                                                            
+                                                            <th>
+                                                                <button type="button" onclick="window.location.href='{% url 'consultation_details' pk=consultation.pk dossier=consultation.dossier.pk code=consultation.dossier.etudiant.code_paiement  %}'" class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"><span class="ti-eye"></span> VOIR LE RESUME</button>
+                                                                
+                                                                {% if consultation.medecin == request.user %}
+                                                                <button  onclick="window.location.href='{% url 'consultation_create'  pk=dossier.pk code=dossier.etudiant.code_paiement consultation_id=consultation.id %}'" type="button" onclick="" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-pencil"></span> METTRE A JOUR</button>
+                                                                {% endif %}
+                                                                    
+                                                            </th> 
+                                                        </tr>
+                                                            
+                                                        {% endfor %}
+                                                            
+                                                      
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                </section>
+                        </div>  
+                    </div>                             
+                </div>
+
+            </div>
+        </div> 
+    </div>  
+        {% endif %}
+            
+    </div> 
+    <!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+        
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="validationModalLabel">Dossier Médicale {{dossier}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- ... and so on for other fields ... -->
+                <form method="post">
+                    {% csrf_token %}
+                    {% for fieldset in form.as_fieldsets %}
+                    <fieldset>
+                        <legend>{{ fieldset.name }}</legend>
+                        <div class="row">
+                            {% for field in fieldset.fields %}
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                                
+                            {% endfor %}
+                            
+                        </div>
+                    </fieldset>
+                    <hr>
+                {% endfor %}
+                    <button type="submit" class="btn btn-primary" id="confirmValidation" style="float: right;">Valider</button>
+                </form>
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <button type="button"  style="float: left;" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page %}

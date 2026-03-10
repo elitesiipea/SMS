@@ -1,0 +1,209 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+                <!-- End row -->
+                <div class="row justify-content-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="invoice">
+                                    <div class="invoice-head">
+                                        <div class="row">
+                                            <div class="col-12 col-md-7 col-lg-7">
+                                                <div class="invoice-logo">
+                                                    <h3>{{user.etablissement}}</h3>
+                                                </div>
+                                                <h4>secretariat@iipea.com</h4>
+                                                <p>+225 07 08 08 87 87 / 07 00 24 36 88</p>
+                                                <p class="mb-0"></p>
+                                            </div>
+                                            <div class="col-12 col-md-5 col-lg-5">
+                                                <div class="invoice-name">
+                                                    <span class="badge badge-info-inverse font-14"><h3>{{consultation.dossier.etudiant.code_paiement}}</h3></span>
+                                                    <br>
+                                                    <br>
+                                                    <p class="mb-0">Inscrit depuis le : {{consultation.dossier.etudiant.created}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="invoice-billing">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="invoice-address">
+                                                    <h4 class="mb-3">Information de base</h4>
+                                                    <h6 class="text-muted">Nom : {{consultation.dossier.etudiant.nom }}</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li>Prénom(s) : {{consultation.dossier.etudiant.prenom}}</li> 
+                                                        <li>Status : {{consultation.dossier.etudiant.type_etudiant}}</li>  
+                                                        <li>Etablissement d'origine : {{consultation.dossier.etudiant.etablissement_d_origine}}</li> 
+                                                        
+                                                       
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="invoice-address">
+                                                    <ul class="list-unstyled">
+                                                        <li>Date Naissance : {{consultation.dossier.etudiant.date_de_naissance}}</li> 
+                                                        <li>Lieu Naissance : {{consultation.dossier.etudiant.lieu_de_naissance}}</li> 
+                                                        <li>Matricule Mers : {{consultation.dossier.etudiant.matricule_mers}}</li> 
+                                                        <li>Numéro de Table Bac : {{consultation.dossier.etudiant.numero_table_bac}}</li> 
+                                                      </ul>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <h4 class="mb-3">Rapport de consultation</h4>
+                                        <h4 class="mb-3">Médecin : {{consultation.medecin | upper }}</h4>
+                                    </div>  
+                                   
+                                    <div class="invoice-summary">
+                                        <div class="row justify-content-center">
+                                            <div class="col-12">
+                                                <consultation method="post">
+                                                   <div class="row">
+                                                    <div class="col-12">
+                                                        <hr>
+                                                        <h5>1- Motif de la consultation </h5>
+                                                        {{ consultation.motif_de_la_consultation.label_tag }} {{ consultation.motif_de_la_consultation }}
+                                                    </div>
+                                                    <br>
+                                                    <div class="col-12">
+                                                        <hr>
+                                                        <h5>2- Historique de la maladie </h5>
+                                                        {{ consultation.histoire_de_la_mamdie.label_tag }} {{ consultation.histoire_de_la_mamdie }}
+                                                    </div>
+                                                  
+                                                    <div class="col-12">
+                                                        <hr>
+                                                        <h5>3- Constantes</h5>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                
+                                                                {% if consultation.poids %}
+
+                                                                Poids :  <b>{{ consultation.poids }} Kg </b> <br>
+                                                                    
+                                                                {% endif %}
+                                                                    
+                                                                    TA :  <b>{{ consultation.TA }} Mmhg </b> <br>
+                                                                    Pouls :  <b>{{ consultation.pouls }} Bpm</b>  <br>
+                                                                    Température : <b> {{ consultation.Temperature }} °C</b> <br>
+                                                                    
+                                                            </div>
+                                                            <div class="col-6">
+                                                                
+                                                                FR :  <b>{{ consultation.FR }} Cpm</b><br>
+                                                                SOA2 :  <b>{{ consultation.Sao2 }} %</b> <br>
+                                                                GLASGOW :  <b>{{ consultation.Glasgow }}</b> <br>
+                                                            </div>
+                                                        </div>
+                                                   </div>
+                                                   <div class="col-12">
+                                                    <hr>
+                                                    <h5>4- Examens Physique</h5>
+                                                        {{ consultation.examen_physique.label_tag }} {{ consultation.examen_physique }}
+                                                    </div>
+                                                    <hr>
+                                                    <div class="col-12">
+                                                        <hr>
+                                                        <h4>CONCLUSION</h4>
+                                                        <hr>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <h5>Hypotheses diagnostiques </h5>
+                                                            {{ consultation.hypotheses_diagnostic }}
+                                                        </div>
+                                                            <div class="col-6">
+                                                               <h5> Examens paracliniques</h5>
+                                                                {{ consultation.examens_paracliniques }}
+                                                        </div>
+                                                            
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            <h5>Diagnostic retenu</h5>
+                                                            {{ consultation.diagnostic_retenu }}
+                                                        </div>
+                                                        <div class="col-4">
+                                                               <h5> Traitement</h5>
+                                                               {{ consultation.traitement }}
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <h5> Evolution</h5>
+                                                            {{ consultation.evolution }}
+                                                        </div>
+                                                            
+                                                    </div>
+                                                    <hr>
+                                                    {% if consultation.rendez_vous %}
+                                                    <h4>PROCHAIN RENDEZ VOUS</h4>
+                                                   <div class="row">
+                                                            <div class="col">
+                                                                
+                                                               
+                                                                    
+                                                               
+                                                                    
+                                                                Procahin Rendez-vous prévu pour le  <b>{{ consultation.rendez_vous }}</b>
+                                                            </div>
+                                                    </div>
+                                                    <hr>
+                                                    {% endif %}
+                                                    <h4>ARRET MALADIE</h4>
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            Le patient bénéficie d'un arrêt maladie :  
+                                                            {% if consultation.arret_de_travail  %}<b>OUI</b>{% else %}<b>NON</b>{% endif %}       
+                                                    </div>
+                                                     
+                                                     {% if consultation.arret_de_travail %}
+                                                     <div class="col-3">
+                                                        Date Début arret maladie :  <b>{{ consultation.debut_arret_travail }}</b>
+                                                     </div>
+                                                     <div class="col-3">
+                                                        Date fin arret maladie :  <b>{{ consultation.fin_arret_travail }}</b>
+                                                     </div>
+                                                     {% endif %}
+                                                        
+                                                   </div>
+                                                  <hr>
+                                                </div> 
+                                            </div>  
+                                        </div>  
+                                    </div>
+                        
+                                    <div class="invoice-footer">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                                <p class="mb-0">L'Institut International Polytechnique des Elites d'Abidjan vous remercie </p><p id="currentDate"></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="invoice-footer-btn">
+                                                    <a href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+    

@@ -1,0 +1,61 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->    
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- End col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                      
+                                    <h4>1- INFORMATIONS DE BASE</h4>
+
+                             <br>
+                                        <h4>
+                                            Filiere : {{contrat.classe.filiere}}
+                                        </h4>
+                                        <h4>
+                                            Niveau : {{contrat.classe.niveau}}
+                                        </h4>
+                                        <h4>
+                                            Classe : {{contrat.classe}}
+                                        </h4>
+                                        <h4>
+                                            Enseignant : {{contrat.enseignant | upper }}
+                                        </h4>
+                                        <br>   
+                                   
+                                        <form method="post" class="move-students-form">
+                                            {% csrf_token %}
+                                            
+                                          
+                                        
+                                            <div class="form-group" >
+                                                <label for="num_to_migrate">Nombre d'heures du TD</label>
+                                                <input style="border:2px solid black" type="heure" required name="heure" id="heure" class="form-control" min="1">
+                                            </div>
+                                            <div class="form-group" >
+                                                <label for="num_to_migrate">Taux Horaire du Td</label>
+                                                <input style="border:2px solid black" type="taux" required name="taux" id="taux" class="form-control" min="1">
+                                            </div>
+                                        
+                                            <div class="form-group">
+                                                <button class="btn btn-success" type="submit">Creer le TD</button>
+                                            </div>
+                                        </form>             
+                </div>
+            </div>
+        </div>  
+    </div> 
+    <!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+        
+{% endblock page %}
+    

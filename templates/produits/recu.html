@@ -1,0 +1,126 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<style>
+    @media print {
+      .tohide {
+        display: none;
+      }
+    }
+
+    
+    </style>
+    <style>
+        /* Styles par défaut pour l'affichage à l'écran */
+        .alert-dossier {
+            background-color: #ff4c4c;
+            color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .alert-icon {
+            margin-right: 10px;
+        }
+        .alert-text {
+            flex: 1;
+        }
+
+        /* Styles pour l'impression */
+        @media print {
+            .alert {
+                background-color: #ff4c4c; /* Couleur de fond rouge */
+                color: white; /* Couleur du texte blanc */
+                padding: 15px; /* Espacement */
+                margin: 20px 0; /* Marge */
+                border-radius: 5px; /* Coins arrondis */
+                display: flex; /* Flexbox */
+                align-items: center; /* Alignement */
+                font-family: Arial, sans-serif; /* Police */
+            }
+            .alert-icon {
+                margin-right: 10px; /* Marge à droite de l'icône */
+            }
+            .alert-text {
+                flex: 1; /* Prend tout l'espace disponible */
+            }
+
+            /* Masquer d'autres éléments si nécessaire */
+            body {
+                -webkit-print-color-adjust: exact; /* Forcer l'impression des couleurs */
+                print-color-adjust: exact; /* Pour les autres navigateurs */
+            }
+        }
+    </style>
+    <!-- Start Contentbar -->
+    <div class="contentbar">
+                <!-- End row -->
+                <div class="row justify-content-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                           <div class="container-fluid">
+                           
+                           </div>
+                            
+                            <div class="card-body">
+                                <div class="invoice">
+                                    <div class="invoice-head">
+                                        <div class="row">
+                                            <div class="col-12 col-md-7 col-lg-7">
+                                                <div class="invoice-logo">
+                                                    <h3>{{user.etablissement}}</h3>
+                                                </div>
+                                                <h4>secretariat@iipea.com</h4>
+                                                <p>+225 07 08 08 87 87 / 07 00 24 36 88</p>
+                                                <p class="mb-0"></p>
+                                            </div>
+                                           
+                                        </div>
+                                    </div> 
+                                    <br>
+                                    <div class="contentbar">
+                                        <h2>Reçu d'Opération</h2>
+                                        <hr>
+                                            <h3><strong>Produit:</strong> {{ operation.produit.nom }}</h3>
+                                            <h3><strong>Type:</strong> {{ operation.get_type_operation_display }}</h3>
+                                            <h3><strong>Quantité:</strong> {{ operation.quantite }}</h3>
+                                            <h3><strong>Description:</strong> {{ operation.description }}</h3>
+                                            <h3><strong>Date:</strong> {{ operation.date_operation }}</h3>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <div class="invoice-footer">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6">
+                                                        <p class="mb-0">L'Institut International Polytechnique des Elites d'Abidjan vous remercie </p><p id="currentDate"></p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="invoice-footer-btn">
+                                                           
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                            <button onclick="window.print()" class="btn btn-secondary">Imprimer</button>
+                                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+
+    

@@ -1,0 +1,91 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<!-- jQuery -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+
+        <div class="container-fluid">
+            <div class="contentbar">
+                <div class="container-fluid">
+                    <h2 class="mb-4">Créer une Commande</h2>
+            
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Informations sur la Commande</h5>
+                                {{ form }}
+            
+                                <h5>Produits Commandés</h5>
+                                <hr>
+                                {{ formset.management_form }}
+                                <div class="formset">
+                                    <div class="row">
+                                        {% for form in formset %}
+                                            <div class="col-md-6">  <!-- Two columns for each row -->
+                                                <div class="form-group">
+                                                    <label for="{{ form.produit.id_for_label }}">Produit</label>
+                                                    {{ form.produit }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">  <!-- Two columns for each row -->
+                                                <div class="form-group">
+                                                    <label for="{{ form.quantite.id_for_label }}">Quantité</label>
+                                                    {{ form.quantite }}
+                                                </div>
+                                            </div>
+                                            {% if forloop.counter|divisibleby:2 %}
+                                                </div><div class="row">  <!-- Close the row after every two forms -->
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <hr>
+            
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" style="float:right" class="btn btn-success" >Créer la Commande</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <script>
+                document.getElementById('add-product').addEventListener('click', function() {
+                    let formsetContainer = document.querySelector('.formset');
+                    let totalForms = document.getElementById('id_form-TOTAL_FORMS');
+                    let currentFormCount = parseInt(totalForms.value);
+            
+                    // Clone the last form
+                    let newForm = formsetContainer.children[currentFormCount - 1].cloneNode(true);
+                    newForm.querySelectorAll('input, select').forEach(function(input) {
+                        input.value = '';
+                        // Update the name attributes
+                        let name = input.name.replace(/-\\d+-/, '-' + currentFormCount + '-');
+                        input.name = name;
+                        input.id = name.replace(/-/g, '_');
+                    });
+            
+                    // Append the new form to the container
+                    formsetContainer.appendChild(newForm);
+                    totalForms.value = currentFormCount + 1; // Update the total forms count
+                });
+            </script>
+            
+           
+    </div>
+</div>
+</div>
+      
+
+
+{% endblock page %}

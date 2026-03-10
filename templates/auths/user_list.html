@@ -1,0 +1,95 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+
+<style>
+    .true-bg {
+        background-color: green;
+        color: white;
+        /* Couleur de fond pour les valeurs True */
+    }
+
+    .false-bg {
+        background-color: red; /* Couleur de fond pour les valeurs False */
+    }
+</style>
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                  
+                                    <th>is_staff</th>
+                                    <th>is_super_admin</th>
+                                    <th>is_medecin</th>
+                                    <th>is_stock</th>
+                                    <th>can_view_stock</th>
+                                    <th>is_active</th>
+                                  
+                                    <th>can_register_student</th>
+                                    <th>can_register_teacher</th>
+                                    <th>can_view_teacher_profile_and_contrat</th>
+                                    <th>can_view_teacher_acccompte</th>
+                                    <th>can_manage_teacher_acccompte</th>
+                                    <th>can_manage_fees</th>
+                                    <th>can_update_fees</th>
+                                    <th>can_add_note</th>
+                                    <th>can_update_time</th>
+                                    <th>can_view_index_summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                     <td class="">{{ forloop.counter }}</td>
+                                     <td class="">{{ user.nom }}</td>
+                                     <td class="">{{ user.prenom }}</td>
+                                     <td class="">{{ user.email }}</td>
+                                
+                                     <td class="{% if user.is_staff %}true-bg{% else %}false-bg{% endif %}">{{ user.is_staff }}</td>
+                                     <td class="{% if user.is_super_admin %}true-bg{% else %}false-bg{% endif %}">{{ user.is_super_admin }}</td>
+                                     <td class="{% if user.is_medecin %}true-bg{% else %}false-bg{% endif %}">{{ user.is_medecin }}</td>
+                                     <td class="{% if user.is_stock %}true-bg{% else %}false-bg{% endif %}">{{ user.is_stock }}</td>
+                                     <td class="{% if user.can_view_stock %}true-bg{% else %}false-bg{% endif %}">{{ user.can_view_stock }}</td>
+                                     <td class="{% if user.is_active %}true-bg{% else %}false-bg{% endif %}">{{ user.is_active }}</td>
+                                    
+                                     <td class="{% if user.can_register_student %}true-bg{% else %}false-bg{% endif %}">{{ user.can_register_student }}</td>
+                                     <td class="{% if user.can_register_teacher %}true-bg{% else %}false-bg{% endif %}">{{ user.can_register_teacher }}</td>
+                                     <td class="{% if user.can_view_teacher_profile_and_contrat %}true-bg{% else %}false-bg{% endif %}">{{ user.can_view_teacher_profile_and_contrat }}</td>
+                                     <td class="{% if user.can_view_teacher_acccompte %}true-bg{% else %}false-bg{% endif %}">{{ user.can_view_teacher_acccompte }}</td>
+                                     <td class="{% if user.can_manage_teacher_acccompte %}true-bg{% else %}false-bg{% endif %}">{{ user.can_manage_teacher_acccompte }}</td>
+                                     <td class="{% if user.can_manage_fees %}true-bg{% else %}false-bg{% endif %}">{{ user.can_manage_fees }}</td>
+                                     <td class="{% if user.can_update_fees %}true-bg{% else %}false-bg{% endif %}">{{ user.can_update_fees }}</td>
+                                     <td class="{% if user.can_add_note %}true-bg{% else %}false-bg{% endif %}">{{ user.can_add_note }}</td>
+                                     <td class="{% if user.can_update_time %}true-bg{% else %}false-bg{% endif %}">{{ user.can_update_time }}</td>
+                                     <td class="{% if user.can_view_index_summary %}true-bg{% else %}false-bg{% endif %}">{{ user.can_view_index_summary }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+{% endblock page %}
+    

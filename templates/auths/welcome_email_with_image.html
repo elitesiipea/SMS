@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bienvenue</title>
+</head>
+<body>
+    <img src="{{ image_url }}" alt="Image d'accueil" width="800px" />
+    <h1>Bienvenue chez , {{ user.etablissement }}</h1>
+    <p>Merci d'avoir rejoint IIPEA. Voici quelques informations sur votre compte :</p>
+    <p>Nom : {{ user.nom }}</p>
+    <p>Prénom : {{ user.prenom }}</p>
+    <p>Email : {{ user.email }}</p>
+    <p>Mot de passe : {{ password }}</p>
+
+    <p>Vous pouvez vous connecter sur notre site en suivant ce lien : <a href="{{ site_url }}">{{ site_url }}</a></p>
+    <p>N'oubliez pas de changer votre mot de passe.</a></p>
+    
+</body>
+</html>

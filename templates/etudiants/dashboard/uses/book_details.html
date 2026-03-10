@@ -1,0 +1,77 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+   
+ <!--=====================================-->
+        <!--=     Courses Details Area Start    =-->
+        <!--=====================================-->
+        <section class="edu-section-gap course-details-area">
+            <div class="container">
+                <div class="row row--30">
+                    <div class="col-lg-8">
+                        <div class="course-details-content">
+                           
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                                    <div class="course-tab-content">
+                                        <div class="course-overview">
+                                            <h3 class="heading-title"> Description du Cours</h3>
+                                            <p>{{livre.description | safe }}</p>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                
+ 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="course-sidebar-3 sidebar-top-position">
+                            <div class="edu-course-widget widget-course-summery">
+                                <div class="inner">
+                                    <div class="thumbnail">
+                                        <img src="{% static 'etudiant/assets/images/course/course-46.jpg' %}" alt="Courses">
+                                        <a href="#" class="play-btn video-popup-activation"><i class="icon-18"></i></a>
+                                    </div>
+                                    <div class="content">
+                                        
+                                        <ul class="course-item">
+                                           
+                                            <li>
+                                                <span class="label"><i class="icon-62"></i>Auteur:</span>
+                                                <span class="value">{{livre.auteur}}</span>
+                                            </li>
+                                            <li>
+                                                <span class="label"><i class="icon-61"></i>Catégprie :</span>
+                                                <span class="value">{{livre.categorie}}</span>
+                                            </li>
+                                           
+                                        </ul>
+                                        <div class="read-more-btn">
+                                            <a href="{{livre.document.url}}" download class="edu-btn">Télécharger<i class="icon-4"></i></a>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+{% endblock content %}
+    

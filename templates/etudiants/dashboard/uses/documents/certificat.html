@@ -1,0 +1,354 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    /* Pour agrandir la taille des éléments */
+    #annee_id option {
+        font-size: 16px; /* Modifier la taille de police selon vos préférences */
+    }
+    
+    /* Pour mettre les éléments en gras */
+    #annee_id option {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row g-5">
+        <div class="">
+            <div class="">
+                <div class="">
+                    <form action="#" method="GET">
+                        <div class="row">
+                            <div class="col-6">
+                                <h6 class="showing-text">Sélectionnez l'année Académique</h6>
+                            </div>
+                            <div class="col-6">
+                                <select name="edu-select" id="annee_id" class="form-control">
+                                    <option value="">Année Académique</option>
+                                    {% for annee in annees_academiques %}
+                                        <option value="{{ annee.id }}">{{ annee.debut }} - {{ annee.fin }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+           
+        </div>
+        <div>
+            
+            {% if found_cursus == False  %}
+            <br>
+            <br>
+            <div class="row g-5 row--45">
+                <div class="col-lg-6">
+                    <div class="edu-faq-gallery">
+                        <div class="faq-thumbnail thumbnail-1 sal-animate" data-sal-delay="50" data-sal="slide-right" data-sal-duration="800">
+                            <img src="{% static 'etudiant/assets/images/others/faq-5.webp' %}" alt="Faq Images">
+                        </div>
+                        <ul class="shape-group">
+                            <li class="shape-1 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <img data-depth="1.5" src="{% static 'etudiant/assets/images/faq/shape-35.png' %}" alt="Shape Images" style="transform: translate3d(-23.5px, -1.5px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
+                            </li>
+                            <li class="shape-2 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <img data-depth="-2" src="{% static 'etudiant/assets/images/faq/shape-36.png' %}" alt="Shape Images" style="transform: translate3d(24.5px, 1.6px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
+                            </li>
+                            <li class="shape-3">
+                                <img src="{% static 'etudiant/assets/images/faq/shape-34.png' %}" alt="Shape Images">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 sal-animate" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800">
+                    <div class="edu-faq-content">
+                        <div class="section-title section-left">
+                            <span class="pre-title">Oups</span>
+                            <h2 class="title">Aucune donnée <span class="color-secondary">disponible </h2>
+                            <span class="shape-line"><i class="icon-19"></i></span>
+                        </div>
+                        <div class="faq-accordion" id="faq-accordion">
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <h5 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                                            Pourquoi n'ai-je aucune donnée pour cette année ? 
+                                        </button>
+                                    </h5>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faq-accordion">
+                                        <div class="accordion-body">
+                                            <p>Aucune maquette n'est disponible pour vous pour le compte de cette Année Académique car vous n'étiez pas inscris cette année là. <br>
+                                                En cas d'erreur merci de contater les administrateurs
+                                                </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <ul class="shape-group">
+                            <li class="shape-1 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <img data-depth="1.5" src="{% static 'etudiant/assets/images/about/shape-02.png' %}" alt="Shape Images" style="transform: translate3d(-41.9px, -2.7px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;">
+                            </li>
+                            <li class="shape-2 scene sal-animate" data-sal-delay="500" data-sal="fade" data-sal-duration="200" style="transform: translate3d(0px, 0px, 0px) rotate(0.0001deg); transform-style: preserve-3d; backface-visibility: hidden; pointer-events: none;">
+                                <span data-depth="-2.2" style="transform: translate3d(22.2px, 1.4px, 0px); transform-style: preserve-3d; backface-visibility: hidden; position: relative; display: block; left: 0px; top: 0px;"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            
+            {% if cursus is not none %}
+            <div class="container">
+                <center>
+                    <div style="display: none; color: white; padding: 20px;"  id="loader"  class="spinner-border text-success" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </center>
+                <div class="row mt-5 mb-5">
+                    <button onclick="printDiv()" class="edu-btn btn-medium">Télécharger</button>
+                </div>
+            </div>
+          
+
+               <div class="" id="to_print" style="background-color: white;">
+
+                <div class="sa4d25">
+                    <div class="" style="background-color:transparent">
+                
+                           <!-- Invoice card start -->
+                           <div class="card myDivToPrint" id="contenu_{{cursus.id}}"  style="background-color:transparent" >
+                
+                            <div class="card-block contenu" style="background-color: transparent;">
+                                
+                                <div class="container-fluid">
+                                    <br>
+                                    <div class="same-line">
+                                        <div class="on-the-left" style="float: left">
+                                            <strong style="color: black;">MINISTERE DE L'ENSEIGNEMENT SUPERIEUR<br>ET DE LA RECHERCHE SCIENTIFIQUE</strong>
+                                        </div>
+                                        <div class="on-the-right" style="float: right">
+                                            <strong style="color: black;">REPUBLIQUE DE CÔTE D'IVOIRE<br>Union - Discipline - Travail</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                             
+                                <div class="same-line">
+                                    <div class="on-the-center">
+                                        <h3>
+                                            <center>
+                                                <br>
+                                                <img src="{{user.etudiant.etablissement.logo.url}}" width="150px">
+                                                <br>
+                                                <br>
+                                              
+                                                <strong>{{user.etudiant.etablissement.full_name}}</strong>
+                                            </center>
+                                        </h3>
+                                        <center>
+                                            <hr style="width: 70%; border-color: black">
+                                        </center>
+                                    </div>
+                                </div>
+                               
+                                <div class="same-line" style="border: 2px solid black; border-radius: 5px; padding-left: 5px; margin-right: 5%; margin-left: 5%; padding-top: 5px;">
+                                    <h3><strong> <center>
+                                        
+                                        {% if name == "INSCRIPTION" %}
+                                        FICHE D'INSCRIPTION
+                                        {% else %}
+                                        CERTIFICAT DE {{name}}
+                                        {% endif %}
+                                            
+                                    </center> </strong></h3>
+                                </div>
+                                <p>&nbsp;</p>
+                
+                            <div class="container-fluid">
+                                <div class="same-line">
+                                   <div class="row">
+                                    <div class="col-12">
+                                        <div class="on-the-left">
+                                            <font  size="3px"><strong>ANNEE UNIVERSITAIRE :  {{cursus.annee_academique}}</strong> </font>
+                                        </div>
+                                    </div>
+                                   </div>
+                                </div>
+                              
+                                <div>
+                                    <br>
+                                          <div class="row">
+                                           
+                                            <font size="4px"><strong>Nous certifions que, </strong></font><br><br>
+                                            <div class="col-10">
+                                                <table class="table table-responsive invoice-table invoice-order table-borderless" style="border-collapse: collapse;">
+                                                    <tbody>
+                                                <tr>
+                                                    <th>Etudiant(e) :</th>
+                                                    <th><strong>{{cursus.etudiant }}</strong></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Né(e) le :</th>
+                                                    <th>
+                                                        <strong>{{cursus.etudiant.date_de_naissance |date:'d-m-Y' }}</strong>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Matricule :</th>
+                                                    <th>
+                                                        <strong>{{cursus.etudiant.matricule | upper  }}</strong>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Elites-ID :</th>
+                                                    <th>
+                                                        <strong>{{cursus.etudiant.code_paiement | upper  }}</strong>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Filière :</th>
+                                                    <th>
+                                                        <strong>{{cursus.filiere | upper }} ({{cursus.filiere.sigle | upper }})</strong>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Niveau :</th>
+                                                    <th><strong>{{cursus.niveau | upper }} </strong>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status :</th>
+                                                    <th><strong>{{cursus.etudiant.type_etudiant | upper }}</strong> 
+                                                </tr>
+                                             </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-2">
+                                                <img src="{{user.etudiant.photo.url}}" width="150px">
+                                            </div>
+                                          </div>
+                                  
+                
+                                    <div class="dt-responsive table-responsive">
+                                       
+                                       {% if name == "INSCRIPTION" %}
+                                       <table class="table table-striped table-bordered nowrap">
+                                        <thead>
+                                            <tr style="background-color: #ffdb99; height: 20px; font-size:15px; text-align: center; font-weight: bold;">
+                                                
+                                                <th style="border: 1px solid black;">Source</th>
+                                                <th style="border: 1px solid black;">Montant </th>
+                                                <th style="border: 1px solid black;">Date </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in cursus.paiements %}
+                                            <tr style="">
+                                               
+                                                <td style="border: 1px solid black;">{{data.source | upper }}</td>
+                                                <td style="border: 1px solid black;">{{data.montant | intcomma }} FCFA</td>
+                                                <td style="border: 1px solid black;">{{data.created |date:'d-m-Y' }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            
+                                            <tr style="height: 20px; font-size:15px; text-align: center; font-weight: bold;">
+                                                <th style="background-color: #ffdb99; border: 1px solid black;">Montant Scolarité </th>
+                                                <th style="border: 1px solid black;">{{cursus.frais | intcomma }} FCFA</th>
+                                            </tr>
+                                            <tr style="height: 20px; font-size:15px; text-align: center; font-weight: bold;">
+                                                <th style="background-color: #ffdb99; border: 1px solid black;">Montant Payé </th>
+                                                <th style="border: 1px solid black;">{{cursus.paye | intcomma }} FCFA</th>
+                                            </tr>
+                                            <tr style="height: 20px; font-size:15px; text-align: center; font-weight: bold;">
+                                                <th style="background-color: #ffdb99; border: 1px solid black;">Reste à Payer </th>
+                                                <th style="border: 1px solid black;"><b>{{cursus.reste | intcomma }} FCFA</b></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                       {% else %}
+                                       <table class="table table-striped table-bordered nowrap">
+                                        <thead>
+                                            <tr style="background-color: #ffdb99; height: 20px; font-size:15px; text-align: center; font-weight: bold;">
+                                                <th style="border: 1px solid black;">Année Academique </th>
+                                                <th style="border: 1px solid black;">Filière </th>
+                                                <th style="border: 1px solid black;">Niveau </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                            {% for data in datas %}
+                                            <tr style="">
+                                                <td style="border: 1px solid black;">{{data.annee_academique}}</td>
+                                                <td style="border: 1px solid black;">{{data.filiere | upper }}</td>
+                                                <td style="border: 1px solid black;">{{data.niveau | upper }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                       {% endif %}
+                                        
+                                    </div>    
+                                </div>
+                
+                                <p style="color: black;" size="1px">est régulièrement inscrit(e) au titre de l'année académique {{cursus.annee_academique.debut}} - {{cursus.annee_academique.fin}} 
+                                    en {{cursus.niveau}} {{cursus.filiere}} , en foi de quoi ce document est délivré  pour servir et valoir ce que de Droit.</p>
+                               
+                                <div class="row">
+                                    <div class="col-6">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://myiipea.com/curriculum/student_resume/{{cursus.etudiant.code_paiement}}/" width="150px" />
+                                        <br>
+                                        <br>
+                                        <strong style="color: black;"> Fait à Abidjan le {{cursus.created |  date:'d/m/Y' }}</strong> <br><br>
+                                    </div>
+                                    <div class="col-6" >
+                                        <img style="float: right;" src="{{user.etudiant.etablissement.cachet_scolarite.url}}" width="170px" />
+                                        <br>
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <strong style="color: black;text-align: right;">La Sous-Direction de la Scolarité,<br> des Services Juridiques et de la Communication</strong><br>
+                                    </div>
+                                </div>
+                                <p>&nbsp;</p>
+                                <div class="invoice-head">
+                                    <div class="row">
+                                        <div class="col-12 col-md-7 col-lg-7">
+                                            <div class="invoice-logo">
+                                                <h4>{{cursus.etudiant.etablissement}}</h4>
+                                            </div>
+                                            <p>secretariat@iipea.com / +225 07 08 08 87 87 / 07 00 24 36 88</p>
+                                            <p class="mb-0"></p>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-lg-5">
+                                            <div class="invoice-name">
+                                                <span class="badge badge-info-inverse font-14"><h5>{{etudiant.code_paiement}}</h5></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <center>
+                                <p>&nbsp;</p>
+                            </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+               </div>
+           
+            {% endif %}
+                
+                
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+    

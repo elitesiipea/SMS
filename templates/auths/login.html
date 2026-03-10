@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="School Management System (SMS)">
+  <meta name="keywords" content="School Management System (SMS)">
+  <meta name="author" content="School Management System (SMS)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+  <title>
+
+    {% if titre %}
+    {{titre}}
+    {% else %}
+    SMS
+    {% endif %}
+
+  </title>
+  <!-- Fevicon -->
+  <link rel="shortcut icon" href="{% static 'administration/assets/images/favicon.ico' %}">
+  <link href="{% static 'administration/assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'administration/assets/css/style.css' %}" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body class="vertical-layout">
+  <!-- Start Containerbar -->
+  <div id="containerbar" class="containerbar authenticate-bg">
+    <!-- Start Container -->
+    <div class="container">
+      <div class="auth-box login-box">
+        <!-- Start row -->
+        <div class="row no-gutters align-items-center justify-content-center">
+          <!-- Start col -->
+          <div class="col-md-6 col-lg-5">
+            <!-- Start Auth Box -->
+            <div class="auth-box-right">
+              <div class="card">
+                <div class="card-body">
+
+                  {% if form.errors %}
+                  <div class="alert alert-danger">
+                    <strong>Oops! Il y a des erreurs :</strong>
+                    <ul>
+                      {% for field in form %}
+                      {% for error in field.errors %}
+                      <li>{{ error }}</li>
+                      {% endfor %}
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  {% endif %}
+                  <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-head">
+                      <a href="#" class="logo"><img src="{% static 'administration/assets/images/logo.png' %}" class="img-fluid" alt="logo"></a>
+                  </div> 
+                    <h3 class="my-4" style="color: rgb(9, 9, 53);">Connexion</h3>
+
+                    <div class="form-group">
+                      <input type="email" class="form-control" id="id_email" name="username"
+                        placeholder="student@iipea.com" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" id="id_password" name="password"
+                        placeholder="@elites@" required>
+                    </div>
+                    <div class="form-row mb-3">
+                      <div class="col-sm-6">
+                        <div class="custom-control custom-checkbox text-left">
+                          <input type="checkbox" onclick="myFunction()" class="custom-control-input" id="rememberme">
+                          <label class="custom-control-label font-14" for="rememberme">Afficher le mot de passe</label>
+                        </div>
+
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="forgot-psw">
+                          <a id="forgot-psw" href="{% url 'password_reset' %}" class="font-14">Mot de passe oublié</a>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg btn-block font-18">Connexion</button>
+                  </form>
+                  <div class="login-or">
+                    <h6 class="text-muted">OU</h6>
+                  </div>
+
+                  <p class="mb-0 mt-3">Vous êtes un patent ? <a href="{% url 'parents_home' %}">Espace Parents</a></p>
+
+                </div>
+              </div>
+            </div>
+            <!-- End Auth Box -->
+          </div>
+          <!-- End col -->
+        </div>
+        <!-- End row -->
+      </div>
+    </div>
+    <!-- End Container -->
+  </div>
+  <!-- End Containerbar -->
+  <!-- Start js -->
+
+  <script>
+    function myFunction() {
+      var x = document.getElementById("id_password") || document.getElementById("id_new_password1") || document.getElementById("id_new_password2");
+      var y = document.getElementById("id_new_password2");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+      if (y.type === "password") {
+        y.type = "text";
+      } else {
+        y.type = "password";
+      }
+    }
+  </script>
+
+
+</body>
+
+</html>

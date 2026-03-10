@@ -1,0 +1,115 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<style>
+
+    
+    .form-control {
+        border: 2px solid black; /* Bordure noire */
+        border-radius: 4px; /* Arrondir légèrement les coins */
+    }
+    
+    /* Optionnel : pour changer la bordure au focus */
+    .form-control:focus {
+        border-color: #0056b3; /* Couleur de bordure au focus (exemple : bleu) */
+        outline: none; /* Enlever le contour par défaut */
+    }
+    
+</style>
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                    {% if user.is_super_admin %}
+                    <button type="button" style="float:right" class="tabledit-save-button btn btn-sm btn-primary open-popup" data-toggle="modal" data-target="#validationModal"><span class="ti-plus"></span>  NOUVELLE MAQUETTE PEDAGOGIQUE</button>
+                    
+                    <br>
+                    {% endif %}
+                    
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="container-fluid">
+                        <h2>Modifier les Matières de la Maquette</h2>
+                        <form method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            <div class=" mt-4">
+                              
+                                <div class="row">
+                                    {% for matiere in matieres %}
+                                    <div class="col-md-12 mb-3">
+                                        <u><p>
+                                            <ul>
+                                                <li>
+                                                    {{ matiere.nom | upper  }} - {{ matiere.unite | upper  }} - {{ matiere.unite.semestre | upper  }}
+                                                </li>
+                                            </ul>
+                                        </p></u>
+                                        <div class="form-row align-items-center">
+                                            <div class="col-md-12">
+                                                <label for="matiere_{{ matiere.id }}_nom">Nom:</label>
+                                                <input type="text" class="form-control" name="matiere_{{ matiere.id }}_nom" value="{{ matiere.nom | upper }}" required>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="matiere_{{ matiere.id }}_coefficient">Coefficient:</label>
+                                                <input type="number" class="form-control" name="matiere_{{ matiere.id }}_coefficient" value="{{ matiere.coefficient }}" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="matiere_{{ matiere.id }}_volume_horaire">Volume Horaire CM :</label>
+                                                <input type="number" class="form-control" name="matiere_{{ matiere.id }}_volume_horaire" value="{{ matiere.volume_horaire }}" required>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="matiere_{{ matiere.id }}_taux_horaire">Taux Horaire CM:</label>
+                                                <input type="number" class="form-control" name="matiere_{{ matiere.id }}_taux_horaire" value="{{ matiere.taux_horaire }}" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="matiere_{{ matiere.id }}_volume_horaire">Volume Horaire TD :</label>
+                                                <input type="number" class="form-control" name="matiere_{{ matiere.id }}_volume_horaire_td" value="{{ matiere.volume_horaire_td }}" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="matiere_{{ matiere.id }}_taux_horaire">Taux Horaire TD:</label>
+                                                <input type="number" class="form-control" name="matiere_{{ matiere.id }}_taux_horaire_td" value="{{ matiere.taux_horaire_td }}" required>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="matiere_{{ matiere.id }}_enseignant">Enseignant :</label>
+                                                <input type="text" class="form-control" name="matiere_{{ matiere.id }}_enseignant" value="{{ matiere.enseignant }}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% endfor %}
+                                </div>
+                                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    <script>
+      
+    </script>
+            
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <button type="button"  style="float: left;" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    
+{% endblock page %}
+    

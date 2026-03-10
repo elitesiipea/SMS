@@ -1,0 +1,73 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+
+        <div class="container-fluid">
+            <h2>Marquer la Commande comme Reçue</h2>
+            <h4>Commande N°{{ commande.id }} - Fournisseur: {{ commande.fournisseur.nom }}</h4>
+
+            <!-- Information about the Commande -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Informations de la Commande</h5>
+                    <p><strong>Date de création :</strong> {{ commande.created|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Date de dernière mise à jour :</strong> {{ commande.date_update|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Commande Reçue :</strong> {% if commande.commande_recu %} Oui {% else %} Non {% endif %}</p>
+                    <p><strong>Bon de Commande :</strong> 
+                        {% if commande.bon_de_commande %}
+                            <a href="{{ commande.bon_de_commande.url }}" target="_blank">Voir le bon de commande</a>
+                        {% else %}
+                            Aucun bon de commande disponible
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- List of Products in the Commande -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Produits Commandés</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité Commandée</th>
+                                <th>Quantité en Stock (Avant Réception)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for produit_commande in commande.produits_commandes.all %}
+                            <tr>
+                                <td>{{ produit_commande.produit.nom }}</td>
+                                <td>{{ produit_commande.quantite }}</td>
+                                <td>{{ produit_commande.produit.quantite }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Form to Upload Bon de Commande and Mark as Received -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Actions</h5>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="bon_de_commande">Télécharger Bon de Commande</label>
+                            {{ form.bon_de_commande }}
+                        </div>                    
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page %}

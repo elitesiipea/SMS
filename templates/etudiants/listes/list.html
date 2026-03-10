@@ -1,0 +1,168 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                
+                                <th>ID</th>
+                                <th>MATRICULE</th>
+                                <th>MATRICULE MENET</th>
+                                <th>NUMERO TABLE BAC</th>
+                                <th>NOM</th>
+                                <th>PRENOMS</th>
+                                <th>FILIERE</th>
+                                <th>NIVEAU</th>
+                                <th>DATE DE NAISSANCE</th>
+                                <th>LIEU DE NAISSANCE</th>
+                                <th>ETABLISSEMENT D'ORIGINE</th>
+                                <th>SEXE</th>
+                                <th>EMAIL</th>
+                                <th>CONTACT 1</th>
+                                <th>CONTACT 2</th>
+                                <th>ETABLISSEMENT</th>
+                                <th>CODE EP</th>
+                                <th>EMARGEMENT</th>
+                                <th>NATIONALITE</th>
+                                <th>SERIE BAC</th>
+                                <th>ELITES-ID</th>
+                                <th>STATUS</th>
+                                <th>BACHELIER</th>
+                                <th>EXTRAIT</th>
+                                <th>BAC DEPOSE</th>
+                                <th>DERNIER DIPLOME</th>
+                                <th>FICHE ORIENTATION</th>
+                                <th>PIECE</th>
+                                <th>CARTE ETUDIANT</th>
+                                <th>CMU</th>
+                                <th>ACTIONS</th>
+                                <th>LAST UPDATE</th>
+                                <th>PIECE MANQUANTE</th>
+                                
+                                
+               
+                            </tr>
+                            </thead>
+                            
+                            <tbody>
+                           
+                            {% for etudiant in etudiants  %}
+                            <tr>
+                                <th>{{etudiant.id | upper }}</th>
+                                <th>{{etudiant.matricule | upper }}</th>
+                                <th>{{etudiant.matricule_menet | upper }}</th>
+                                <th>{{etudiant.numero_table_bac | upper }}</th>
+                                <th>{{etudiant.nom | upper }}</th>
+                                <th>{{etudiant.prenom | upper }}</th>
+                                <th>{{etudiant.last_class.filiere | upper }}</th>
+                                <th>{{etudiant.last_class.niveau | upper }}</th>
+                                <th>{{etudiant.date_de_naissance | upper }}</th>
+                                <th>{{etudiant.lieu_de_naissance | upper }}</th>
+                                <th>{{etudiant.etablissement_d_origine | upper }}</th>
+                                <th>{{etudiant.sexe | upper }}</th>
+                                <th>{{etudiant.utilisateur.email  }}</th>
+                                <th>+225{{etudiant.contact | upper }}</th>
+                                <th>+225{{etudiant.contactparent | upper }}</th>
+                              
+                                <th>{{etudiant.etablissement.sigle | upper }}</th>
+                                <th>{{etudiant.etablissement.code | upper }}</th>
+                                <th></th>
+                                <th>{{etudiant.nationalite.name | upper }}</th>
+                                <th>{{etudiant.serie_bac | upper }}</th>
+                                <th>{{etudiant.type_etudiant | upper }}</th>
+                                <th>{{etudiant.code_paiement | upper }}</th>
+                               
+                               
+                                {% if etudiant.sans_bac  %}
+                                <th>NON</th>
+                                    {% else %}
+                                    <th>OUI </th>
+                                {% endif %}
+
+                                {% if etudiant.extrait_depose  %}
+                                <th>OUI </th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+
+                                {% if etudiant.diplome_depose  %}
+                                <th>OUI </th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+
+                                {% if etudiant.diplome_depose  %}
+                                <th>OUI </th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+
+                                {% if etudiant.fiche_orientation_depose  %}
+                                <th>OUI </th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+
+                                {% if etudiant.piece_depose  %}
+                                <th>OUI</th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+
+                                {% if etudiant.carte_etudiant  %}
+                                <th>OUI</th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+                                {% if etudiant.cmu  %}
+                                <th>OUI</th>
+                                    {% else %}
+                                    <th>NON</th>
+                                {% endif %}
+
+                                <td style="white-space: nowrap; width: 15%;">
+                                    <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
+                                    <div class="btn-group btn-group-sm" style="float: none;">
+                                        <button type="button" onclick="window.location.href='{{ etudiant.url }}'" class="tabledit-save-button btn btn-sm btn-info" style="float: none; margin: 5px;"><span class="ti-eye"></span></button>
+                                        <button type="button" onclick="window.location.href='{{ etudiant.scolarite_admin_url }}'" class="tabledit-save-button btn btn-sm btn-success" style="float: none; margin: 5px;"><span class="ti-money"></span></button>
+                                        {% if not etudiant.carte_etudiant %}
+                                            <button type="button" onclick="window.location.href='{{ etudiant.carte }}'" class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"></span>REMETTRE LA CARTE</button>  
+                                        {% endif %}
+                                    </div>
+                                    </div>
+                                </td>
+                                <th>{{etudiant.date_update}}</th>
+                                <th>
+                                    {% if etudiant.extrait_depose  %}{% else %}EXTRAIT-{% endif %}{% if etudiant.diplome_depose  %}{% else %}BAC LEGALISE-{% endif %}{% if etudiant.fiche_orientation_depose  %}{% else %}FICHE D'ORIENTATION-{% endif %}{% if etudiant.piece_depose  %}{% else %}CNI-{% endif %}{% if etudiant.cmu  %}{% else %}CMU{% endif %}
+                                </th>
+                            </tr>
+                                
+                            {% endfor %}
+                                
+                          
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+{% endblock page %}
+    

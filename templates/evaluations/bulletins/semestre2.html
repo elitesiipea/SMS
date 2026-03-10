@@ -1,0 +1,551 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>>BULLETIN {{classe}} - S2</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta name="robots" content="noindex">
+ 
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  
+    <style type="text/css" media="print">
+        @page
+        {
+            size: auto;   /* auto is the initial value */
+        }
+        * {
+            -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+            color-adjust: exact !important;                 /*Firefox*/
+        }
+    </style>
+</head>
+<body >
+        <div class="container" style="background-color: white;">
+
+            <div class="row">
+                <div class="col">
+                    <h3>BULLETINS : {{classe.nom}} {{classe.niveau}}</h3>
+                    <h3>FILIÈRE :{{classe.filiere}}</h3>
+                    <h3>SEMESTRE : SEMESTRE 2</h3>
+                    <h3>ETABLISSEMENTS :{{classe.etablissement}}</h3>
+                    <h3>{{classe.annee_academique}}</h3>
+                    <div class="col-md-4 not" style="margin-top: 50px;">
+                        <div class="row text-center">
+                            <div class="col-sm-12 invoice-btn-group">
+                                <a id="print" target="_blank"><button type="button" onclick="window.print()"
+                                        class="btn btn-primary btn-print-invoice waves-effect waves-light m-r-20"><i
+                                            class="fa fa-download"></i> &nbsp;&nbsp;Imprimer les bulletins
+                                    </button></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <p style="page-break-before: always;"></p>
+            <br>
+{% for etudiant in classe.effectifs %}
+
+            <div class="container" style="background-color: white;background-color: white;">
+
+                <div class="card" style="background-color: white;">
+
+                    <div class="card-block panels-wells contenu" style="background-color: white;">
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 style="color: black;">
+                                    <center>
+                                        MINISTÈRE DE L'ENSEIGNEMENT SUPERIEUR <br>&nbsp;ET DE LA RECHERCHE SCIENTIFIQUE
+                                    </center>
+                                </h5>
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                                <h5 style="color: black;">REPUBLIQUE DE CÔTE D'IVOIRE</h5>
+                                 <br>
+                                 <br>
+                                <p style="margin-top: -40px;margin-right: 60px;">Union-Discipline-Travail</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <img src="{{user.etablissement.logo.url}}" width="200px" alt="logo">
+                            </div>
+                            <div class="col" style="text-align: center; border-radius: 10%;margin-left: 25%;margin-right: 25px;margin-left: 25px;">
+                                <h2 style="border: 2px solid black;border-radius: 10px;color: white; background-color: #165288;font-weight: bold;font-size: 15px;">
+                                    Tel : {{user.etablissement.contact}} <br> Site : <u>{{user.etablissement.site}}</u><br> Email : <u>{{user.etablissement.email}}</u>
+                                </h2>
+                            </div>
+
+                            <div class="col">
+                                <h6 style="color: black; margin-left: 100px; margin-top: 20px;">
+                                  <ul> Année Académique </ul>
+                                    <br>
+                                   <center>
+                                    {{classe.annee_academique.debut}}-{{classe.annee_academique.fin}} 
+                                   </center>
+                                </h6>
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="row" style="text-align: center;">
+                            <div class="col" style="text-align: center; border-radius: 10%; margin-right:200px; margin-left:200px" >
+                                <center>
+                                    <h2 style="border: 2px solid black;border-radius: 10px;color: white; background-color: #165288;font-weight: bold;font-size: 29px;">
+                                       BULLETIN DU 2<sup>ême</sup> 
+                                       {% if classe.annee_academique.etablissement.is_college %}
+                                       TRIMESTRE
+                                       {% else %}
+                                       SEMESTRE
+                                       {% endif %}
+                                    </h2>
+    
+                                </center>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table border="10px" style="border: 1px solid black; width: 100%">
+                                    <tr style=" height: 15px; font-size: 15px; margin-left: 5px; border: 0;border-color: white;font-weight: bold; ">
+
+                                        <td width="50%" style="text-align: left;">&nbsp; Nom et Prénoms(s) : {{etudiant.etudiant.utilisateur}}</td>
+                                        <td width="50%" style="right: ;" colspan="6">&nbsp; Matricule : {{etudiant.etudiant.matricule}}
+                                        </td>
+
+
+                                    </tr>
+                                    <tr style=" height: 15px; font-size: 15px; text-align: left; border-color: white; border-bottom-color: black;font-weight: bold; ">
+
+                                        <td width="50%">&nbsp; 
+                                            {% if user.etablissement.id == 6 %}
+                                            {% else %}
+                                            Date de naissance : {{etudiant.etudiant.date_de_naissance |date:'d/m/Y' }}
+                                            {% endif %}
+                                        </td>
+                                        <td width="50%" colspan="6">&nbsp; Sexe : {{etudiant.etudiant.sexe}}</td>
+
+
+                                    </tr>
+
+                                    <tr style="background-color: #165288; height: 25px; font-size: 15px; text-align: center; font-weight: bold;">
+
+                                        <td width="50%" style="text-align: center; padding-left: 1%;color: white;" colspan="10">Filière : {{etudiant.filiere}}</td>
+
+
+
+                                    </tr>
+                                    <tr style=" height: 15px; font-size: 15px; text-align: left;margin-left: 5px; border: 0;border-color: white;font-weight: bold; ">
+
+                                        <td width="50%">&nbsp; Classe : {{classe.nom}}</td>
+                                        <td width="50%" colspan="6">&nbsp; Statut : {{etudiant.etudiant.type_etudiant}}</td>
+
+
+                                    </tr>
+                                    <tr style=" height: 15px; font-size: 15px; text-align: left; border-color: white; border-bottom-color: black;font-weight: bold; ">
+
+                                        <td width="50%">&nbsp; Effectif : {{classe.nb_etudiant}}</td>
+                                       
+
+
+                                    </tr>
+                                    <hr>
+                                    <tr style=" height: 15px; font-size: 15px; text-align: center; ">
+
+                                        
+                                        {% if classe.classe_universitaire %}
+                                        <td>Matiere</td>
+                                        <td>Moy</td>
+                                        <td>Coef</td>
+                                        <td>Crédit</td>
+                                        <td>Mention</td>
+                                        <td>Décision</td>
+                                        <td>Session </td>
+                                        {% else %}
+
+                                        <td>Matières</td>
+                                        <td>Moy</td>
+                                        <td>Coef</td>
+                                        <td>M*Coef</td>
+                                        <td>Appréciation</td>
+                                        <td>Enseignant</td>
+                                       
+                                        {% endif %}
+                                            
+                                       
+                                       
+                                    </tr>
+                   
+                        <tr style="background-color: #165288; height: 25px; font-size: 15px; text-align: center; font-weight: bold;">
+                            <td width="50%" style="text-align: left; padding-left: 1%;color: white;" colspan="10"><center>{{ ue.nom | upper }}</center></td>
+                        </tr>
+                       
+                            
+                        {% for note in etudiant.notes_semestre_2 %}
+                        {% if note.etudiant.id == etudiant.id %}
+                            <tr style="font-size: 15px; text-align: center; height: 25px">
+                                
+                                {% if classe.classe_universitaire %}
+
+                                <td style="text-align: left; padding-left: 1%;">{{ note.note.matiere.matiere.nom | upper }}</td>
+                                <td>{{ note.moyenne }}</td>
+                                <td>{{ note.note.matiere.matiere.coefficient }}</td>   
+                               
+                                    {% if note.moyenne >= 10 or note.moyenne_unite >= 10 %}
+                                            <td>{{ note.note.matiere.matiere.coefficient }}</td>  
+                                        {% else %}
+                                        <td>0</td>  
+                                    {% endif %}
+                               
+                                    {% if note.moyenne is not None %}
+                                            <td>
+                                                {% if note.moyenne >= 0 and note.moyenne <= 4.99 %}
+                                                    Mauvais
+                                                {% elif note.moyenne >= 5 and note.moyenne <= 9.99 %}
+                                                    Insuffisant
+                                                {% elif note.moyenne >= 10 and note.moyenne <= 11.99 %}
+                                                    Passable
+                                                {% elif note.moyenne >= 12 and note.moyenne <= 13.99 %}
+                                                    Assez Bien
+                                                {% elif note.moyenne >= 14 and note.moyenne <= 15.99 %}
+                                                    Bien
+                                                {% elif note.moyenne >= 16 and note.moyenne <= 18.99 %}
+                                                    Très Bien
+                                                {% elif note.moyenne >= 19 and note.moyenne <= 20 %}
+                                                    Excellent
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                 
+                                        {%  if note.moyenne >= 10 or note.moyenne_unite >= 10 %}
+                                        <td>ADMIS(E)</td>  
+                                        {% else %}
+                                        <td>REFUSE(E)</td>  
+                                        {% endif %}
+
+                                        <td>{{ note.session }}</td> 
+
+                                {% else %}
+
+
+                                    <td style="text-align: left; padding-left: 1%;">{{ note.note.matiere.matiere.nom | upper }}</td>
+                                    <td>{{ note.moyenne }}</td>
+                                    <td>{{ note.note.matiere.matiere.coefficient }}</td>
+                                    <td>{{ note.moyenne_coefficient }}</td>
+                                    {% if note.moyenne is not None %}
+                                    <td>
+                                        {% if note.moyenne >= 0 and note.moyenne <= 4.99 %}
+                                            Mauvais
+                                        {% elif note.moyenne >= 5 and note.moyenne <= 9.99 %}
+                                            Insuffisant
+                                        {% elif note.moyenne >= 10 and note.moyenne <= 11.99 %}
+                                            Passable
+                                        {% elif note.moyenne >= 12 and note.moyenne <= 13.99 %}
+                                            Assez Bien
+                                        {% elif note.moyenne >= 14 and note.moyenne <= 15.99 %}
+                                            Bien
+                                        {% elif note.moyenne >= 16 and note.moyenne <= 18.99 %}
+                                            Très Bien
+                                        {% elif note.moyenne >= 19 and note.moyenne <= 20 %}
+                                            Excellent
+                                        {% endif %}
+                                    </td>
+                                    {% endif %}
+                                <td>{{ note.note.matiere.enseignant }}</td>
+                            {% endif %}
+                                    
+                            </tr>
+                        {% endif %}
+                        {% endfor %}   
+                                    <tr style="font-size: 20px; text-align: center; height: 25px">
+                                        <td style="text-align: center; padding-left: 1%;" colspan=""><b>TOTAL</b>
+                                        </td>
+                                        <td><b></b></td>
+                                        <td><b>{{etudiant.credit_notes_semestre_2}}</b></td>
+                                        <td><b>{{etudiant.total_notes_semestre_2}}</b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row" style="margin-left:1px;margin-top: 4px;">
+
+                            <div class="col-8" style="border:1px solid black;">
+                                
+                                    <div class="row" style="border:1px solid black; ">
+                                        <div class="col-8" style="border-right: 1px solid black;">Moyenne du 2 
+                                            <sup>ême</sup> 
+                                            {% if classe.annee_academique.etablissement.is_college %}
+                                            Trimestre
+                                            {% else %}
+                                            Semestre
+                                            {% endif %}</div>
+                                        <div class="col-4"  style="font-weight:bold">{{etudiant.moyenne2}} / 20</div>
+                                    </div>
+
+                                   
+                                   {% if classe.classe_universitaire %}
+
+                                   <div class="row" style="border:1px solid black; ">
+                                    <div class="col-8" style="border-right: 1px solid black;">Crédit du 2
+                                        <sup>ême</sup> semestre</div>
+                                    <div class="col-4" style="font-weight:bold">{{etudiant.credit_obtenues_notes_semestre_2}} / 30</div>
+                                     </div>
+
+                                    
+                                   {% endif %}
+                                    
+                                  
+                                    <div class="row" style="border:1px solid black; ">
+                                        <div class="col-8" style="border-right: 1px solid black;">Rang</div>
+                                        {% for r in rang reversed %} {% if r.id == etudiant.id %} {% if forloop.first %}
+                                        <div class="col-4"  style="font-weight:bold">{{forloop.counter }} <sup>er</sup> </div>
+                                        {% else %}
+                                        <div class="col-4"  style="font-weight:bold">{{forloop.counter }} <sup>ème</sup> </div>
+                                        {% endif %} {% endif %} {% endfor %}
+    
+    
+                                    </div>
+
+                                   
+                                   {% if not classe.annee_academique.etablissement.is_college %}
+
+                                   <div class="row" style="border:1px solid black; ">
+                                    <div class="col-8" style="border-right: 1px solid black;">Moyenne du 1
+                                        <sup>er</sup> semestre</div>
+                                    <div class="col-4"  style="font-weight:bold">{{etudiant.moyenne1}} / 20</div>
+                                </div>
+                                    
+                                   {% endif %}
+                                    
+
+                                    {% if classe.classe_universitaire %}
+
+                                    <div class="row" style="border:1px solid black; ">
+                                     <div class="col-8" style="border-right: 1px solid black;">Crédit du 1
+                                         <sup>er</sup> semestre</div>
+                                     <div class="col-4" style="font-weight:bold">{{etudiant.credit_obtenues_notes_semestre_1}} / 30</div>
+                                      </div>
+ 
+                                     
+                                    {% endif %}
+
+                                    {% if not classe.annee_academique.etablissement.is_college %}
+
+                                    <div class="row" style="border:1px solid black; ">
+                                        <div class="col-8" style="border-right: 1px solid black;">Moyenne annuelle
+                                            </div>
+                                        <div class="col-4"  style="font-weight:bold">{{etudiant.moyenne_totale}} / 20</div>
+                                    </div>
+                                    {% if classe.classe_universitaire %}
+                                    <div class="row" style="border:1px solid black; ">
+                                        <div class="col-8" style="border-right: 1px solid black;">Credit Annuel
+                                            </div>
+                                        <div class="col-4"  style="font-weight:bold">{{etudiant.credit_total}} / 60</div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="row" style="border:1px solid black; ">
+                                        <div class="col-8" style="border-right: 1px solid black;">Rang Annuel</div>
+                                        {% for r in rang_annuel reversed %} {% if r.id == etudiant.id %} {% if forloop.first %}
+                                        <div class="col-4"  style="font-weight:bold">{{forloop.counter }} <sup>er</sup> </div>
+                                        {% else %}
+                                        <div class="col-4"  style="font-weight:bold">{{forloop.counter }} <sup>ème</sup> </div>
+                                        {% endif %} {% endif %} {% endfor %}
+    
+    
+                                    </div>
+
+
+                                    {% endif %}
+                                    <br>
+
+                                <div class="row" style=" ">
+                                    <div class="col-8" style="">Moyenne la plus forte de la classe</div>
+                                    {% for r in rang %} {% if forloop.last %}
+                                    <div class="col-4" style="font-weight:bold">{{r.moyenne2}}</div>
+                                    {% endif %} {% endfor %}
+
+                                </div>
+                                
+                                <div class="row" style=" ">
+                                    <div class="col-8" style="">Moyenne la plus faible de la classe</div>
+                                    {% for r in rang %} {% if forloop.first %}
+                                    <div class="col-4" style="font-weight:bold">{{ r.moyenne2 }}</div>
+                                    {% endif %} {% endfor %}
+
+
+                                </div>
+                              
+
+                                <div class="row" style=" ">
+                                    <div class="col-8" style="">
+                                        <div class="row">
+
+                                            {% for d in msd %} {% if d.etudiant.id == e.id %} {% if d.tableau == "THF" %}
+                                            <div class="col-4">
+                                                <div style="width:60px;height:30px;border:2px solid #000;"><img src="https://scolarite.uvci.edu.ci/assets/images/check.png" width="30px"></div>
+                                            </div>
+                                            <div class="col-8">Tableau d'honneur + Félicitations</div>
+                                            {% else %}
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Tableau d'honneur + Félicitations</div>
+                                            {% endif %} {% endif %} {% endfor %}
+
+
+                                        </div>
+                                    </div>
+                                  
+
+                                    <div class="col-8" style="">
+                                        <div class="row">
+                                            {% for d in msd %} {% if d.etudiant.id == e.id %} {% if d.tableau == "THE" %}
+                                            <div class="col-4">
+                                                <div style="width:60px;height:30px;border:2px solid #000;"><img src="https://scolarite.uvci.edu.ci/assets/images/check.png" width="30px"></div>
+                                            </div>
+                                            <div class="col-8">Tableau d'honneur + Encouragement</div>
+                                            {% else %}
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Tableau d'honneur + Encouragement</div>
+                                            {% endif %} {% endif %} {% endfor %}
+
+                                        </div>
+                                    </div>
+                                   
+
+                                    <div class="col-8" style="">
+                                        <div class="row">
+                                            {% for d in msd %} {% if d.etudiant.id == e.id %} {% if d.tableau == "TH" %}
+                                            <div class="col-4">
+                                                <div style="width:60px;height:30px;border:2px solid #000;"><img src="https://scolarite.uvci.edu.ci/assets/images/check.png" width="30px"></div>
+                                            </div>
+                                            <div class="col-8">Tableau d'honneur</div>
+                                            {% else %}
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Tableau d'honneur</div>
+                                            {% endif %} {% endif %} {% endfor %}
+
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row">
+                                            <div class="col-8"></div>
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid rgb(255, 255, 255);">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col" style="margin-top: 20px;">
+                                        <h5 style="font-weight: bold;color: black;">Sanctions</h5>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Avertissement travail</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Blâme travail</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Avertissement conduite</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div style="width:60px;height:20px;border:2px solid #000;"></div>
+                                            </div>
+                                            <div class="col-8">Blâme conduite</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-4">
+                               
+                                <table border="10px" style="border: 1px solid black; width: 100%;  border-collapse:separate;border-collapse: inherit; 
+                border-spacing: 0 6em;">
+                
+                                    <tr style="border-color: white;">
+                                      
+                                      {% if classe.annee_academique.etablissement.is_college %}
+                                      <td style="text-align: center;">Appréciation du conseil :
+                                       </td>
+                                            {% else %}
+                                            <td style="text-align: center;">Décision :
+                                                <h3><b>
+                                                {% if classe.classe_universitaire %}
+                                                        {% if etudiant.credit_total == 60 %}
+                                                            {{ "ADMIS(E)" }}
+                                                        {% elif etudiant.credit_total >= 48 %}
+                                                            {{ "DEROGÉ(E)" }}
+                                                        {% else %}
+                                                            {{ "AJOURNÉ(E)" }}
+                                                        {% endif %}
+                                                {% else %}
+                                                {% if etudiant.moyenne_totale >= 10 %}
+                                                            {{ "ADMIS(E)" }}
+                                                {% else %}
+                                                            {{ "REFUSÉ(E)" }}
+                                                        {% endif %}
+                                                        {% endif %}
+                                                    </b> </h3></td>
+                                        
+                                      {% endif %}
+                                        
+                                    </tr>
+                                    
+
+                                    <tr style="border-color: white;margin-top: 0px;">
+
+                                        <td style="text-align: center;">Abidjan, le {% now "d/m/Y " %}</td>
+                                    </tr>
+                                    <tr style="border-color: white;">
+
+                                        <td style="text-align: center;font-weight: bold;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 17px;">
+                                            <u>La Sous Direction de la Scolarité</u></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                       
+                    
+                        <br>
+                      
+                        <div>
+                            <p style="font-size: 15px; text-align: center;">
+                                {{user.etablissement.footer_bull  }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p style="page-break-before: always;"></p>
+
+
+{% endfor %}
+        </div>
+  
+</body>
+</html>

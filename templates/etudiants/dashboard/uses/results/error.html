@@ -1,0 +1,46 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+{% load static %}
+{% block content %}
+
+        <!--=====================================-->
+        <!--=        404 Area Start            =-->
+        <!--=====================================-->
+        <section class="section-gap-equal error-page-area">
+            <div class="container">
+                <div class="edu-error">
+                    <div class="thumbnail">
+                        <img src="{% static 'etudiant/assets/images/others/404.png' %}" alt="404 Error">
+                        <ul class="shape-group">
+                            <li class="shape-1 scene">
+                                <img data-depth="2" src="{% static 'etudiant/assets/images/about/shape-25.png' %}" alt="Shape">
+
+                            </li>
+                            <li class="shape-2 scene">
+                                <img data-depth="-2" src="{% static 'etudiant/assets/images/about/shape-15.png' %}" alt="Shape">
+                            </li>
+                            <li class="shape-3 scene">
+                                <img data-depth="2" src="{% static 'etudiant/assets/images/about/shape-13.png' %}" alt="Shape">
+                            </li>
+                            <li class="shape-4 scene">
+                                <img data-depth="-2" src="{% static 'etudiant/assets/images/counterup/shape-02.png' %}" alt="Shape">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        <h2 class="title">Echec de Paiement</h2>
+                       
+                        
+                    </div>
+                </div>
+            </div>
+            <ul class="shape-group">
+                <li class="shape-1">
+                    <img src="{% static 'etudiant/assets/images/others/map-shape-2.png' %}" alt="Shape">
+                </li>
+            </ul>
+        </section>
+        <!--=====================================-->
+        <!--=        Footer Area Start          =-->
+        <!--=====================================-->
+        <!-- Start Footer Area  -->
+{% endblock content %}

@@ -1,0 +1,161 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+   
+ <!--=====================================-->
+        <!--=     Courses Details Area Start    =-->
+        <!--=====================================-->
+        <section class="edu-section-gap course-details-area">
+            <div class="container">
+                <div class="row row--30">
+                    <div class="col-lg-8">
+                        <div class="course-details-content">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Présentation</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="carriculam-tab" data-bs-toggle="tab" data-bs-target="#carriculam" type="button" role="tab" aria-controls="carriculam" aria-selected="false">Ressources</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="instructor-tab" data-bs-toggle="tab" data-bs-target="#instructor" type="button" role="tab" aria-controls="instructor" aria-selected="false">Enseignant</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                                    <div class="course-tab-content">
+                                        <div class="course-overview">
+                                            <h3 class="heading-title"> Description du Cours</h3>
+                                            <p>{{cours.description | safe }}</p>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="carriculam" role="tabpanel" aria-labelledby="carriculam-tab">
+                                    <div class="course-tab-content">
+                                        <div class="course-curriculam">
+                                            <h3 class="heading-title">Ressources du Cours</h3>
+
+                                            <div class="course-lesson">
+                                                
+                                                <ul>
+                                                    <li>
+                                                        {% if cours.support %}
+                                                            <div class="text"><i class="icon-65"></i> <a target="_blank" href="{{cours.syllabus.url}}">Syllabus</a></div>
+                                                        {% endif %}
+                                                        <div class="icon"><i class="icon-24"></i></div>
+                                                    </li>
+                                                    <li>
+                                                        {% if cours.syllabus %}
+                                                            <div class="text"><i class="icon-65"></i><a  target="_blank" href="{{cours.support.url}}">Support de Cours</a></div>4
+                                                        {% endif %}
+                                                        <div class="icon"><i class="icon-24"></i></div>
+                                                    </li>
+                                                   
+                                                </ul>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="instructor" role="tabpanel" aria-labelledby="instructor-tab">
+                                    <div class="course-tab-content">
+                                        <div class="course-instructor">
+                                            <div class="thumbnail">
+                                                <img src="{{user.etablissement.logo.url}}" alt="{{cours.enseignant}}">
+                                            </div>
+                                            <div class="author-content">
+                                                <h6 class="title">{{cours.enseignant}}</h6>
+                                                <span class="subtitle"></span>
+                                                <p>
+                                                    {{cours.enseignant.utilisateur.email}}
+                                                </p>
+                                                <p>
+                                                    {{cours.enseignant.contact}}
+                                                </p>
+                                                <ul class="social-share">
+                                                    <li><a href="#"><i class="icon-facebook"></i></a></li>
+                                                    <li><a href="#"><i class="icon-twitter"></i></a></li>
+                                                    <li><a href="#"><i class="icon-linkedin2"></i></a></li>
+                                                    <li><a href="#"><i class="icon-youtube"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+ 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="course-sidebar-3 sidebar-top-position">
+                            <div class="edu-course-widget widget-course-summery">
+                                <div class="inner">
+                                    <div class="thumbnail">
+                                        <img src="{% static 'etudiant/assets/images/course/course-46.jpg' %}" alt="Courses">
+                                        <a href="#" class="play-btn video-popup-activation"><i class="icon-18"></i></a>
+                                    </div>
+                                    <div class="content">
+                                        <h4 class="widget-title">Contenus</h4>
+                                        <ul class="course-item">
+                                           
+                                            <li>
+                                                <span class="label"><i class="icon-62"></i>Enseignant:</span>
+                                                <span class="value">{{cours.enseignant}}</span>
+                                            </li>
+                                            <li>
+                                                <span class="label"><i class="icon-61"></i>Durée :</span>
+                                                <span class="value">{{cours.volume_horaire}} Heures</span>
+                                            </li>
+                                            <li>
+                                                <span class="label">
+                                                    <img class="svgInject" src="{% static 'etudiant/assets/images/svg-icons/books.svg' %}" alt="book icon">
+                                                   </span>
+                                                <span class="value">{{cours.filiere}}</span>
+                                            </li>
+                                            <li>
+                                                <span class="label"><i class="icon-63"></i>Niveau :</span>
+                                                <span class="value">{{cours.niveau}}</span>
+                                            </li>
+                                            <li>
+                                                <span class="label"><i class="icon-59"></i>Language:</span>
+                                                <span class="value">English</span>
+                                            </li>
+                                            <li>
+                                                <span class="label"><i class="icon-64"></i>Certificat :</span>
+                                                <span class="value">Non</span>
+                                            </li>
+                                        </ul>
+                                        <div class="read-more-btn">
+                                            
+                                            {% if cours.support %}
+
+                                            <a  target="_blank" href="{{cours.support.url}}" class="edu-btn">Support de Cours <i class="icon-4"></i></a>
+                                                
+                                            {% endif %}
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+{% endblock content %}
+    

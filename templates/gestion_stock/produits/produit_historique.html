@@ -1,0 +1,48 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <div class="container-fluid">
+            <h2>Historique ({{ produit.nom }})</h2>
+
+
+            <table id="datatable-buttons" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Commande ID</th>
+                        <th>Fournisseur</th>
+                        <th>Date de réception</th>
+                        <th>Quantité commandée</th>
+                        <th>Bon de commande</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produit_commande in produit_commandes %}
+                    <tr>
+                        <td>{{ produit_commande.commande.id }}</td>
+                        <td>{{ produit_commande.commande.fournisseur.nom }}</td>
+                        <td>{{ produit_commande.commande.date_update|date:"d/m/Y" }}</td>
+                        <td>{{ produit_commande.quantite }}</td>
+                        <td>
+                            {% if produit_commande.commande.bon_de_commande %}
+                            <a href="{{ produit_commande.commande.bon_de_commande.url }}" target="_blank">Voir le bon</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">Aucune commande reçue pour ce produit.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock page %}

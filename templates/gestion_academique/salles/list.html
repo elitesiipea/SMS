@@ -1,0 +1,214 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        width: 50%;
+        margin: 0 auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid black;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: #d2a100;
+        color: white;
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+    .campus-header {
+        background-color: #2a6da4;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: left;
+    }
+    .capacity {
+        text-align: center;
+    }
+</style>
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+                    {% if user.is_super_admin %}
+                    <button type="button" style="float:right" class="tabledit-save-button btn btn-sm btn-primary open-popup" data-toggle="modal" data-target="#validationModal"><span class="ti-plus"></span>  NOUVELLE SALLE</button>
+                    
+                    <br>  
+                    {% endif %}
+                    
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <table>
+                                <tr>
+                                    <th colspan="2">
+                                        <center>
+                                            Capacité d'Accueil {{ user.etablissement | upper  }}
+                                        </center>
+                                    </th>
+                                </tr>
+                              
+                               
+                               {% for c in campus  %}
+
+                               <tr>
+                                <td class="campus-header" colspan="2">
+                                    <center>{{ c.nom | upper  }} | {{c.places_total}} Place(s)</center>
+                                </td>
+                            </tr>
+                            
+                           
+                           {% for s in c.salles  %}
+
+                           <tr>
+                            <td>{{ s.nom | upper  }}</td>
+                            <td class="capacity">{{ s.capacite }}</td>
+                        </tr>
+                            
+                           {% endfor %}
+                            
+                                
+                               {% endfor %}
+                               <tr>
+                                <th colspan="">
+                                    <center>
+                                        Capacité d'Accueil totale
+                                    </center>
+                                </th>
+                                <th colspan="">
+                                    <center>
+                                       {{user.etablissement.salles_count}}
+                                    </center>
+                                </th>
+                            </tr>
+                                
+                            </table>
+                    
+                          
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+
+
+      
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="validationModalLabel">Nouvelle Salle</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- ... and so on for other fields ... -->
+                <form method="post" id="salleForm">
+                    {% csrf_token %}
+            
+                    <fieldset>
+                        <legend>{{ fieldset.name }}</legend>
+                        <div class="row">
+            
+                            <div class="col-md-6 mb-3">
+                                <label for="nom">Nom de la salle</label>
+                                <input style="border: 2px solid black;" type="text" required name="nom" id="nom" class="form-control" placeholder="Nom de la salle, Exemple : DANIEL GUEDEGBE" oninput="validateNom()">
+                                <div id="nomError" class="error"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="capacite">Capacité d'accueil</label>
+                                <input style="border: 2px solid black;" type="text" required name="capacite" id="capacite" class="form-control" placeholder="Capacité d'accueil, Exemple : 100" oninput="validateCapacite()">
+                                <div id="capaciteError" class="error"></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <hr>
+                    <button type="submit" class="btn btn-primary" id="confirmValidation" style="float: right;" disabled>Enregistrer</button>
+                </form>
+            
+                <script>
+                    const salleForm = document.getElementById('salleForm');
+                    const nomInput = document.getElementById('nom');
+                    const capaciteInput = document.getElementById('capacite');
+                    const confirmValidationBtn = document.getElementById('confirmValidation');
+            
+                    function validateNom() {
+                        const nomValue = nomInput.value.trim();
+                        const nomError = document.getElementById('nomError');
+            
+                        if (nomValue.length >= 3) {
+                            nomError.textContent = '';
+                        } else {
+                            nomError.textContent = 'Le nom de la salle doit contenir au moins 3 caractères.';
+                        }
+                        validateForm();
+                    }
+            
+                    function validateCapacite() {
+                        const capaciteValue = capaciteInput.value.trim();
+                        const capaciteError = document.getElementById('capaciteError');
+            
+                        if (/^\d+$/.test(capaciteValue) && parseInt(capaciteValue) > 1) {
+                            capaciteError.textContent = '';
+                        } else {
+                            capaciteError.textContent = 'La capacité d\'accueil doit être un entier supérieur à 1.';
+                        }
+                        validateForm();
+                    }
+            
+                    function validateForm() {
+                        const nomValue = nomInput.value.trim();
+                        const capaciteValue = capaciteInput.value.trim();
+            
+                        if (nomValue.length >= 3 && /^\d+$/.test(capaciteValue) && parseInt(capaciteValue) > 1) {
+                            confirmValidationBtn.removeAttribute('disabled');
+                        } else {
+                            confirmValidationBtn.setAttribute('disabled', 'true');
+                        }
+                    }
+                </script>
+            
+            
+              
+        
+            
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <button type="button"  style="float: left;" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+{% endblock page %}
+    

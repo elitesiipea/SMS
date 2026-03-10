@@ -1,0 +1,53 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+        <h2 class="title">Bienvenue {{user}}</h2>
+        <span class="shape-line"><i class="icon-19"></i></span>
+     
+    </div>
+
+    <div class="row g-5">
+            <div class="row g-5">
+                <div class="container">
+                        <div class="card" style="border:5px solid black;background-color:#165288;">
+                            <br>
+                            
+                            <!-- Add this part in your HTML template to display the form -->
+                           
+                            <div class="container">
+                               <div class="row">
+                                <div class="col-3">
+                                   
+                                    <img class="card-img-top" src="{{user.etudiant.photo.url}}" height="225" width="250" alt="Photo">
+                                 <br>
+                                </div>
+                                <br>
+                                <div class="col-9">
+                                    <h3 style="text-align:center;color:white">CARTE ETUDIANT</h3>
+                                    <div class="card-body" style="border:2px solid;color:white">
+                                        <h5 style="color:white" class="card-title">Matricule : {{user.etudiant.matricule     | upper }}</h5>
+                                        <h5 style="color:white" class="card-title">Nom & Prénoms : {{user.etudiant.nom | upper }} {{user.etudiant.prenom | upper }}</h5>
+                                        <h5 style="color:white" class="card-title">Date de naissance : {{user.etudiant.date_de_naissance |date:'d/m/Y'  }} | Téléphone : +225{{user.etudiant.contact}}</h5>
+                                        <h5 style="color:white" class="card-title">Filiere : {{user.etudiant.last_class.filiere | upper   }} | Niveau : {{user.etudiant.last_class.niveau | upper   }}</h5>
+                                      
+                                        <!-- Ajoutez d'autres informations selon vos besoins -->
+                                    </div>    
+                                    <br>
+                                  
+                                   
+                               </div>
+                            
+                                
+                            <br>
+                        </div>
+                  </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
+    

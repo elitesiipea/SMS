@@ -1,0 +1,183 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->    
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- End col -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                           
+                                <section>
+                                    <h4>1- INFORMATIONS DE BASE</h4>
+                                    <div class="row">
+                                    {% for field in form %}
+                                        {% if field.label == "Nom" %}
+                                            <div class="form-group col-4">
+                                                {{ field.label_tag }}
+                                                {{ field }}
+                                            </div>
+                                        {% endif %}
+                                        {% if field.label == "Prenom" %}
+                                            <div class="form-group col-4">
+                                                Prénom(s)
+                                                {{ field }}
+                                            </div>
+                                        {% endif %}
+                                        {% if field.label == "Email" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                        </div>
+                                    {% endif %}
+                                        
+                                        {% if field.label == "Date de naissance" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "Lieu de naissance" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "Nationalite" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "Sexe" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        {% if field.label == "Contact" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                       
+                                        {% if field.label == "Domicile" %}
+                                        <div class="form-group col-4">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+
+                                        {% if field.label == "Situations" %}
+                                        <div class="form-group col-4">
+                                            Situation Matrimoniale
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+
+                                        
+                                        
+                                    {% endfor %}
+                                </div>
+                                </section>
+                        </div>  
+                    </div>                             
+                </div>
+
+            </div>
+        </div>  
+
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                           
+                                <section>
+                                    <h4>2- INFORMATIONS PROFESSIONNELLES</h4>
+                                 
+                                    <div class="row">
+                                    {% for field in form %}
+                                        {% if field.label == "Cv et document" %}
+                                            <div class="form-group col-6">
+                                                Documents ( Cv + Diplome + CNI + Autre)
+                                                {{ field }}
+                                            </div>
+                                        {% endif %}
+                                        {% if field.label == "Domaine" %}
+                                            <div class="form-group col-6">
+                                                Liste des matieres enseignées (Par ligne)
+                                                <br>
+                                                {{ field }}
+                                            </div>
+                                        {% endif %}
+                                        {% if field.label == "Numero cni" %}
+                                        <div class="form-group col-6">
+                                            N° CNI ou Passeport ou autre
+                                            {{ field }}
+                                        </div>
+                                    {% endif %}
+                                        
+                                        {% if field.label == "Statut enseignant" %}
+                                        <div class="form-group col-6">
+                                            {{ field.label_tag }}
+                                            {{ field }}
+                                            
+                                        </div>
+                                        {% endif %}
+                                        
+                                        
+                                    {% endfor %}
+                                </div>
+                                </section>
+                        </div>  
+                    </div>                             
+                </div>
+
+            </div>
+        </div>  
+
+        
+
+                 <!-- End col -->
+                 <div class="col-lg-12">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+                            <div class="row justify-content-end">
+                                <div class="col-4">
+                                   
+                                        <section>
+                                            <button type="submit" class="btn btn-success btn-md btn-block font-18">Enregistrer le dossier</button>
+                                        </section>
+                                </div>  
+                            </div>                             
+                        </div>
+        
+                    </div>
+                </div>  
+    </form>  
+    </div> 
+    <!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+        
+{% endblock page %}
+    

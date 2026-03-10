@@ -1,0 +1,206 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+        <h2 class="title">Bienvenue {{user}}</h2>
+        <span class="shape-line"><i class="icon-19"></i></span>
+        <p>Sélectionnez la rubrique à laquelle vous souhaitez accéder</p>
+        <p>Votre Classe est : <b>{{cursus.classe}}</b></p>
+    </div>
+
+    <div class="row g-5">
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_maquette' %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-24"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_maquette' %}">
+                        <h5 class="title">Maquette Pédagogique</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_times' %}'">
+            <div class="categorie-grid categorie-style-2 color-secondary-style">
+                <div class="icon">
+                    <i class="icon-10 art-design"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_times' %}">
+                        <h5 class="title">Emplois du temps</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_courses' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra01-style">
+                <div class="icon">
+                    <i class="icon-11 personal-development"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_courses' %}">
+                        <h5 class="title">Cours</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_fees' %}'">
+            <div class="categorie-grid categorie-style-2 color-tertiary-style">
+                <div class="icon">
+                    <i class="icon-27 health-fitness"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_fees' %}">
+                        <h5 class="title">Scolarités</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_notes' %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-9"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_notes' %}">
+                        <h5 class="title">Mes Notes</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_book' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra02-style">
+                <div class="icon">
+                    <i class="icon-13 data-science"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_book' %}">
+                        <h5 class="title">Bibliothèque</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_documents' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra03-style">
+                <div class="icon">
+                    <i class="icon-14"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_documents' %}">
+                        <h5 class="title">Documents</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_groupe' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra04-style">
+                <div class="icon">
+                    <i class="icon-15"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_groupe' %}">
+                        <h5 class="title">Mon Groupe</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_cv' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra05-style">
+                <div class="icon">
+                    <i class="icon-16 computer-science"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_cv' %}">
+                        <h5 class="title">Mon Cv</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_password' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra06-style">
+                <div class="icon">
+                    <i class="icon-17 video-photography"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_password' %}">
+                        <h5 class="title">Mes Accès</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_profile' %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-9"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_profile' %}">
+                        <h5 class="title">Mettre à jour Profil</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'logout' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra01-style">
+                <div class="icon">
+                    <i class="icon-11 personal-development"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'logout' %}">
+                        <h5 class="title">Déconnexion</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_transport' %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-1"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_transport' %}">
+                        <h5 class="title">
+                            <center>
+                                Cars & Transports
+                            </center>
+                        </h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'cartes' %}'">
+            <div class="categorie-grid categorie-style-2 color-extra04-style">
+                <div class="icon">
+                    <i class="icon-15"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'cartes' %}">
+                        <h5 class="title">Ma Carte</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    
+{% endblock content %}
+    

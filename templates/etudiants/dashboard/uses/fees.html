@@ -1,0 +1,57 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+    <h4 class="title">Scolarité  {{ user }}</h4>
+    <span class="shape-line"><i class="icon-19"></i></span>
+</div>
+<section class="cart-page-area edu-section-gap">
+        <div class="container">
+            
+            <div class="table-responsive table-center" >
+                <table class="table cart-table wishlist-table">
+                    <thead>
+                        <tr>
+                           
+                            <th scope="col" class="product-title">Année Académique</th>
+                            <th scope="col" class="product-title">Filière</th>
+                            <th scope="col" class="product-title">Niveau</th>
+                            <th scope="col" class="product-title">Frais</th>
+                            <th scope="col" class="product-title">Payé</th>
+                            <th scope="col" class="product-price">Reste à Payer</th>
+                            <th scope="col" class="product-status">Action</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                       
+                       {% for scolarite in scolarites  %}
+                       <tr>
+                     
+                        <td class="product-status" data-title="Année Académique">{{scolarite.annee_academique}}</td>
+                        <td class="product-status" data-title="Filière">{{scolarite.filiere}}</td>
+                        <td class="product-status" data-title="Niveau">{{scolarite.niveau}}</td>
+                        <td class="product-status" data-title="Frais">{{scolarite.frais}} FCFA</td>
+                        <td class="product-status" data-title="Payé">{{scolarite.paye}} FCFA</td>
+                        <td class="product-status" data-title="Reste à Payer">{{scolarite.reste}} FCFA</td>
+                        <td class="product-add-cart">
+                            {% if not scolarite.solded %}
+                                <a href="{{scolarite.paiement_url}}" class="edu-btn btn-medium">Nouveau Paiement</a>
+                            {% endif %}  
+                        </td>
+                       </tr>
+                       {% endfor %}
+                        
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    
+{% endblock content %}
+    

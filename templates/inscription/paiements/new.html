@@ -1,0 +1,47 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+
+{% block page %}
+<!-- Start Contentbar -->    
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- End col -->
+        
+        {% if etudiant %}
+
+        {% else %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <form method="post" class="form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="code_paiement">Code d'identification de l'étudiant :</label>
+                            <div class="input-group">
+                                <input style="border: 2px solid black" type="text" id="code_paiement" name="code_paiement" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Chercher le dossier</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+            
+        {% endif %}
+            
+            
+    </div> 
+    <!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+        
+{% endblock page %}
+    

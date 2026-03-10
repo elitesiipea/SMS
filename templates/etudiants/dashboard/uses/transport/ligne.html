@@ -1,0 +1,39 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+        <h2 class="title">{{titre}}</h2>
+        <span class="shape-line"><i class="icon-19"></i></span>
+        <p>Sélectionnez la rubrique à laquelle vous souhaitez accéder</p>
+
+    </div>
+
+    <div class="row g-5">
+
+        {% for ligne in lignes  %}
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_lignes_abonnement' pk=ligne.pk  %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-5"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_lignes_abonnement' pk=ligne.pk %}">
+                        <h5 class="title">{{ligne}} <br> ({{ligne.cout_mensuel}} Fcfa / Mois)</h5>
+                    </a>
+                    <br>
+                    <button style="float:right" class="edu-btn btn-small">M'abonner</button>
+                </div>
+            </div>
+        </div>
+        
+        {% endfor %}
+
+    </div>
+</div>
+    
+{% endblock content %}
+    

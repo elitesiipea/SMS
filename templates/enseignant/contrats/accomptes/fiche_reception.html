@@ -1,0 +1,115 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+                <!-- End row -->
+                <div class="row justify-content-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="invoice">
+                                    <div class="    ">
+                                        <div class="row">
+                                          <div class="col-2">
+                                            <img src="{{user.etablissement.logo.url}}" height="200px">
+                                            
+                                          </div>    
+                                        </div>
+                                      </div>
+                                      <table>
+                                        <br>
+                                        <div style="border: 3px solid #145089;background-color:#145089; " class="">
+                                          <center>  <h3 style="color:white">REMISE DE CHEQUE  N°<b>&nbsp;{{contrat.numero_cheque}}&nbsp;</b> ({{contrat.annee_academique}})</h3></center>
+                                          </div>
+                                        <tbody>
+                                          <tr>
+                                            <td>
+                                              <div>
+                                                <br>
+                                                <div class="row">
+                                                    <br>
+                                                    <br>
+                                                  <br>
+                                                  <p>
+                                                    Je soussigné(e)
+                                                   
+                                                    M/ Mme / Mlle : <strong>{{contrat.enseignant}}</strong><br>
+                                                    N° CNI ou passeport : <strong>{{contrat.enseignant.numero_cni}}</strong><br>
+                                                    Date et lieu de naissance : <strong>{{contrat.enseignant.date_de_naissance}} à {{contrat.enseignant.lieu_de_naissance}}</strong><br>
+                                                    Nationalité : <strong>{{contrat.enseignant.nationalite.name}}</strong><br>
+                                                    Situation matrimoniale : <strong>{{contrat.enseignant.situations}}</strong><br>
+                                                    Domicile : <strong>{{contrat.enseignant.domicile}}</strong><br>
+                                                    Cellulaire : <strong>{{contrat.enseignant.contact}}</strong><br>
+                                                    Intervenant en : {{contrat.filiere}} {{contrat.niveau}} ({{contrat.classe}}), 
+                                                    Comme enseignant en <strong>{{contrat.matiere.nom | upper }}</strong>
+                                                   </p>
+                                                   
+                                                   <p>
+                                                    Reconnais avoir recu à l'agence comptable le cheque numéro <b>&nbsp;{{contrat.numero_cheque}}&nbsp;</b> d'un montant de   <b> &nbsp; {{contrat.cout}} FCFA</b> <br>
+                                                   En foi de quoi ce document est établi pour servir et valoir ce que de droit.
+                                                   </p>
+                                                    
+                                                </div>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                       
+                                      </table>
+                                      <br>
+                                      <b>Abidjan le {% now "d/m/Y" %}</b>
+                                      <br>
+                                      <br>
+                                      <div class="row">
+                                        
+                                        <br>
+                                        <div class="col-6">La Comptabilité</div>
+                                        <div class="col-6">L'enseignant
+                                          <br>
+                                          {{contrat.enseignant | upper }}
+                                        </div>
+                                      </div>
+                                      <div class="footer">
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                       <center><b> Email : secretariat@iipea.com --- Site web: www.iipea.com --- Contacts: +225 07 08 08 87 87 / 05 44 02 60 60</b> </center>
+                                        <br>
+                                        <br>
+                                      </div>
+                                   
+                                    <div class="invoice-footer">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                               
+                                            </div>
+                                            <div class="col-md-6 d-print-none">
+                                                <div class="invoice-footer-btn">
+                                                    <a href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+    

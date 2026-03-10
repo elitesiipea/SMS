@@ -1,0 +1,253 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+{% block page %}
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <div class="container-fluid"> <!-- Utilisation de container-fluid pour pleine largeur -->
+            <!-- Row contenant les deux tableaux côte à côte -->
+            <div class="row">
+                <!-- Colonne pour la table des catégories de produits -->
+                <div class="col-md-4 col-lg-4 col-xl-4"> <!-- Colonne adaptée à différentes tailles d'écrans -->
+                    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addCategoryModal">
+                        Ajouter une catégorie
+                    </button>
+                
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                            <div class="table-responsive">
+                                <table id="datatable-buttons-categories" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Produits</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for categorie in categories %}
+                                        <tr>
+                                            <td>{{ categorie.nom }}</td>
+                                            <td>{{ categorie.produits }}</td>
+                                            <td>
+                                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editCategoryModal-{{ categorie.id }}">Editer</button>
+                                                <a href="{% url 'delete_category' categorie.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Colonne pour la table des produits -->
+                <div class="col-md-8 col-lg-8 col-xl-8">
+                    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addProductModal">
+                        Ajouter un produit
+                    </button>
+                
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                            <div class="table-responsive">
+                                <table id="datatable-buttons" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Quantité</th>
+                                            <th>Localisation</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for produit in produits %}
+                                        <tr>
+                                            <td>{{ produit.nom }}</td>
+                                            <td>{{ produit.quantite }}</td>
+                                            <td>{{ produit.localisation }}</td>
+                                            <td>
+                                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editProductModal-{{ produit.id }}">Editer</button>
+                                               
+                                               
+                                               {% if user.overloader %}
+                                               <a href="{% url 'delete_product' produit.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                                               {% else %}
+                                               <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                                               {% endif %}
+                                               <a href="{% url 'produit_historique' produit.id %}" class="btn btn-info btn-sm">Historique</a>
+                                                 
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Ajouter Catégorie -->
+        <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form method="POST" action="{% url 'produit_view' %}">
+                    {% csrf_token %}
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une catégorie</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nom">Nom</label>
+                                <input type="text" class="form-control" id="nom" name="nom" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Ajouter Produit -->
+        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form method="POST" action="{% url 'produit_view' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter un produit</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nom">Nom</label>
+                                <input type="text" class="form-control" id="nom" name="nom" required>
+                                <input type="hidden" class="form-control" id="nom_produit" name="nom_produit">
+
+                                
+                            </div>
+                            <div class="form-group">
+                                <label for="categorie">Catégorie</label>
+                                <select class="form-control" id="categorie" name="categorie">
+                                    {% for categorie in categories %}
+                                    <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantite">Quantité</label>
+                                <input type="number" class="form-control" id="quantite" name="quantite" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="localisation">Localisation</label>
+                                <input type="text" class="form-control" id="localisation" name="localisation" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="localisation">Description</label>
+                                <input type="textarea" class="form-control" id="description" name="description" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modals Editer (générés dynamiquement) -->
+{% for categorie in categories %}
+<div class="modal fade" id="editCategoryModal-{{ categorie.id }}" tabindex="-1" aria-labelledby="editCategoryLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'edit_category' categorie.id %}">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editer la catégorie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="nom" name="nom" value="{{ categorie.nom }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+{% for produit in produits %}
+<div class="modal fade" id="editProductModal-{{ produit.id }}" tabindex="-1" aria-labelledby="editProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'edit_product' produit.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editer le produit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="nom" name="nom" value="{{ produit.nom }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categorie">Catégorie</label>
+                        <select class="form-control" id="categorie" name="categorie">
+                            {% for categorie in categories %}
+                            <option value="{{ categorie.id }}" {% if produit.categorie.id == categorie.id %}selected{% endif %}>{{ categorie.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantite">Quantité</label>
+                        <input type="number" class="form-control" id="quantite" name="quantite" value="{{ produit.quantite }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="localisation">Localisation</label>
+                        <input type="text" class="form-control" id="localisation" name="localisation" value="{{ produit.localisation }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="localisation">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" value="{{ produit.description }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock page %}

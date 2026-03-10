@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="School Management System (SMS)">
+  <meta name="keywords" content="School Management System (SMS)">
+  <meta name="author" content="School Management System (SMS)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+  <title>
+
+    {% if titre %}
+    {{titre}}
+    {% else %}
+VERIFICATION D'ATTESTATIONS
+    {% endif %}
+
+  </title>
+  <!-- Fevicon -->
+  <link rel="shortcut icon" href="{% static 'administration/assets/images/favicon.ico' %}">
+  <link href="{% static 'administration/assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'administration/assets/css/style.css' %}" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body class="vertical-layout">
+  <!-- Start Containerbar -->
+  <div id="containerbar" class="containerbar authenticate-bg">
+    <!-- Start Container -->
+    <div class="container">
+      <div class="auth-box login-box">
+        <!-- Start row -->
+        <div class="row no-gutters align-items-center justify-content-center">
+          <!-- Start col -->
+          <div class="col-md-6 col-lg-5">
+            <!-- Start Auth Box -->
+            <div class="auth-box-right">
+              <div class="card">
+                <div class="card-body">
+
+                  {% if not found %}
+                  <div class="alert alert-danger">
+                    <strong>Aucune attestation avec ce matricule n'a été trouvée , merci de contacter l'administration</strong>
+                  </div>
+                  {% endif %}
+
+                  
+                  {% if attestation %}
+
+                  <ul class="list-group">
+                    <li class="list-group-item"><strong>Nom:</strong> {{attestation.nom | upper }}</li>
+                    <li class="list-group-item"><strong>Prénom:</strong> {{attestation.prenom | upper }}</li>
+                    <li class="list-group-item"><strong>Matricule:</strong> {{attestation.matricule | upper }}</li>
+                    <li class="list-group-item"><strong>Filère:</strong> {{attestation.filiere | upper }}</li>
+                    <li class="list-group-item"><strong>Cycle:</strong> {{attestation.niveau | upper }} {{attestation.cycle | upper }}</li>
+                    <li class="list-group-item"><strong>Date de Naissance :</strong> {{attestation.date_de_naissance | upper }}</li>
+                    <li class="list-group-item"><strong>Lieu de naissance :</strong> {{attestation.lieu_de_naissance | upper }}</li>
+                   
+                    <!-- Ajoutez ici d'autres informations de l'utilisateur -->
+    
+                    <!-- Icône de validation -->
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        CERTIFIE CONFORME
+                        <span class="badge badge-success badge-pill"><i class="fas fa-check"></i></span>
+                    </li>
+                    <div class="container">
+                        <br>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://myiipea.com{% url 'verify' code=attestation.code %}" width="150px" />
+                  
+                    </div> 
+                </ul>
+                    
+                  {% endif %}
+                    
+                </div>
+              </div>
+            </div>
+            <!-- End Auth Box -->
+          </div>
+          <!-- End col -->
+        </div>
+        <!-- End row -->
+      </div>
+    </div>
+    <!-- End Container -->
+  </div>
+  <!-- End Containerbar -->
+  <!-- Start js -->
+
+
+
+</body>
+
+</html>

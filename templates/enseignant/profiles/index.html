@@ -1,0 +1,210 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+                <!-- End row -->
+                <div class="row justify-content-center">
+                    <!-- Start col -->
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="invoice">
+                                    <div class="invoice-head">
+                                        <div class="row">
+                                            <div class="col-12 col-md-7 col-lg-7">
+                                                <div class="invoice-logo">
+                                                    <h3>{{enseignant.etablissement}}</h3>
+                                                </div>
+                                                <h4>secretariat@iipea.com</h4>
+                                                <p>+225 07 08 08 87 87 / 07 00 24 36 88</p>
+                                                <p class="mb-0"></p>
+                                            </div>
+                                            <div class="col-12 col-md-5 col-lg-5">
+                                                <div class="invoice-name">
+                                                    <span class="badge badge-info-inverse font-14"><h3>{{enseignant.code}}</h3></span>
+                                                    <br>
+                                                    <br>
+                                                    <p class="mb-0">Inscrit depuis le : {{enseignant.created}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="invoice-billing">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-4 col-lg-4">
+                                                <div class="invoice-address">
+                                                    <h4 class="mb-3">Informations de base</h4>
+                                                    <h6 class="text-muted">Nom : {{enseignant.nom }}</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li>Prénom(s) : {{enseignant.prenom}}</li> 
+                                                        <li>Status : {{enseignant.statut_enseignant}}</li>  
+                                                        <li>Date Naissance : {{enseignant.date_de_naissance}}</li> 
+                                                        <li>Lieu Naissance : {{enseignant.lieu_de_naissance}}</li> 
+                                                        <li>N° CNI / Passeport : {{enseignant.numero_cni | upper }}</li> 
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-md-4 col-lg-4">
+                                                <div class="invoice-address">
+                                                    <ul class="list-unstyled">
+                                                        <li>Nationalité : {{enseignant.nationalite.name }}</li> 
+                                                        <li>Matricule : {{enseignant.code}}</li> 
+                                                        <li>Lieu de Residence : {{enseignant.domicile}}</li> 
+                                                        <li>Sexe : {{enseignant.sexe}}</li> 
+                                                        <li>Contact : {{enseignant.contact}}</li> 
+                                                        <br>
+                                                        <li>Code Enseignant : <b><p class="mb-3"><span class="badge badge-info-inverse font-14">{{enseignant.code}}</span></p></b> </li>    
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                <div class="invoice-address">
+                                                    <div class="card">
+                                                        <div class="card-body bg-info-rgba text-center">
+                                                           <img  height="100px" src="{{enseignant.etablissement.logo.url}}" alt="{{enseignant}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <h4 class="mb-3">Scolarité</h4> -->
+                                    </div>  
+                                   
+                                    <!-- <div class="invoice-summary">
+                                       
+                                        <div class="table-responsive ">
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">ID</th>                       
+                                                        <th scope="col">Banque</th>
+                                                        <th scope="col">Réference</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Montant</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>ECOBANK</td>
+                                                        <td>MF000-151-412510</td>
+                                                        <td>01/01/2023</td>
+                                                        <td>150.0000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>SGBCI</td>
+                                                        <td>MF000-151-412510</td>
+                                                        <td>01/01/2023</td>
+                                                        <td>150.0000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>BRIDE BANK</td>
+                                                        <td>MF000-151-412510</td>
+                                                        <td>01/01/2023</td>
+                                                        <td>150.0000</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="invoice-summary-total">
+                                        <div class="row">
+                                            <div class="col-md-12 order-2 order-lg-1 col-lg-5 col-xl-6">
+                                                <div class="order-note">
+                                                    <p class="mb-3"><span class="badge badge-info-inverse font-14"></span></p>
+                                                    <h6></h6>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 order-1 order-lg-2 col-lg-7 col-xl-6">
+                                                <div class="order-total table-responsive ">
+                                                    <table class="table table-borderless text-right">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Montant de la scolarité:</td>
+                                                                <td>500.000</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Montant Payé:</td>
+                                                                <td>450.000</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="f-w-7 font-18"><h5>Resye à Payer :</h5></td>
+                                                                <td class="f-w-7 font-18"><h5>50.000 Fcfa</h5></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="invoice-meta">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="invoice-meta-box">
+                                                    <h4 class="mb-3">Accès enseignant</h4>
+
+                                                    <p style="font-size: large;">
+                                                        Bienvenue à IIPEA , veuillez trouver ci dessous vos accès étudiant (E-MAIL & Mot de passe) , vous donnant accès à l'applicatrion Myiipea
+                                                        disponible sur PlayStore et AppleStore et sur <i class="feather icon-aperture mr-2"></i> www.myiipea.com .
+                                                        
+                                                    </p>
+                                                    <ul class="pl-3">
+                                                        <li style="font-size: large;color:black"><i class="feather icon-mail mr-2"> </i>E-mail : {{enseignant.utilisateur.email}}</li>  
+                                                        <li style="font-size: large;color:black"><i class="feather icon-lock mr-2"> </i>Mot de passe : @elites@</li>  
+                                                    </ul>
+                                                    <p style="font-size: large;color:black">
+                                                        Nb : Vous avez un delai d'un jour pour changer votre mot de passe sur l'application MyIIPEA
+                                                    </p>
+                                                    <p style="font-size: large;color:black">
+                                                        Vos accès vous donnent droit aux éléments suivants  : 
+                                                        <ul>
+                                                            <li><strong>Emplois du temps</strong></li>
+                                                            <li><strong>Listes des contrats</strong></li>
+                                                            <li><strong>Fiches de notes &amp; Liste de classe</strong></li>
+                                                            <li><strong>Dépôt de support &amp; document</strong></li>
+                                                            <li><strong>Demandes d'acompte</strong></li>
+                                                            <li><strong>Liste des étudiants (Pour les classes où n'intervient pas l'enseignant)</strong></li>
+                                                            <li><strong>Progressions</strong></li>
+                                                            <li><strong>Cahiers de Texte</strong></li>
+                                                            <li><strong>Contact administration</strong></li>
+                                                        </ul>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="invoice-footer">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                                <p class="mb-0">L'Institut International Polytechnique des Elites d'Abidjan vous remercie </p><p id="currentDate"></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="invoice-footer-btn">
+                                                    <a href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End col -->
+                </div>
+                <!-- End row -->
+            </div>
+            <!-- End Contentbar -->
+           
+    
+{% endblock page %}
+    

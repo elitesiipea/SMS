@@ -1,0 +1,79 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<!-- Start Contentbar -->    
+<div class="contentbar">                
+    <!-- Start row -->
+    <div class="row">
+        
+        <div class="col-lg-12">
+                <!-- Start col -->
+            <div class="card m-b-30">
+                
+                <div class="card-body">
+
+                    {% if user.can_add_note %}
+                    <button type="button" style="float: right;"  onclick="window.location.href='{% url 'create_note' pk=note.classe.pk %}'" class="tabledit-save-button btn btn-sm btn-primary" style="float: none; margin: 5px;"><span class="ti-plus"></span> NOUVELLE NOTE</button>
+                    <br>
+                    <br>
+                    {% endif %}
+                    
+                    {% if user.can_add_note %}
+                    <button type="button" style="float: right;" onclick="window.location.href='{% url 'note_resultat_add_edit' pk=note.pk %}'" class="tabledit-save-button btn btn-sm btn-info"><span class="ti-pencil"></span>  MODIFIER LA NOTE</button>
+            
+                    <br>
+                    {% endif %}
+                        
+                    
+                    <h6 class="card-subtitle">Exportez les données vers Copy, CSV, Excel & Note.</h6>
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+
+                                <th>Id</th>
+                                <th>Etudiant</th>
+                                <th>Note 1</th>
+                                <th>Note 2</th>
+                                <th>Note 3 </th>
+                                <th>Note Partielle</th>
+                                <th>Moyenne</th>
+                                
+                               
+                            </tr>
+                            </thead>
+                            
+                            <tbody>
+                           
+                            
+                            {% for resultat in resultats  %}
+
+                            <tr>
+                               
+                                <td>{{forloop.counter}}</td>
+                                <td>{{resultat.etudiant.etudiant}}</td>
+                                <td>{% if resultat.note.use_note_1 %}{{resultat.note_1}} {% else %} --- {% endif %}</td>
+                                <td>{% if resultat.note.use_note_2 %}{{resultat.note_2}} {% else %} --- {% endif %}</td>
+                                <td>{% if resultat.note.use_note_3 %}{{resultat.note_3}} {% else %} --- {% endif %}</td>
+                                <td>{% if resultat.note.use_note_partiel %}{{resultat.note_partiel}} {% else %} --- {% endif %}</td>
+                                <td>{{resultat.moyenne}}</td>
+                            </tr>
+                                
+                            {% endfor %}
+                                
+                          
+                            </tbody>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+    </div>
+    <!-- End row -->
+</div>
+    
+{% endblock page %}
+    

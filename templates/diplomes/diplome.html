@@ -1,0 +1,106 @@
+{% load humanize %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{session}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+    crossorigin="anonymous">
+    <link href="https://fonts.cdnfonts.com/css/berlin-sans-fb" rel="stylesheet">
+        
+</head>
+
+<style>
+    .gras{
+        font-weight:bold !important ;
+        font-size:20px
+    }
+</style>
+
+  <body>
+   
+    <ul>
+        {% for attestation in diplomes %}
+                <div class="container-fluid">
+                    <h2 class="text-center gras" style="line-height: 1.5;margin-top:80px;font-weight:bold;font-size:4 0px"><strong style="font-weight: bold;font-size: 35px">{{attestation.niveau | upper }}</strong></h2>
+                    <p class="gras text-center"  style="font-weight:bold;font-size:13px">
+                        <b style="font-family: 'Berlin Sans FB';font-size:19px;font-weight:bold;">
+                            Diplôme enregistré sous le N° {{attestation.code | upper }} Année académique {{attestation.annee_academique | upper }} IIPEA
+                        </b>
+                     </p>
+                    <div class="container">
+                        {% if attestation.cycle == "UNIVERSITAIRE" %}
+                        <p class="text-center" style="font-size:12px">
+                           <i style="font-family: 'Berlin Sans FB';">
+                            Vu la loi N°2023-423 du 22 mai 2023 relative à l’enseignement,<br>
+                            Vu le décret N°97-675 du 3 septembre 1997 fixant les conditions de concession du service public et de l’enseignement à des établissements privés ;<br>
+                            Vu la décision N°198 /MERS/DGES/KKJ du 24 avril 2020 portant autorisation de création d’Etablissement Privés d’Enseignement Supérieur de type universitaire ;<br>
+                            Vu l’arrêté N°199 /MERS/DGES/DESUP/KKJ du 24 avril 2020 portant autorisation d’ouverture et d’agrément d’Etablissement Privés d’Enseignement de type universitaire ;<br>
+                            Vu l’arrêté N°558/ MERS/DGES du 04 novembre 2021 fixant la liste des Etablissement Privés de types universitaire habilités à délivrer des diplômes homologués par la Commission de Reconnaissance et d’Equivalence de Diplômes Nationaux et Etrangers Post-Bac, en sa saison du mercredi, 09 février 2022.<br>
+                            Vu les pièces justificatives produites par l’intéressé(e) en vue de son inscription pour le parcours {{attestation.niveau | lower | capfirst}} 
+                           </i>
+    
+                        </p>
+                        {% elif attestation.cycle == "PROFESSIONNEL" %}
+                        <p class="text-center" style="font-size:12px">
+                           <i style="font-family: 'Berlin Sans FB';">
+                            Vu la loi N°2023-423 du 22 mai 2023 relative à l’enseignement,<br>
+                            Vu le décret N°97-675 du 3 septembre 1997 fixant les conditions de concession du service public et l’enseignement à des établissements privés ;<br>
+                            Vu l’arrêté N°361 du 19 juin 2007 fixant les conditions d’autorisation de création et d’ouverture, des Grandes Ecoles et Universités Privées,<br>
+                            Vu l’arrêté N°779 /MERS/DGES/DESUP/KKJ du 01 octobre 2019 portant autorisation d’ouverture et d’agrément d’Etablissement Privés d’Enseignement Supérieur de type post BTS ;<br>
+                            Vu l’arrêté N°420/ MERS/DGES du 04 novembre 2022 fixant la liste des Etablissement Privés d’Enseignement Supérieur de type Grande Ecole habilités à délivrer des diplômes homologués par la Commission de Reconnaissance et d’Equivalence de Diplômes Nationaux et Etrangers Post-Bac, en sa saison du mercredi, 09 février 2022 ; <br>
+                            Vu les pièces justificatives produites par l’intéressé(e) en vue de son inscription pour le parcours {{attestation.niveau| lower |  capfirst}}
+                           </i>
+    
+                        </p>
+                    {% endif %}
+                    <p>
+                        Vu le procès-verbal du jury en date du <b style="" class="gras">{{attestation.date_soutenance}}</b> attestant que l’intéressé(e) a satisfait toutes les obligations du règlement des études.<br>
+                        Sur proposition du {% if attestation.cycle == "UNIVERSITAIRE" %} Président {% elif attestation.cycle == "PROFESSIONNEL" %} Directeur Général {% endif %} de l’Institut International Polytechnique des Elites d’Abidjan sis Abidjan Cocody,<br>
+                        Le Ministre de l’Enseignement Supérieur et de la Recherche Scientifique délivre au titre de l’année académique <b style="">{{attestation.annee_academique}}</b><br>
+                        À  {{ attestation.genre }}  <b style=""  class="gras">{{attestation.nom }} {{attestation.prenom }}</b><br>
+                        Né(e) le <b style="" class="gras">{{attestation.date_de_naissance |date:'d/m/Y' }}</b> à <b style="" class="gras">{{attestation.lieu_de_naissance }}</b><br>
+                        Le Diplôme de <b style="" class="gras">{{attestation.diplome | upper }}</b><br>
+                        Et lui confère le <b style="" class="gras"> Grade de {{attestation.niveau | lower | capfirst }}</b> et reconnu comme tel, pour en jouir avec les prérogatives qui y sont attachées.<br>
+
+                    </p>
+
+                  <br>
+                    <div class="row text-center">
+
+                        <div class="col-4">
+                            <p style="font-weight: bold;font-size: 17px" class="gras" style="text-align:center">
+                               <b> Le (La) Titulaire</b>
+                            </p>
+                        </div>
+                        <div class="col-4">
+                            {% if attestation.cycle == "UNIVERSITAIRE" %}
+                            <p style="font-weight: bold;font-size: 17px" class="gras" style="text-align:center">
+                                <b>Le Président</b>
+                            </p>
+                            {% elif attestation.cycle == "PROFESSIONNEL" %}
+                            <p style="font-weight: bold;font-size: 17px" class="gras" style="text-align:center">
+                                <b> Le Directeur Général </b>
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="col-4">
+                            <p style="font-weight: bold;font-size: 14px">
+                                <b>Le Ministre de l’Enseignement Supérieur<br> et de la Recherche Scientifique (MESRS)</b>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+           <p style="page-break-before: always;"></p>
+            </div>
+        {% endfor %}
+    </ul>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>

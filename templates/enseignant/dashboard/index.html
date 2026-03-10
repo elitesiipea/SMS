@@ -1,0 +1,337 @@
+{% extends 'administration/uses/ blank.html' %}
+{% load static %}
+
+
+{% block page %}
+
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg .tg-teh8 {
+        background-color: #f3eec1;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-6zfp {
+        font-weight: bold;
+        background-color: #8db4e3;
+        color: #000000;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-6dzw {
+        background-color: #d2dae2;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-654s {
+        font-weight: bold;
+        background-color: #8800c9;
+        color: #ffffff;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-qsz9 {
+        background-color: #f3eec1;
+        color: #000000;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-l660 {
+        background-color: #d2dae2;
+        color: #000000;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-dj9i {
+        background-color: #8800c9;
+        color: #ffffff;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-fzvx {
+        background-color: #31b267;
+        color: #ffffff;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-zkk0 {
+        background-color: #f3eec1;
+        color: #000000;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-gpzw {
+        font-weight: bold;
+        background-color: #8db4e3;
+        color: #000000;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-i31f {
+        background-color: #8db4e3;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-7ye7 {
+        background-color: #31b267;
+        color: #ffffff;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-z4m1 {
+        font-weight: bold;
+        background-color: #31b267;
+        color: #ffffff;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    @media screen and (max-width: 767px) {
+        .tg {
+            width: auto !important;
+        }
+
+        .tg col {
+            width: auto !important;
+        }
+
+        .tg-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+</style>
+
+<style>
+    .bg-light-gray {
+    background-color: #f7f7f7;
+}
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}   
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+
+.bg-sky.box-shadow {
+    box-shadow: 0px 5px 0px 0px #00a2a7
+}
+
+.bg-orange.box-shadow {
+    box-shadow: 0px 5px 0px 0px #af4305
+}
+
+.bg-green.box-shadow {
+    box-shadow: 0px 5px 0px 0px #4ca520
+}
+
+.bg-yellow.box-shadow {
+    box-shadow: 0px 5px 0px 0px #dcbf02
+}
+
+.bg-pink.box-shadow {
+    box-shadow: 0px 5px 0px 0px #e82d8b
+}
+
+.bg-purple.box-shadow {
+    box-shadow: 0px 5px 0px 0px #8343e8
+}
+
+.bg-lightred.box-shadow {
+    box-shadow: 0px 5px 0px 0px #d84213
+}
+
+
+.bg-sky {
+    background-color: #02c2c7
+}
+
+.bg-orange {
+    background-color: #e95601
+}
+
+.bg-green {
+    background-color: #5bbd2a
+}
+
+.bg-yellow {
+    background-color: #f0d001
+}
+
+.bg-pink {
+    background-color: #ff48a4
+}
+
+.bg-purple {
+    background-color: #9d60ff
+}
+
+.bg-lightred {
+    background-color: #ff5722
+}
+
+.padding-15px-lr {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.padding-5px-tb {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.margin-10px-bottom {
+    margin-bottom: 10px;
+}
+.border-radius-5 {
+    border-radius: 5px;
+}
+
+.margin-10px-top {
+    margin-top: 10px;
+}
+.font-size14 {
+    font-size: 14px;
+}
+
+.text-light-gray {
+    color: #d6d5d5;
+}
+.font-size13 {
+    font-size: 13px;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
+</style>
+
+<style>
+    .dark-hr {
+        background-color: #333; /* Couleur foncée */
+        height: 2px; /* Hauteur de la ligne */
+    }
+</style>
+
+<!-- Start Contentbar -->    
+<div class="contentbar">    
+    
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="invoice-footer-btn">
+                <a style="float:right" href="javascript:window.print()" class="btn btn-primary-rgba py-1 font-16"><i class="feather icon-printer mr-2"></i>Imprimer</a>
+            </div>
+        </div>
+        <br>
+        <br>
+           <center>
+            <h3>EMPLOIS DU TEMPS 
+                
+                {% for programme in programmes %}
+                    
+                    {% if forloop.first %}
+                        {{programme.emplois_du_temps.classe.annee_academique}}
+                    {% endif %}
+                        
+                {% endfor %}
+                    
+            </h3>
+           </center>
+            <br>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr class="bg-light-gray">
+                        <th class="text-uppercase">LUNDI</th>
+                        <th class="text-uppercase">MARDI</th>
+                        <th class="text-uppercase">MERCREDI</th>
+                        <th class="text-uppercase">JEUDI</th>
+                        <th class="text-uppercase">VENDREDI</th>
+                        <th class="text-uppercase">SAMEDI</th>
+                        <th class="text-uppercase">DIMANCHE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for jour in jours_semaine %}
+                            <td>
+                                {% for programme in programmes %}
+                                    {% if programme.jour == jour %}
+                                        <div>
+                                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">{{ programme.matiere.matiere.nom }}</span>
+                                            <div class="margin-10px-top font-size14">{{ programme.debut|time:"H:i" }}-{{ programme.fin|time:"H:i" }}</div>
+                                            <div class="font-size13 text-light-gray" style="color:black">{{ programme.salle }}</div>
+                                            <br>
+                                            <b><div class="font-size13 text-light-gray" style="color:black">
+                                                ({{ programme.emplois_du_temps.classe }}) 
+                                                ({{ programme.matiere.enseignant.utilisateur.id }}) 
+                                                 </div></b>
+                                        </div>
+                                        <hr class="dark-hr">
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+   
+{% endblock page %}
+    

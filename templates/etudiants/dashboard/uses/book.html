@@ -1,0 +1,108 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<section class="shop-page-area section-gap-equal" style="margin-top:-150px">
+    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+        <h4 class="title">Bibliothèque  </h4>
+        <span class="shape-line"><i class="icon-19"></i></span>
+    </div>
+    <div class="container">
+        <div class="edu-sorting-area">
+            <div class="sorting-left">
+                
+            </div>
+            <div class="sorting-right">
+                <div class="edu-sorting">
+                    <div class="icon"><i class="icon-55"></i></div>
+                    <select class="edu-select" id="category-filter">
+                        <option value="all">Catégories</option>
+                        {% for categorie in categories %}
+                            <option value="{{ categorie.id }}">{{ categorie }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row g-5">
+            
+            {% for livre in livres   %}
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 sal-animate livre-item" data-sal-delay="100" data-sal="slide-up" data-sal-duration="800" data-category="{{ livre.categorie.id }}">
+                <div class="edu-product">
+                    <div class="inner">
+                        <div class="thumbnail">
+                            <a href="{% url 'books_details' pk=livre.pk %}">
+                                <img src="{{livre.image.url}}" alt="{{livre}}">
+                            </a>
+                            <div class="product-hover-info">
+                                <ul>
+                                    <li><a href="{% url 'books_details' pk=livre.pk %}"><i class="icon-22"></i></a></li>
+                                  
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h6 class="title"><a href="{% url 'books_details' pk=livre.pk %}">{{livre}}</a></h6>
+                            <div class="product-rating">
+                                <div class="rating">
+                                    <i class="icon-23"></i>
+                                    <i class="icon-23"></i>
+                                    <i class="icon-23"></i>
+                                    <i class="icon-23"></i>
+                                    <i class="icon-23"></i>
+                                </div>
+                               
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <ul class="edu-pagination pt--50">
+            {% if page_obj.has_previous %}
+                <li><a href="?page=1" aria-label="First"><i class="icon-west"></i></a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous"><i class="icon-west"></i></a></li>
+            {% endif %}
+            <li class="active"><a href="#">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next"><i class="icon-east"></i></a></li>
+                <li><a href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last"><i class="icon-east"></i></a></li>
+            {% endif %}
+        </ul>
+        
+
+    </div>
+</section>
+    
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#category-filter").change(function() {
+            var selectedCategory = $(this).val();
+            
+            // Masquer tous les livres
+            $(".livre-item").hide();
+            
+            if (selectedCategory === "all") {
+                // Afficher tous les livres si "Toutes les catégories" est sélectionné
+                $(".livre-item").show();
+            } else {
+                // Afficher uniquement les livres de la catégorie sélectionnée
+                $(".livre-item[data-category='" + selectedCategory + "']").show();
+            }
+        });
+    });
+</script>
+
+
+{% endblock content %}
+    

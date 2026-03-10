@@ -1,0 +1,58 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="section-title section-center" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">
+        <h2 class="title">Mes Documents</h2>
+        <span class="shape-line"><i class="icon-19"></i></span>
+        <p>Sélectionnez la rubrique à laquelle vous souhaitez accéder</p>
+    </div>
+
+    <div class="row g-5">
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_certificat' name='FREQUENTATION'  %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-24"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_certificat' name='FREQUENTATION'  %}">
+                        <h5 class="title">Certificat de Fréquentation</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_certificat' name='SCOLARITE'  %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-24"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_certificat' name='SCOLARITE' %}">
+                        <h5 class="title">Certficat de Scolarité</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-sal-delay="50" data-sal="slide-up" data-sal-duration="800" onclick="window.location.href='{% url 'student_certificat' name='INSCRIPTION' %}'">
+            <div class="categorie-grid categorie-style-2 color-primary-style edublink-svg-animate">
+                <div class="icon">
+                    <i class="icon-24"></i>
+                </div>
+                <div class="content">
+                    <a href="{% url 'student_certificat' name='INSCRIPTION' %}">
+                        <h5 class="title">Recu d'Inscription</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    
+{% endblock content %}
+    

@@ -1,0 +1,176 @@
+{% extends 'etudiants/dashboard/components/base.html' %}
+
+{% load static %}
+{% block content %}
+{% load humanize %}
+<section class="shop-page-area section-gap-equal">
+<form action="{% url 'payment_processing_view' %}" method="post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="col-lg-12">
+            <p>Règlement frais de scolarité {{scolarite.filiere}} {{scolarite.niveau}} {{scolarite.annee_academique}}</p>
+            <div class="course-sidebar-3">
+                <div class="edu-course-widget widget-course-summery">
+                    <div class="inner">
+                        <div class="content">
+                            <h4 class="widget-title">{{user}}</h4>
+                            <p>Code Paiement N° {{user.etudiant.code_paiement}}</p>
+                           
+                            <ul class="course-item">
+                                <li>
+                                    <span class="label"><i class="icon-60"></i>Frais : </span>
+                                    <span class="value">{{scolarite.frais | intcomma }} FCFA</span>
+                                </li>
+                                <li>
+                                    <span class="label"><i class="icon-70"></i>Payé :</span>
+                                    <span class="value">{{scolarite.paye | intcomma }} FCFA</span>
+                                </li>
+                                <li>
+                                    <span class="label"><i class="icon-68"></i>Reste à Payer :</span>
+                                    <span class="value price">{{scolarite.reste | intcomma }} FCFA</span>
+                                    
+                                </li>
+                                <br>
+
+                                <div class="form-group">
+                                    <label for="current-log-email"> Veuillez Saisir le Montant <b>(XOF)</b></label>
+                                    <input  type="number" inputmode="numeric" name="current-log-email" id="current-log-email" min="500" max="{{scolarite.reste }}"
+                                     placeholder="Montant à payer" style="border:2px solid black">
+                                     <input  type="hidden" name="scolarite_id" id="scolarite_id" value="{{scolarite.id}}">
+                                     <input  type="hidden" name="scolarite_id" id="scolarite_id" value="{{scolarite.id}}">
+                                    
+                                    <p id="error-message" style="color: red;"></p>
+                                </div>
+                            </ul>
+
+                            <hr>
+                            <span style="color: white;background-color: rgb(90, 161, 90);border-radius: 5px;" class="value price">&nbsp;  Moyen de Paiement &nbsp;</span>
+                            <hr>
+                            <!--MOYEN PAIEMENT -->
+
+                            <div class="col">
+                               
+                                <div class="course-sidebar-3">
+                                    <div class="edu-course-widget widget-course-summery">
+                                        <div class="inner">
+                                            <label for="current-log-email"> Veuillez sélectionner le <b>moyen</b> de paiement</label>
+                                            <div class="container">
+                                                <style>
+                                                        .grid {
+                                                            display: flex;
+                                                            justify-content: space-between; /* Espacement uniforme entre les éléments */
+                                                            align-items: center; /* Centrage vertical */
+                                                        }
+
+                                                        .grid-item {
+                                                            width: calc(30% - 10px); /* 25% de la largeur totale moins l'espacement */
+                                                            max-width: 150px; /* Taille maximale de chaque élément */
+                                                            text-align: center; /* Centrage du contenu */
+                                                        }
+
+                                                        .grid-item img {
+                                                            max-width: 100%; /* L'image s'adapte à la largeur de l'élément */
+                                                        }
+
+                                                </style>
+                                                <div class="grid">
+                                                    <a class="grid-item operator">
+                                                        <img src="{% static 'administration/assets/paye/wave.png' %}" alt="WAVE MONEY">
+                                                    </a>
+                                                    <!-- <a  class="grid-item operator">
+                                                        <img src="{% static 'administration/assets/paye/orange.png' %}" alt="ORANGE MONEY">
+                                                    </a>
+                                                    <a  class="grid-item operator">
+                                                        <img src="{% static 'administration/assets/paye/moov.png' %}" alt="MOOV MONEY">
+                                                    </a>
+                                                    <a  class="grid-item operator">
+                                                        <img src="{% static 'administration/assets/paye/mtn.png' %}" alt="MTN MONEY">
+                                                    </a> -->
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                   <div class="phone_validation" style="display: none;">
+                                     <!--PHONE ZONE-->
+                                     <div class="form-group">
+                                        <label for="current-log-email"> Veuillez Saisir numéro <b id="network"></b> à débiter </label>
+                                        <input type="text" maxlength="10" pattern="[0-9]*" inputmode="numeric" name="phone" placeholder="Numéro à débiter *" style="border:2px solid black">
+                                        <input  type="hidden" name="operateur_id" id="operateur_id">
+                                        <p id="phone-error-message" style="color: red;"></p>
+                                    </div>
+                                    
+                                    <div class="read-more-btn">
+                                        <button type="submit" class="edu-btn">Continuer <i class="icon-4"></i></a>
+                                    </div>
+                                    <!--PHONE ZONE-->
+                                   </div>
+                                </div>
+                               
+                            </div>
+                            <!--MOYEN PAIEMENT -->
+                           
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        </div> 
+    </div>
+</form>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const operatorLinks = document.querySelectorAll(".operator");
+
+        operatorLinks.forEach(link => {
+            link.addEventListener("click", function (event) {
+                const inputAmount = document.getElementById("current-log-email");
+                const errorMessage = document.getElementById("error-message");
+                const amount = parseFloat(inputAmount.value);
+                
+                if (!amount || amount < 500) {
+                    event.preventDefault();
+                    errorMessage.textContent = "Veuillez saisir un montant supérieur ou égal à 500 Frs";
+                } else {
+                    errorMessage.textContent = "";
+
+                    const phoneValidation = document.querySelector(".phone_validation");
+                    phoneValidation.style.display = "block";
+
+                    const selectedOperator = link.querySelector("img").alt;
+                    
+                    var network = document.getElementById("network")
+                    network.textContent = "";
+                    network.appendChild(document.createTextNode(` ${selectedOperator}`));
+
+                      // Assign the value to the hidden input field
+                    const operatorIdInput = document.getElementById("operateur_id");
+                    operatorIdInput.value = selectedOperator;
+
+                    phoneInput.addEventListener("input", function () {
+                        const phoneErrorMessage = document.getElementById("phone-error-message");
+                        const phoneNumber = phoneInput.value;
+                        
+                        if (!/^\d{10}$/.test(phoneNumber)) {
+                            phoneErrorMessage.textContent = "Veuillez saisir un numéro valide de 10 chiffres";
+                        } else {
+                            phoneErrorMessage.textContent = "";
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+    
+{% endblock content %}
+    
