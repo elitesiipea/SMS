@@ -77,3 +77,21 @@ media/
 *.json
 *.pgsql
 *.env*
+# Secrets / tokens
+SMS/gen.txt
+etudiants/credentials.json
+
+# OAuth / API credentials
+*credentials.json
+*token.json
+
+# Local database dumps
+*.pgsql
+*.sql
+*.json
+
+# Logs
+*.log
+
+# Django media
+media/
