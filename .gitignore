@@ -73,3 +73,7 @@ ENV/
 media/
 # Explicitly DO NOT ignore .env files or variants
 # So files like .env, .env.dev, .env.prod, env.dev, env.prod ARE included
+# Secrets locaux
+*.json
+*.pgsql
+*.env*
