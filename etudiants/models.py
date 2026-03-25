@@ -65,7 +65,7 @@ class Etudiant(models.Model):
     matricule_mers = models.CharField(max_length=50)
     numero_table_bac = models.CharField(max_length=50)
     matricule_menet = models.CharField(max_length=50)
-    nationalite = CountryField(blank_label='(Selectionner le pays)')
+    nationalite = CountryField(blank_label='(Selectionner le pays)', blank=True, null=True)
     matricule = models.CharField(max_length=50, editable=True,null=True, blank=True)
     lieu_de_residence = models.CharField(max_length=50)
     sexe = models.CharField(max_length=50, choices=sexes,)

@@ -1,22 +1,24 @@
 from django import forms
 from .models import Etudiant, EtablissementDorigine,  SessionSoutenanceNew, SessionDiplome, Diplome, Certificat, CertificatSession
 from django.contrib.auth.forms import PasswordChangeForm
-from django_countries.widgets import CountrySelectWidget
+from django_countries import countries
 
 class StudentPhotoForm(forms.ModelForm):
     class Meta:
         model = Etudiant
         fields = ['photo']
 
-
 class EtudiantForm(forms.ModelForm):
+    nationalite = forms.ChoiceField(
+        choices=[("", "(Selectionner le pays)")] + list(countries),
+        widget=forms.Select(attrs={"class": "form-control required"})
+    )
+
     class Meta:
         model = Etudiant
         exclude = ['utilisateur','etablissement','active', 'created', 'date_update']
 
-        widgets = {
-            'nationalite': CountrySelectWidget(),
-        }
+
 
     def __init__(self, *args, **kwargs):
         super(EtudiantForm, self).__init__(*args, **kwargs)
