@@ -3,8 +3,14 @@ from .models import Enseignant, ContratEnseignant
 from gestion_academique.models import Matiere, AnneeAcademique, Classe, Filiere, Niveau
 from django.forms.widgets import CheckboxSelectMultiple
 from django.contrib.auth.forms import PasswordChangeForm
+from django_countries import countries
 
 class EnseignantForm(forms.ModelForm):
+    nationalite = forms.ChoiceField(
+        choices=[("", "(Selectionner le pays)")] + list(countries),
+        widget=forms.Select(attrs={"class": "form-control required"})
+    )
+
     class Meta:
         model = Enseignant
         exclude = ['utilisateur', 'etablissement','created', 'date_update', 'code',]
