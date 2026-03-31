@@ -247,7 +247,19 @@ def etudiant_profile(request,pk):
 @login_required
 @student_required
 def student_home(request):
-    
+
+    # -------------------------------------------------------
+    # Etablissements dont l'espace étudiant est temporairement fermé
+    # Pour rouvrir : retirer l'ID de la liste ci-dessous
+    # -------------------------------------------------------
+    ETABLISSEMENTS_FERMES = [1]  # ID 1 = IIPEA Cocody
+
+    if request.user.etablissement_id in ETABLISSEMENTS_FERMES:
+        return render(request, 'etudiants/acces_ferme.html', {
+            'titre': 'Accès Fermé',
+            'message': "L'espace étudiant est temporairement fermé. Merci de contacter l'administration pour plus d'informations."
+        })
+
     try:
             cursus = get_object_or_404(Inscription, etudiant_id=request.user.etudiant.id, annee_academique=AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id,  active=True).order_by('-created').first(),confirmed=True)
     except:
