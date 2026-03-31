@@ -41,10 +41,11 @@ class EtudiantAdmin(admin.ModelAdmin):
     autocomplete_fields = ['etablissement_d_origine']
 
     def get_queryset(self, request):
-        # Récupérer l'établissement de l'utilisateur connecté
-        etablissement = request.user.etablissement
-        # Filtrer les emplois du temps par établissement de l'utilisateur connecté
-        queryset = Etudiant.objects.filter(etablissement=etablissement)
+        queryset = super().get_queryset(request)
+
+        if hasattr(request.user, "etablissement") and request.user.etablissement:
+            return queryset.filter(etablissement=request.user.etablissement)
+
         return queryset
     
     

@@ -1487,9 +1487,24 @@ import pandas as pd
 import logging
 from django.db import transaction
 import re
+import string
+import secrets
 
 
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Génère un code diplôme unique de 12 caractères
+# (bulk_create ne déclenche pas save(), donc on génère ici explicitement)
+# ---------------------------------------------------------------------------
+def _generer_code_diplome_unique():
+    chars = string.ascii_uppercase + string.digits
+    code = ''.join(secrets.choice(chars) for _ in range(12))
+    while Diplome.objects.filter(code=code).exists():
+        code = ''.join(secrets.choice(chars) for _ in range(12))
+    return code
+
 
 class SessionListViewCreation(View):
     template_name = 'diplomes/diplome_create.html'
@@ -1569,11 +1584,46 @@ class SessionListViewCreation(View):
                             
                             date_naissance_normalisee = date_naissance.date()
 
-                            # Génération du matricule
-                            matricule_base = self.generer_matricule_base(nom, prenom, date_naissance_normalisee)
-                            matricule = f"{matricule_base}0001" # (Basé sur votre ancienne logique)
-                            
-                            # Création de l'objet Diplome en mémoire
+                            # --- Matricule : vrai matricule plateforme ou généré ---
+                            from etudiants.models import Etudiant as EtudiantModel
+                            etudiant_plateforme = EtudiantModel.objects.filter(
+                                nom__iexact=nom,
+                                prenom__iexact=prenom,
+                                date_de_naissance=date_naissance_normalisee
+                            ).first()
+
+                            if etudiant_plateforme and etudiant_plateforme.matricule:
+                                matricule = etudiant_plateforme.matricule
+                            else:
+                                matricule_base = self.generer_matricule_base(nom, prenom, date_naissance_normalisee)
+                                matricule = f"{matricule_base}0001"
+
+                            # --- Date soutenance en français ---
+                            MOIS_FR = {
+                                1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril',
+                                5: 'Mai', 6: 'Juin', 7: 'Juillet', 8: 'Août',
+                                9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'
+                            }
+                            date_soutenance_raw = row['date_soutenance']
+                            try:
+                                dt_soutenance = pd.to_datetime(date_soutenance_raw, errors='coerce')
+                                if pd.notna(dt_soutenance):
+                                    date_soutenance_str = f"{dt_soutenance.day} {MOIS_FR[dt_soutenance.month]} {dt_soutenance.year}"
+                                else:
+                                    date_soutenance_str = str(date_soutenance_raw).strip()
+                            except Exception:
+                                date_soutenance_str = str(date_soutenance_raw).strip()
+
+                            # --- Normalisation du cycle ---
+                            cycle_raw = str(row['cycle']).strip().upper()
+                            if 'UNIV' in cycle_raw:
+                                cycle_normalise = 'UNIVERSITAIRE'
+                            elif 'PRO' in cycle_raw:
+                                cycle_normalise = 'PROFESSIONNEL'
+                            else:
+                                cycle_normalise = cycle_raw
+
+                            # --- Création de l'objet Diplome en mémoire ---
                             diplome = Diplome(
                                 session=session,
                                 matricule=matricule,
@@ -1587,9 +1637,10 @@ class SessionListViewCreation(View):
                                 diplome=row['diplome'],
                                 niveau=row['niveau'],
                                 annee_academique=row['annee_academique'],
-                                date_soutenance=row['date_soutenance'],
+                                date_soutenance=date_soutenance_str,
                                 session_soutenance=row['session_soutenance'],
-                                cycle=row['cycle'],
+                                cycle=cycle_normalise,
+                                code=_generer_code_diplome_unique(),
                             )
                             diplomes_a_creer.append(diplome)
 

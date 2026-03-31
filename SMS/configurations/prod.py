@@ -1,7 +1,7 @@
 # prod.py
 
 # Importez les paramètres communs du fichier settings.py
-from ..settings import *
+
 
 # Désactivez le mode de débogage pour l'environnement de production
 DEBUG = False

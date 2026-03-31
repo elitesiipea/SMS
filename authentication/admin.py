@@ -4,6 +4,7 @@ from .models import User
 from gestion_academique.models import Classe
 
 
+
 class UserAdminForm(forms.ModelForm):
     class Meta:
         model = User
