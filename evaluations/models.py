@@ -31,7 +31,6 @@ class Note(models.Model):
         return f'{self.classe} {self.matiere}'
 
     def save(self, *args, **kwargs):
-        """Optimisation: éviter les requêtes inutiles"""
         if not self.pk:
             self.coeeficient_matiere = self.matiere.matiere.coefficient
             if self.classe.classe_universitaire:
@@ -62,6 +61,8 @@ class Resultat(models.Model):
     @property
     def moyenne_calculee(self):
         """Calcul dynamique de la moyenne"""
+        if self.non_classe:
+            return None  # Exclu du calcul
         notes_utilisees = sum([self.note.use_note_1, self.note.use_note_2, self.note.use_note_3, self.note.use_note_partiel])
         total_notes = sum([
             self.note_1 * self.note.use_note_1,
@@ -74,6 +75,8 @@ class Resultat(models.Model):
     @property
     def moyenne_coefficient_calculee(self):
         """Calcul dynamique de la moyenne pondérée par le coefficient"""
+        if self.non_classe:
+            return None
         return round(self.moyenne_calculee * self.note.coeeficient_matiere, 2)
 
     @property
@@ -81,25 +84,32 @@ class Resultat(models.Model):
         """Moyenne des matières d'une même unité d'enseignement"""
         notes = Resultat.objects.filter(
             etudiant=self.etudiant,
-            note__matiere__matiere__unite=self.note.matiere.matiere.unite
+            note__matiere__matiere__unite=self.note.matiere.matiere.unite,
+            non_classe=False  # Exclure les non classés
         )
-        return round(sum(item.moyenne_calculee for item in notes) / notes.count(), 2) if notes.exists() else 0
+        return round(sum(item.moyenne_calculee for item in notes if item.moyenne_calculee is not None) / notes.count(), 2) if notes.exists() else 0
 
     def save(self, *args, **kwargs):
-        """Optimisation: Calcul de la moyenne avant sauvegarde"""
-        self.moyenne = self.moyenne_calculee
-        self.moyenne_coefficient = self.moyenne_coefficient_calculee
-
-          # Calcul moyenne_unite en une seule requête
-        notes_unite = Resultat.objects.filter(
-            etudiant=self.etudiant,
-            note__matiere__matiere__unite=self.note.matiere.matiere.unite
-        ).only("moyenne")
-        if notes_unite.exists():
-            self.moyenne_unite = round(
-                sum(item.moyenne for item in notes_unite) / notes_unite.count(), 2
-            )
-        else:
+        """Calcul de la moyenne avant sauvegarde"""
+        if self.non_classe:
+            self.moyenne = 0
+            self.moyenne_coefficient = 0
             self.moyenne_unite = 0
-            
+        else:
+            self.moyenne = self.moyenne_calculee or 0
+            self.moyenne_coefficient = self.moyenne_coefficient_calculee or 0
+
+            notes_unite = Resultat.objects.filter(
+                etudiant=self.etudiant,
+                note__matiere__matiere__unite=self.note.matiere.matiere.unite,
+                non_classe=False  # Exclure les non classés
+            ).only("moyenne")
+
+            if notes_unite.exists():
+                self.moyenne_unite = round(
+                    sum(item.moyenne for item in notes_unite) / notes_unite.count(), 2
+                )
+            else:
+                self.moyenne_unite = 0
+
         super().save(*args, **kwargs)

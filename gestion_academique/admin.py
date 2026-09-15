@@ -189,7 +189,7 @@ class MatiereAdmin(admin.ModelAdmin):
         'unite__maquette__niveau__nom', 
         'unite__semestre', 
         'unite__categorie',
-        'unite__maquette__annee_academique__nom',  # Add annee_academique to the search fields
+        'unite__maquette__annee_academique__debut',  # Add annee_academique to the search fields
     )
     
     list_filter = (

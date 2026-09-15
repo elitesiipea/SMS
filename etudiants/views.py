@@ -252,7 +252,7 @@ def student_home(request):
     # Etablissements dont l'espace étudiant est temporairement fermé
     # Pour rouvrir : retirer l'ID de la liste ci-dessous
     # -------------------------------------------------------
-    ETABLISSEMENTS_FERMES = [1]  # ID 1 = IIPEA Cocody
+    ETABLISSEMENTS_FERMES = []  # ID 1 = IIPEA Cocody
 
     if request.user.etablissement_id in ETABLISSEMENTS_FERMES:
         return render(request, 'etudiants/acces_ferme.html', {
@@ -522,6 +522,14 @@ def student_times(request):
 @login_required
 @student_required
 def student_notes(request):
+    # Notes temporairement fermées pour IIPEA Cocody
+    ETABLISSEMENTS_FERMES = [1]
+    if request.user.etablissement_id in ETABLISSEMENTS_FERMES:
+        return render(request, 'etudiants/acces_ferme.html', {
+            'titre': 'Accès Fermé',
+            'message': "La consultation des notes est temporairement indisponible. Merci de contacter l'administration."
+        })
+
     selected_annee_id = request.GET.get('annee_id')
     annees_academiques = AnneeAcademique.objects.filter(etablissement_id=request.user.etablissement.id,  active=True).order_by('created')
     if selected_annee_id:
